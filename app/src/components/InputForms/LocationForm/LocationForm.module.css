@@ -1,0 +1,37 @@
+.InputCard {
+	padding: 10px;
+}
+
+.Segment {
+	padding: 15px 0;
+	text-align: center;
+}
+
+button.Unit .Icon {
+	margin-right: 0;
+}
+button.Red {
+	display: block;
+	width: 100%;
+	color: #ae1100;
+}
+
+/* button .Icon {
+	margin-right: 8px;
+} */
+button.Unit {
+	border-radius: 8px;
+	line-height: 0;
+	width: 48px;
+	height: 48px;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 8px;
+	font-size: 19.2px;
+}
+
+/* .InpuptGroup label {
+	margin: 0;
+	flex: 1;
+} */

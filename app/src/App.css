@@ -1,3 +1,78 @@
+body,
+html {
+	margin: 0;
+	padding: 0;
+	background-color: #ebecf0;
+}
+
+body,
+p,
+input,
+select,
+textarea,
+button {
+	font-family: 'Montserrat', sans-serif;
+	letter-spacing: -0.2px;
+	font-size: 16px;
+}
+
+div,
+p {
+	color: #babecc;
+	text-shadow: 1px 1px 1px #fff;
+}
+
+form {
+	padding: 10px;
+	width: 320px;
+	margin: 0 auto;
+}
+
+button,
+input {
+	border: 0;
+	outline: 0;
+	font-size: 16px;
+	border-radius: 320px;
+	padding: 16px;
+	background-color: #ebecf0;
+	text-shadow: 1px 1px 0 #fff;
+}
+
+label {
+	display: block;
+	margin-bottom: 15px;
+	width: 100%;
+}
+
+input {
+	margin-right: 8px;
+	box-shadow: inset 2px 2px 5px #babecc, inset -5px -5px 10px #fff;
+	width: 100%;
+	box-sizing: border-box;
+	transition: all 0.2s ease-in-out;
+	appearance: none;
+	-webkit-appearance: none;
+}
+input:focus {
+	box-shadow: inset 1px 1px 2px #babecc, inset -1px -1px 2px #fff;
+}
+
+button {
+	color: #61677c;
+	font-weight: bold;
+	box-shadow: -5px -5px 20px #fff, 5px 5px 20px #babecc;
+	transition: all 0.2s ease-in-out;
+	cursor: pointer;
+	font-weight: 600;
+}
+button:hover {
+	box-shadow: -2px -2px 5px #fff, 2px 2px 5px #babecc;
+}
+button:active {
+	box-shadow: inset 1px 1px 2px #babecc, inset -1px -1px 2px #fff;
+}
+
 .App {
 	text-align: center;
 }
@@ -28,12 +103,6 @@
 	color: #61dafb;
 }
 
-/* .EmailForm * {
-	padding: 10px;
-	width: 30%;
-	height: 100px;
-} */
-
 @keyframes App-logo-spin {
 	from {
 		transform: rotate(0deg);
@@ -41,10 +110,4 @@
 	to {
 		transform: rotate(360deg);
 	}
-}
-
-.InputCards {
-	display: flex;
-	flex-direction: row;
-	margin: 30px;
 }

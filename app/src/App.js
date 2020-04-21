@@ -1,19 +1,15 @@
 import React from 'react';
 import './App.css';
 
-import EmailSubForm from './components/InputForms/EmailSubForm/EmailSubForm';
-import LocationForm from './components/InputForms/LocationForm/LocationForm';
+import Layout from './hoc/Layout/Layout';
+import Aux from './hoc/Auxiliary/Auxiliary';
 
 function App() {
 	return (
 		<div className='App'>
-			<div className='InputCards'>
-				<EmailSubForm />
-				<LocationForm />
-			</div>
-			<div className='InfoCard'>
-				<p>TUTAJ info o lokalizacji</p>
-			</div>
+			<Aux>
+				<Layout />
+			</Aux>
 		</div>
 	);
 }
