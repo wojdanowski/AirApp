@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "airapp-65e79"
+    "default": "airapp-65e79",
+    "AirApp": "airapp-65e79"
   }
 }

@@ -1,0 +1,28 @@
+.HamburgerButtonBlock {
+	position: fixed;
+	top: 0;
+	left: 100%;
+	margin: 15px;
+}
+
+.menu {
+	cursor: pointer;
+	transition: 0.5s ease;
+	height: 50px;
+}
+
+.bar {
+	width: 50px;
+	height: 4px;
+	background: #7a7d88;
+	box-shadow: 1px 1px 1px #a1a5b3;
+	border-radius: 2px;
+	transition: 0.2s ease;
+	margin: 6px 2px;
+	padding: 0;
+}
+
+.HamburgerButtonBlock:hover .bar {
+	margin: 15px 2px;
+	background: #ae1100;
+}
