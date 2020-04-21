@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import classes from './MapBoxScreen.module.css';
+import MapBox from './MapBox/MapBox';
 
-const MapBoxScreen = (props) => {
-	return (
-		<div className={classes.MapBoxScreen}>
-			<p>TUTAJ zaimplementowana mapa</p>
-		</div>
-	);
-};
+class MapBoxScreen extends Component {
+	render() {
+		return (
+			<div className={classes.MapBoxScreen}>
+				<MapBox />
+			</div>
+		);
+	}
+}
 
 export default MapBoxScreen;
