@@ -6,7 +6,7 @@ import classes from './MainScreen.module.css';
 const MainScreen = (props) => {
 	return (
 		<div className={classes.MainScreenBox}>
-			<LocationForm />
+			<LocationForm geoIconClicked={props.geoIconClicked} />
 		</div>
 	);
 };

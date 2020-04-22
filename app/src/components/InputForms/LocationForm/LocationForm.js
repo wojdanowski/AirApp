@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './LocationForm.module.css';
+import GeoIcon from './../../UI/GeoIcon/GeoIcon';
 
 const LocationForm = (props) => {
 	return (
@@ -9,7 +10,14 @@ const LocationForm = (props) => {
 					<h1>Get info about location</h1>
 				</div>
 				<label>
-					<input type='text' placeholder='Location' />
+					<div className={classes.InputLabelBox}>
+						<input
+							className={classes.InputFormField}
+							type='text'
+							placeholder='Location'
+						/>
+						<GeoIcon geoIconClicked={props.geoIconClicked} />
+					</div>
 				</label>
 				<button className={classes.Red} type='button'>
 					<i className={classes.Icon}></i> GET

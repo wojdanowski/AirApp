@@ -7,6 +7,14 @@
 	text-align: center;
 }
 
+.InputLabelBox {
+	position: relative;
+}
+
+.InputFormField {
+	position: relative;
+}
+
 button.Unit .Icon {
 	margin-right: 0;
 }
@@ -30,8 +38,3 @@ button.Unit {
 	margin: 0 8px;
 	font-size: 19.2px;
 }
-
-/* .InpuptGroup label {
-	margin: 0;
-	flex: 1;
-} */

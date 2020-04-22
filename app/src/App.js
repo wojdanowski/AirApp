@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
 
-import Layout from './hoc/Layout/Layout';
 import Aux from './hoc/Auxiliary/Auxiliary';
+import Layout from './containers/Layout/Layout';
 
 function App() {
 	return (

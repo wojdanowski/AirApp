@@ -1,0 +1,17 @@
+.GeoIcon {
+	float: right;
+	height: 100%;
+	width: 15%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: flex;
+	align-items: center;
+}
+
+.GeoIcon img {
+	height: 50%;
+	display: flex;
+	align-items: center;
+	padding: 5px;
+}
