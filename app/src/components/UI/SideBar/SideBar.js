@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './SideBar.module.css';
-import HamburgerButton from './../Navigation/HamburgerButton/HamburgerButton';
+import HamburgerButton from '../Buttons/HamburgerButton/HamburgerButton';
 
 const SideBar = (props) => {
 	let attachedClasses = [classes.SideBarContainer, classes.Close];

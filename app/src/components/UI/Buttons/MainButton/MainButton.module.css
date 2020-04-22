@@ -1,0 +1,11 @@
+.ButtonWraper {
+	padding: 0 0 15px 0;
+	text-align: center;
+}
+
+button.Red {
+	text-transform: uppercase;
+	display: block;
+	width: 100%;
+	color: #ae1100;
+}
