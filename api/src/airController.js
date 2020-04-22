@@ -6,3 +6,9 @@ exports.stations = function (req, res) {
         res.send(data);
     });
 }
+
+exports.airIndex = function (req, res) {
+    Gios.getAirIndex(req.params.station_id, function (data) {
+        res.send(data);
+    })
+}

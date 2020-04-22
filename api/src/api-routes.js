@@ -21,4 +21,7 @@ router.route('/subscriptions/:subscription_id')  // TODO: zamiast id token jwt
 router.route('/gios/stations')
     .get(airController.stations);
 
+router.route('/gios/stations/:station_id')
+    .get(airController.airIndex);
+
 module.exports = router;
