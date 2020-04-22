@@ -16,7 +16,7 @@ exports.new = function (req, res) {
             res.json(err);
         }
         res.json({
-            message: 'New contact created!',
+            message: 'New subscription created!',
             data: subscription
         });
     });
