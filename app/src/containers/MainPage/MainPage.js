@@ -5,15 +5,46 @@ import MainScreen from './../../components/Screens/MainScreen/MainScreen';
 import MapBoxScreen from './../../components/Screens/MapBoxScreen/MapBoxScreen';
 
 class MainPage extends Component {
-	state = {};
+	constructor(props) {
+		super(props);
+		this.mapBoxRef = React.createRef();
+		this.state = {
+			// initial coordinates for mapbox. Center of Poland
+			selectedCoordinates: {
+				lat: 52.13,
+				lng: 19.25,
+			},
+			isInitial: true,
+		};
+	}
+
+	scrollToRef = (ref) => {
+		window.scrollTo(0, ref.current.offsetTop);
+	};
+
+	locationSelectedHandler() {
+		this.setState({
+			isInitial: false,
+		});
+	}
 
 	geoIconClickedHandler = () => {
 		const success = (position) => {
 			const latitude = position.coords.latitude;
 			const longitude = position.coords.longitude;
-			const coordinates = `Lat: ${latitude} Lng: ${longitude}`;
-			console.log(coordinates);
-			alert(coordinates);
+			// const coordinates = `Lat: ${latitude} Lng: ${longitude}`;
+			// console.log(coordinates);
+			// alert(coordinates);
+			this.setState((prevState) => {
+				return {
+					selectedCoordinates: {
+						lat: latitude,
+						lng: longitude,
+					},
+				};
+			});
+			this.locationSelectedHandler();
+			this.scrollToRef(this.mapBoxRef);
 		};
 
 		const error = () => {
@@ -27,7 +58,11 @@ class MainPage extends Component {
 		return (
 			<Aux>
 				<MainScreen geoIconClicked={this.geoIconClickedHandler} />
-				<MapBoxScreen />
+				<MapBoxScreen
+					refProp={this.mapBoxRef}
+					isInitial={this.state.isInitial}
+					selectedCoordinates={this.state.selectedCoordinates}
+				/>
 			</Aux>
 		);
 	}
