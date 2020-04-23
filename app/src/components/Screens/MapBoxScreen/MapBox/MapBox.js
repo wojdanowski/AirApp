@@ -11,29 +11,52 @@ class MapBox extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			lat: 52.404967,
-			lng: 16.926669,
+			coordinates: null,
 			zoom: 10,
+			initialZoom: 5,
+			map: null,
+			bounds: null,
 		};
 	}
 
 	componentDidMount() {
-		const coordinates = [this.state.lng, this.state.lat];
-		// const addCoordinates = [this.state.lng + 0.001, this.state.lat + 0.001];
-
-		const bounds = new mapboxgl.LngLatBounds(coordinates, coordinates);
-		// bounds.extend(coordinates);
-		// bounds.extend(addCoordinates);
-
 		const map = new mapboxgl.Map({
 			container: this.mapContainer,
 			style: 'mapbox://styles/wojdanowski/ck99wcv550q9o1inuxwtg6h4b',
 			// center: [this.state.lng, this.state.lat],
 			// zoom: this.state.zoom,
-			interactive: false,
+			interactive: true,
+		});
+		this.setState(() => {
+			return {
+				map,
+			};
+		});
+	}
+
+	// showLocation(isInitial){
+
+	// }
+
+	componentDidUpdate(prevProps) {
+		const coordinates = this.props.selectedCoordinates;
+		const bounds = new mapboxgl.LngLatBounds(coordinates, coordinates);
+		let zoom = null;
+
+		this.props.isInitial
+			? (zoom = this.state.initialZoom)
+			: (zoom = this.state.zoom);
+
+		this.state.map.fitBounds(bounds, {
+			maxZoom: zoom,
 		});
 
-		map.fitBounds(bounds, { maxZoom: 12 });
+		if (coordinates !== prevProps.selectedCoordinates) {
+			this.setState({
+				coordinates,
+				bounds,
+			});
+		}
 	}
 
 	render() {

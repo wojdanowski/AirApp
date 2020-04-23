@@ -6,8 +6,11 @@ import MapBox from './MapBox/MapBox';
 class MapBoxScreen extends Component {
 	render() {
 		return (
-			<div className={classes.MapBoxScreen}>
-				<MapBox />
+			<div className={classes.MapBoxScreen} ref={this.props.refProp}>
+				<MapBox
+					selectedCoordinates={this.props.selectedCoordinates}
+					isInitial={this.props.isInitial}
+				/>
 			</div>
 		);
 	}
