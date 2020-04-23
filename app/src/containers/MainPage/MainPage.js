@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import Aux from './../../hoc/Auxiliary/Auxiliary';
-import MainScreen from './../../components/Screens/MainScreen/MainScreen';
 import MapBoxScreen from './../../components/Screens/MapBoxScreen/MapBoxScreen';
+import LocationForm from './../../components/InputForms/LocationForm/LocationForm';
+import classes from './MainPage.module.css';
 
 class MainPage extends Component {
 	constructor(props) {
@@ -15,8 +16,16 @@ class MainPage extends Component {
 				lng: 19.25,
 			},
 			isInitial: true,
+			selectedPlace: '',
 		};
 	}
+
+	placeSelectionHandler = (content) => {
+		console.log(content);
+		// this.setState({
+		// 	selectedPlace: content,
+		// });
+	};
 
 	scrollToRef = (ref) => {
 		window.scrollTo(0, ref.current.offsetTop);
@@ -57,7 +66,12 @@ class MainPage extends Component {
 	render() {
 		return (
 			<Aux>
-				<MainScreen geoIconClicked={this.geoIconClickedHandler} />
+				<div className={classes.MainScreenBox}>
+					<LocationForm
+						geoIconClicked={this.props.geoIconClicked}
+						changeHandler={this.placeSelectionHandler}
+					/>
+				</div>
 				<MapBoxScreen
 					refProp={this.mapBoxRef}
 					isInitial={this.state.isInitial}

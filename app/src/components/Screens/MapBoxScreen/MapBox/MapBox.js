@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
+// import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 import classes from './MapBox.module.css';
 import Aux from './../../../../hoc/Auxiliary/Auxiliary';
@@ -12,7 +13,7 @@ class MapBox extends Component {
 		super(props);
 		this.state = {
 			coordinates: null,
-			zoom: 10,
+			zoom: 11,
 			initialZoom: 5,
 			map: null,
 			bounds: null,
@@ -27,6 +28,14 @@ class MapBox extends Component {
 			// zoom: this.state.zoom,
 			interactive: true,
 		});
+
+		// map.addControl(
+		// 	new MapboxGeocoder({
+		// 		accessToken: mapboxgl.accessToken,
+		// 		mapboxgl: mapboxgl,
+		// 	})
+		// );
+
 		this.setState(() => {
 			return {
 				map,

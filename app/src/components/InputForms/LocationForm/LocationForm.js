@@ -8,19 +8,33 @@ const LocationForm = (props) => {
 	return (
 		<div className={classes.InputCard}>
 			<form>
-				<h1>Get info about location</h1>
+				<h1>
+					<strong
+						style={{
+							fontSize: '40px',
+							textTransform: 'uppercase',
+							color: '#ae1100',
+						}}
+					>
+						jakość powietrza
+					</strong>
+					<br />w twojej okolicy
+				</h1>
 				<label>
 					<div className={classes.InputLabelBox}>
 						<input
 							className={classes.InputFormField}
 							type='text'
-							placeholder='Location'
+							placeholder='Lokalizacja'
+							onChange={(event) => {
+								props.changeHandler(event.target.value);
+							}}
 						/>
 						<GeoIcon geoIconClicked={props.geoIconClicked} />
 					</div>
 				</label>
-				<MainButton label='get' />
-				<MainButton label='show on map' />
+				<MainButton label='Subskrybuj lokalizację' />
+				<MainButton label='pokaż na mapie' />
 			</form>
 		</div>
 	);
