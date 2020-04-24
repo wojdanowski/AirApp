@@ -44,13 +44,11 @@ class MainPage extends Component {
 			// const coordinates = `Lat: ${latitude} Lng: ${longitude}`;
 			// console.log(coordinates);
 			// alert(coordinates);
-			this.setState((prevState) => {
-				return {
-					selectedCoordinates: {
-						lat: latitude,
-						lng: longitude,
-					},
-				};
+			this.setState({
+				selectedCoordinates: {
+					lat: latitude,
+					lng: longitude,
+				},
 			});
 			this.locationSelectedHandler();
 			this.scrollToRef(this.mapBoxRef);
@@ -68,7 +66,7 @@ class MainPage extends Component {
 			<Aux>
 				<div className={classes.MainScreenBox}>
 					<LocationForm
-						geoIconClicked={this.props.geoIconClicked}
+						geoIconClicked={this.geoIconClickedHandler}
 						changeHandler={this.placeSelectionHandler}
 					/>
 				</div>
