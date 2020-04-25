@@ -31,7 +31,10 @@ class MainPage extends Component {
 				const res = await axios(mapBoxQuery);
 				const placesSuggestions = res.data.features.map((place) => {
 					const filteredPlace = {};
-					filteredPlace.coordinates = place.geometry.coordinates;
+					filteredPlace.coordinates = {
+						lat: place.geometry.coordinates[1],
+						lng: place.geometry.coordinates[0],
+					};
 					filteredPlace.name = place.place_name
 						.split(', ')
 						.slice(0, 3)
@@ -47,40 +50,33 @@ class MainPage extends Component {
 				console.log(error);
 			}
 		}
-		// this.setState({
-		// 	selectedPlace: content,
-		// });
 	};
 
 	scrollToRef = (ref) => {
 		window.scrollTo(0, ref.current.offsetTop);
 	};
 
-	locationSelectedHandler() {
+	showLocationOnMap = (coordinates) => {
+		this.scrollToRef(this.mapBoxRef);
 		this.setState({
+			selectedCoordinates: {
+				...coordinates,
+			},
 			isInitial: false,
 		});
-	}
+	};
 
 	geoIconClickedHandler = () => {
 		const success = (position) => {
-			const latitude = position.coords.latitude;
-			const longitude = position.coords.longitude;
-			// const coordinates = `Lat: ${latitude} Lng: ${longitude}`;
-			// console.log(coordinates);
-			// alert(coordinates);
-			this.setState({
-				selectedCoordinates: {
-					lat: latitude,
-					lng: longitude,
-				},
-			});
-			this.locationSelectedHandler();
-			this.scrollToRef(this.mapBoxRef);
+			const selectedCoordinates = {
+				lat: position.coords.latitude,
+				lng: position.coords.longitude,
+			};
+			this.showLocationOnMap(selectedCoordinates);
 		};
 
 		const error = () => {
-			console.log(`Error retriving position`);
+			console.log(`Error retrieving position`);
 		};
 
 		navigator.geolocation.getCurrentPosition(success, error);
@@ -94,6 +90,7 @@ class MainPage extends Component {
 						geoIconClicked={this.geoIconClickedHandler}
 						changeHandler={this.placeSelectionHandler}
 						placesSuggestions={this.state.placesSuggestions}
+						suggestionClickedHandler={this.showLocationOnMap}
 					/>
 				</div>
 				<MapBoxScreen

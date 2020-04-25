@@ -10,33 +10,39 @@ class LocationForm extends Component {
 		typedLocation: '',
 	};
 
-	//  componentDidUpdate(){
-
-	//  }
-	// const placesSuggestions = props.placesSuggestions;
-
 	render() {
-		let fullDropDown;
+		let fullDropDown = null;
+		let ReceivedSuggestions = null;
 
 		if (this.props.placesSuggestions.length && this.state.typedLocation) {
-			const sugestionsContent = this.props.placesSuggestions.map(
-				(place) => <PlaceSuggestion suggestionText={place.name} />
+			const suggestionContent = this.props.placesSuggestions.map(
+				(place, index) => (
+					<PlaceSuggestion
+						clicked={this.props.suggestionClickedHandler}
+						key={index}
+						suggestionText={place.name}
+						suggestionCoordinates={place.coordinates}
+					/>
+				)
 			);
-			fullDropDown = (
-				<div className={classes.fullDropDown}>{sugestionsContent}</div>
-			);
+			ReceivedSuggestions = suggestionContent;
 		} else if (
 			!this.props.placesSuggestions.length &&
 			this.state.typedLocation
 		) {
-			fullDropDown = (
-				<div className={classes.fullDropDown}>
-					<PlaceSuggestion
-						suggestionText={'Brak wyników dla podanego adresu'}
-					/>
-				</div>
+			ReceivedSuggestions = (
+				<PlaceSuggestion
+					suggestionText={'Brak wyników dla podanego adresu'}
+				/>
 			);
 		}
+		fullDropDown = (
+			<div className={classes.fullDropDownContainer}>
+				<div className={classes.fullDropDown}>
+					{ReceivedSuggestions}
+				</div>
+			</div>
+		);
 
 		return (
 			<div className={classes.InputCard}>

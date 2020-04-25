@@ -19,13 +19,15 @@
 	position: relative;
 }
 .fullDropDown {
+	font-weight: bold;
+	box-shadow: -5px -5px 20px #fff, 5px 5px 20px #babecc;
+	transition: all 0.2s ease-in-out;
 	position: absolute;
 	width: 100%;
 	border: 0;
 	outline: 0;
 	border-radius: 10px;
-	padding: 0;
-	background-color: #d6d6da;
+	margin: 10px 0 0 0;
+	background-color: #ebecf0;
 	text-shadow: 1px 1px 0 #fff;
-	transition: transform 0.3s ease-out;
 }
