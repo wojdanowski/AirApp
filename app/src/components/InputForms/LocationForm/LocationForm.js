@@ -17,7 +17,12 @@ class LocationForm extends Component {
 		if (this.props.placesSuggestions.length && this.state.typedLocation) {
 			const suggestionContent = this.props.placesSuggestions.map(
 				(place, index) => (
-					<PlaceSuggestion key={index} suggestionText={place.name} />
+					<PlaceSuggestion
+						clicked={this.props.suggestionClickedHandler}
+						key={index}
+						suggestionText={place.name}
+						suggestionCoordinates={place.coordinates}
+					/>
 				)
 			);
 			ReceivedSuggestions = suggestionContent;
