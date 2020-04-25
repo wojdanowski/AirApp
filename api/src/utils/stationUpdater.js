@@ -32,8 +32,14 @@ const updateGiosStations = async () => {
 };
 
 exports.scheduleUpdateStations = async () => {
-  console.log(`Station update scheduled: ${env.UPDATESCHEDULE}`);
-  updateGiosStations(env.UPDATESCHEDULE);
-  setInterval(updateGiosStations, env.UPDATESCHEDULE);
+  //   console.log(`Station update scheduled: ${env.UPDATESCHEDULE}`);
+  //   updateGiosStations(env.UPDATESCHEDULE);
+  //   setInterval(updateGiosStations, env.UPDATESCHEDULE);
   // TODO: setTimeout lepszy: https://stackoverflow.com/questions/6685396/execute-the-setinterval-function-without-delay-the-first-time
+  delay = env.UPDATESCHEDULE;
+  console.log(`Station update scheduled: ${delay}`);
+  (function runSchedule() {
+    updateGiosStations();
+    setTimeout(runSchedule, delay);
+  })();
 };

@@ -1,4 +1,4 @@
-Subscription = require('../models/subscriptionModel');
+const Subscription = require('../models/subscriptionModel');
 
 exports.new = async (req, res) => {
   // TODO: walidacja danych
@@ -19,7 +19,7 @@ exports.new = async (req, res) => {
   }
 };
 
-exports.view = async (req, res) => {
+exports.get = async (req, res) => {
   // TODO: wyszukiwanie po tokenie jwt, a nie id
   try {
     const subscription = await Subscription.findById(

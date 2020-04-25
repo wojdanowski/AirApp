@@ -7,18 +7,18 @@ router.get('/', function (req, res) {
 });
 
 const subscriptionController = require('./controllers/subscriptionController');
-const airController = require('./controllers/airController');
+const stationController = require('./controllers/stationController');
 
 router.route('/subscriptions').post(subscriptionController.new);
 
 router
   .route('/subscriptions/:subscription_id') // TODO: zamiast id token jwt
-  .get(subscriptionController.view)
+  .get(subscriptionController.get)
   .patch(subscriptionController.update)
   .put(subscriptionController.update)
   .delete(subscriptionController.delete);
 
-router.route('/gios/stations').get(airController.stations);
-router.route('/gios/stations/:station_id').get(airController.airIndex);
+router.route('/stations').get(stationController.all);
+router.route('/stations/:station_id').get(stationController.airIndex);
 
 module.exports = router;
