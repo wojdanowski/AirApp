@@ -17,12 +17,41 @@ exports.all = async (req, res) => {
   }
 };
 
-exports.airIndex = (req, res) => {
-  // jeżeli będą stacje spoza GIOS, to musi być przerobione
-  // dodatkowo, w gios nie ma danych stacji przy airIndex,
-  // może warto najpierw sprawdzić w bazie co to za stacja,
-  // a potem dopiero zrobić zapytanie
-  Gios.getAirIndex(req.params.station_id, function (data) {
-    res.send(data);
-  });
+exports.nearestAirIndex = async (req, res) => {
+  const lon = req.query.lon;
+  const lat = req.query.lat;
+  if (lon == null || lat == null) {
+    res.status(422).json({
+      status: 'fail',
+      message: 'Lack of required parameters (lat, lon)',
+    });
+    return;
+  }
+
+  try {
+    console.log('test');
+    const stationList = await Station.find({
+      location: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [lon, lat],
+          },
+        },
+      },
+    }).limit(1);
+    let station = stationList[0];
+
+    Gios.getAirIndex(station.station_id, (airData) => {
+      res.status(200).json({
+        status: 'success',
+        data: { station, airData },
+      });
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };

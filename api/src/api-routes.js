@@ -19,6 +19,6 @@ router
   .delete(subscriptionController.delete);
 
 router.route('/stations').get(stationController.all);
-router.route('/stations/:station_id').get(stationController.airIndex);
+router.route('/nearestAirIndex').get(stationController.nearestAirIndex); // ?lat=X&lon=Y
 
 module.exports = router;

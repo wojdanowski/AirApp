@@ -8,11 +8,18 @@ const saveGiosStation = async (giosStation) => {
       { station_id: giosStation.id },
       {
         source: 'Gios',
-        lat: giosStation.gegrLat,
-        lon: giosStation.gegrLon,
+        location: {
+          type: 'Point',
+          coordinates: [giosStation.gegrLon, giosStation.gegrLat],
+        },
         name: giosStation.stationName,
       },
-      { upsert: true, new: true, runValidators: true }
+      {
+        upsert: true,
+        setDefaultsOnInsert: true,
+        new: true,
+        runValidators: true,
+      }
     );
   } catch (err) {
     console.log(
@@ -32,10 +39,7 @@ const updateGiosStations = async () => {
 };
 
 exports.scheduleUpdateStations = async () => {
-  //   console.log(`Station update scheduled: ${env.UPDATESCHEDULE}`);
-  //   updateGiosStations(env.UPDATESCHEDULE);
-  //   setInterval(updateGiosStations, env.UPDATESCHEDULE);
-  // TODO: setTimeout lepszy: https://stackoverflow.com/questions/6685396/execute-the-setinterval-function-without-delay-the-first-time
+  // setTimeout > setInterval: https://stackoverflow.com/questions/6685396/execute-the-setinterval-function-without-delay-the-first-time
   delay = env.UPDATESCHEDULE;
   console.log(`Station update scheduled: ${delay}`);
   (function runSchedule() {
