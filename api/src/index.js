@@ -1,5 +1,7 @@
 // modules
-const env = require('./env'); //TODO: import (ES)
+const env = require('./env');
+const stationUpdater = require('./utils/stationUpdater');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -13,16 +15,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // MongoDB
-mongoose.connect(env.DB + '/airDataDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-const db = mongoose.connection;
-if (!db) {
-  console.log('Error connecting db');
-} else {
-  console.log('Db connected successfully');
-}
+mongoose
+  .connect(env.DB + '/airDataDB', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
+  .then(() => console.log('Db connected successfully'))
+  .catch((err) => console.log('Error connecting db'));
 
 // routes
 app.get('/', (req, res) => res.send('Server is up.'));
@@ -32,3 +33,6 @@ app.use('/api', apiRoutes);
 app.listen(env.PORT, function () {
   console.log('Running on port ' + env.PORT);
 });
+
+// run update station
+stationUpdater.scheduleUpdateStations();

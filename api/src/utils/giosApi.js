@@ -2,34 +2,34 @@ const http = require('http');
 
 const gios_url = 'http://api.gios.gov.pl/pjp-api/rest';
 
-exports.getStations = function (callback) {
+exports.getStations = (callback) => {
   const endpoint = '/station/findAll';
   httpGet(endpoint, callback);
 };
 
-exports.getAirIndex = function (stationId, callback) {
+exports.getAirIndex = (stationId, callback) => {
   const endpoint = '/aqindex/getIndex/' + stationId;
   httpGet(endpoint, callback);
 };
 
-function httpGet(endpoint, callback) {
+const httpGet = (endpoint, callback) => {
+  //TODO: zmienić callback na Promise
   const url = gios_url + endpoint;
 
   http
-    .get(url, function (res) {
+    .get(url, (res) => {
       const { statusCode } = res;
       const contentType = res.headers['content-type'];
 
       let error;
       if (statusCode !== 200) {
         error = new Error(
-          'Request Failed.\n' + 'Status Code: ${statusCode} for ' + endpoint
+          'Request Failed.\n' + `Status Code: ${statusCode} for ${endpoint}`
         );
       } else if (!/^application\/json/.test(contentType)) {
         error = new Error(
           'Invalid content-type.\n' +
-            'Expected application/json but received ${contentType} for ' +
-            endpoint
+            `Expected application/json but received ${contentType} for ${endpoint}`
         );
       }
       if (error) {
@@ -55,4 +55,4 @@ function httpGet(endpoint, callback) {
     .on('error', (e) => {
       console.error('Got error: ${e.message} for ' + endpoint); // TODO: jakiś throw pewnie by się przydał
     });
-}
+};

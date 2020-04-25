@@ -1,15 +1,10 @@
 const mongoose = require('mongoose');
 
-function normaliseHours(hours) {
-  // usunąć duplikaty
-  const uniqueHours = Array.from(new Set(hours));
-  // zamienić na integery
-  const integerHours = uniqueHours.map((h) => Math.floor(h));
-  // posortować
-  integerHours.sort();
-
-  return integerHours;
-}
+const normaliseHours = (hours) => {
+  return Array.from(new Set(hours)) // usunąć duplikaty
+    .map((h) => Math.floor(h)) // zamienić na integer
+    .sort(); // posortować
+};
 
 const subscriptionSchema = mongoose.Schema({
   email: {
@@ -40,6 +35,6 @@ const Subscription = (module.exports = mongoose.model(
   'subscription',
   subscriptionSchema
 ));
-module.exports.get = function (callback, limit) {
+module.exports.get = (callback, limit) => {
   Subscription.find(callback).limit(limit);
 };
