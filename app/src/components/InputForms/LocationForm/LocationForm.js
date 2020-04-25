@@ -92,27 +92,3 @@ class LocationForm extends Component {
 }
 
 export default LocationForm;
-
-// const LocationForm = (props) => {
-// 	const [formState, setFormState] = useState({
-// 		typedLocation: '',
-// 	});
-
-// 	let fullDropDown = null;
-// 	// const placesSuggestions = props.placesSuggestions;
-
-// 	if (props.placesSuggestions) {
-// 		const sugestionsContent = props.placesSuggestions.map((place) => (
-// 			<PlaceSuggestion placeInfo={place} />
-// 		));
-// 		fullDropDown = (
-// 			<div className={classes.fullDropDown}>{sugestionsContent}</div>
-// 		);
-// 	}
-
-// 	return (
-
-// 	);
-// };
-
-// export default LocationForm;
