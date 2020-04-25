@@ -6,8 +6,8 @@ router.get('/', function (req, res) {
   });
 });
 
-const subscriptionController = require('./subscriptionController');
-const airController = require('./airController');
+const subscriptionController = require('./controllers/subscriptionController');
+const airController = require('./controllers/airController');
 
 router.route('/subscriptions').post(subscriptionController.new);
 
@@ -19,7 +19,6 @@ router
   .delete(subscriptionController.delete);
 
 router.route('/gios/stations').get(airController.stations);
-
 router.route('/gios/stations/:station_id').get(airController.airIndex);
 
 module.exports = router;
