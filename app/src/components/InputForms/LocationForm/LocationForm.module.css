@@ -14,3 +14,18 @@
 .InputFormField {
 	position: relative;
 }
+
+.fullDropDownContainer {
+	position: relative;
+}
+.fullDropDown {
+	position: absolute;
+	width: 100%;
+	border: 0;
+	outline: 0;
+	border-radius: 10px;
+	padding: 0;
+	background-color: #d6d6da;
+	text-shadow: 1px 1px 0 #fff;
+	transition: transform 0.3s ease-out;
+}
