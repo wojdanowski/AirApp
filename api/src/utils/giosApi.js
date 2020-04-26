@@ -28,8 +28,7 @@ const httpGet = (endpoint, callback) => {
         );
       } else if (!/^application\/json/.test(contentType)) {
         error = new Error(
-          'Invalid content-type.\n' +
-            `Expected application/json but received ${contentType} for ${endpoint}`
+          `Invalid content-type.\\nExpected application/json but received ${contentType} for ${endpoint}`
         );
       }
       if (error) {
@@ -53,6 +52,6 @@ const httpGet = (endpoint, callback) => {
       });
     })
     .on('error', (e) => {
-      console.error('Got error: ${e.message} for ' + endpoint); // TODO: jakiś throw pewnie by się przydał
+      console.error(`Got error: \${e.message} for ${endpoint}`); // TODO: jakiś throw pewnie by się przydał
     });
 };
