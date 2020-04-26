@@ -16,22 +16,25 @@ app.use(bodyParser.json());
 
 // MongoDB
 mongoose
-  .connect(env.DB + '/airDataDB', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
-  .then(() => console.log('Db connected successfully'))
-  .catch((err) => console.log('Error connecting db'));
+	.connect(env.DB + '/airDataDB', {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+		useCreateIndex: true,
+		useFindAndModify: false,
+	})
+	.then(() => console.log('Db connected successfully'))
+	.catch((err) => console.log('Error connecting db'));
 
 // routes
-app.get('/', (req, res) => res.send('Server is up.'));
+app.get('/', (req, res) => {
+	console.log(`Received ping!!!`);
+	res.send('Server is up.');
+});
 app.use('/api', apiRoutes);
 
 // run
 app.listen(env.PORT, function () {
-  console.log('Running on port ' + env.PORT);
+	console.log('Running on port ' + env.PORT);
 });
 
 // run update station
