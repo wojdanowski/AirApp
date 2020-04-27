@@ -52,6 +52,6 @@ const httpGet = (endpoint, callback) => {
       });
     })
     .on('error', (e) => {
-      console.error(`Got error: \${e.message} for ${endpoint}`); // TODO: jakiś throw pewnie by się przydał
+      console.error(`Got error: ${e.message} for ${endpoint}`); // TODO: jakiś throw pewnie by się przydał
     });
 };
