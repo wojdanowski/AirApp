@@ -28,8 +28,8 @@ exports.nearestAirIndex = async (req, res) => {
     return;
   }
 
+  // TODO: duplikat z notifications
   try {
-    console.log('test');
     const stationList = await Station.find({
       location: {
         $nearSphere: {
