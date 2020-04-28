@@ -8,8 +8,10 @@ class MapBoxScreen extends Component {
 		return (
 			<div className={classes.MapBoxScreen} ref={this.props.refProp}>
 				<MapBox
+					displayedStation={this.props.displayedStation}
 					selectedCoordinates={this.props.selectedCoordinates}
 					isInitial={this.props.isInitial}
+					shouldUpdateMap={this.props.shouldUpdateMap}
 				/>
 			</div>
 		);
