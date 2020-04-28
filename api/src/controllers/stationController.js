@@ -1,4 +1,4 @@
-const Gios = require('../utils/giosApi');
+const Gios = require('../utils/externalApis/gios');
 const Station = require('../models/stationModel');
 
 exports.all = async (req, res) => {
@@ -28,8 +28,8 @@ exports.nearestAirIndex = async (req, res) => {
     return;
   }
 
+  // TODO: duplikat z notifications
   try {
-    console.log('test');
     const stationList = await Station.find({
       location: {
         $nearSphere: {
@@ -42,11 +42,11 @@ exports.nearestAirIndex = async (req, res) => {
     }).limit(1);
     let station = stationList[0];
 
-    Gios.getAirIndex(station.station_id, (airData) => {
-      res.status(200).json({
-        status: 'success',
-        data: { station, airData },
-      });
+    const airData = await Gios.getAirIndex(station.station_id);
+
+    res.status(200).json({
+      status: 'success',
+      data: { station, airData },
     });
   } catch (err) {
     res.status(400).json({
