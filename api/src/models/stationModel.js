@@ -13,6 +13,7 @@ const stationSchema = mongoose.Schema({
       values: ['Gios'],
     },
   },
+  //TODO: duplikat z subscriptionModel
   location: {
     // GeoJSON
     type: {

@@ -12,13 +12,18 @@ const subscriptionSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  lat: {
-    type: Number,
-    required: true,
-  },
-  lon: {
-    type: Number,
-    required: true,
+  //TODO: duplikat z stationModel
+  location: {
+    type: {
+      type: String,
+      default: 'Point',
+      enum: ['Point'],
+      required: true,
+    },
+    coordinates: {
+      type: [Number], // lon, lat
+      required: true,
+    },
   },
   hours: {
     type: [Number],
@@ -30,6 +35,8 @@ const subscriptionSchema = mongoose.Schema({
     default: Date.now,
   },
 });
+
+subscriptionSchema.index({ location: '2dsphere' });
 
 const Subscription = (module.exports = mongoose.model(
   'subscription',
