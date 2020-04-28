@@ -1,5 +1,5 @@
 const env = require('.././env');
-const Gios = require('./giosApi');
+const Gios = require('./externalApis/gios');
 const Station = require('../models/stationModel');
 
 const saveGiosStation = async (giosStation) => {
@@ -29,13 +29,10 @@ const saveGiosStation = async (giosStation) => {
   }
 };
 
-const saveAllGiosStations = (giosStations) => {
-  console.log('Gios stations ' + giosStations.length);
-  giosStations.map((station) => saveGiosStation(station));
-};
-
 const updateGiosStations = async () => {
-  Gios.getStations(saveAllGiosStations);
+  const stations = await Gios.getStations();
+  console.log('Gios stations ' + stations.length);
+  stations.map((station) => saveGiosStation(station));
 };
 
 exports.scheduleUpdateStations = async () => {
