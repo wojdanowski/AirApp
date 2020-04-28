@@ -1,6 +1,7 @@
 // modules
 const env = require('./env');
 const stationUpdater = require('./utils/stationUpdater');
+const notifications = require('./utils/notifications');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -36,3 +37,5 @@ app.listen(env.PORT, function () {
 
 // run update station
 stationUpdater.scheduleUpdateStations();
+// run notifications
+notifications.scheduleNotifications();
