@@ -10,6 +10,7 @@ class MainPage extends Component {
 	constructor(props) {
 		super(props);
 		this.mapBoxRef = React.createRef();
+		this.mainScreenRef = React.createRef();
 		this.AIR_API_URL = 'https://air-data-api.herokuapp.com/api/';
 		this.MAP_BOX_API_URL =
 			'https://api.mapbox.com/geocoding/v5/mapbox.places/';
@@ -126,7 +127,7 @@ class MainPage extends Component {
 	render() {
 		return (
 			<Aux>
-				<div className={classes.MainScreenBox}>
+				<div className={classes.MainScreenBox} ref={this.mainScreenRef}>
 					<LocationForm
 						geoIconClicked={this.geoIconClickedHandler}
 						changeHandler={this.placeSuggestionHandler}
@@ -135,7 +136,10 @@ class MainPage extends Component {
 					/>
 				</div>
 				<MapBoxScreen
-					refProp={this.mapBoxRef}
+					arrowClickedHandler={() =>
+						this.scrollToRef(this.mainScreenRef)
+					}
+					mapRef={this.mapBoxRef}
 					isInitial={this.state.isInitial}
 					selectedCoordinates={this.state.selectedCoordinates}
 					displayedStation={this.state.displayedStation}
