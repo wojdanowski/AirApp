@@ -2,16 +2,23 @@ import React, { Component } from 'react';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 import SideBar from '../../components/UI/SideBar/SideBar';
-import MainPage from './../MainPage/MainPage';
+import Backdrop from './../../components/UI/Backdrop/Backdrop';
 
 class Layout extends Component {
 	state = {
 		showSidebar: false,
+		showBackdrop: false,
 	};
 
 	toggleSidebarHandler = () => {
 		this.setState((prevState) => {
 			return { showSidebar: !prevState.showSidebar };
+		});
+	};
+
+	toggleBackdropHandler = () => {
+		this.setState((prevState) => {
+			return { showBackdrop: !prevState.showBackdrop };
 		});
 	};
 
@@ -22,7 +29,8 @@ class Layout extends Component {
 					isOpen={this.state.showSidebar}
 					toggleSidebar={this.toggleSidebarHandler}
 				/>
-				<MainPage />
+				<Backdrop isOpen={this.state.showBackdrop} />
+				<main>{this.props.children}</main>
 			</Aux>
 		);
 	}
