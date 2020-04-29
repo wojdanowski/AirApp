@@ -46,8 +46,7 @@ const sendHourNotifications = async (hour) => {
     const subscriptions = await Subscription.find({ hours: hour });
     console.log(`Sending ${subscriptions.length} notifications (${hour})`);
     subscriptions.map(async (subscription) => {
-      // await sendNotification(subscription);
-      console.log('poszlo');
+      await sendNotification(subscription);
     });
   } catch (err) {
     console.log(`Error while looking for hour ${hour} subscriptions`);

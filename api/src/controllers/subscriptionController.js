@@ -11,6 +11,7 @@ exports.new = async (req, res) => {
       },
       hours: req.body.hours,
     });
+    //FIXME: na heroku jest czas gmt - najatwiej byłoby gdyby czas przychodził w gmt - musiałoby to być rozwiązane w frontendzie
 
     res.status(201).json({
       status: 'success',
