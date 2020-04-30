@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 import SideBar from '../../components/UI/SideBar/SideBar';
 import Backdrop from './../../components/UI/Backdrop/Backdrop';
+import { UiProvider } from './../../Context/UiContext';
 
 class Layout extends Component {
 	state = {
 		showSidebar: false,
 		showBackdrop: false,
+		uiFunctions: {
+			isWorking: this.isWorking,
+		},
 	};
 
 	toggleSidebarHandler = () => {
@@ -22,16 +25,25 @@ class Layout extends Component {
 		});
 	};
 
+	isWorking = () => {
+		console.log(`WORKING`);
+	};
+
 	render() {
 		return (
-			<Aux>
+			<UiProvider
+				value={{
+					isWorking: this.isWorking,
+					valueTwo: 'valueTwo',
+				}}
+			>
 				<SideBar
 					isOpen={this.state.showSidebar}
 					toggleSidebar={this.toggleSidebarHandler}
 				/>
 				<Backdrop isOpen={this.state.showBackdrop} />
 				<main>{this.props.children}</main>
-			</Aux>
+			</UiProvider>
 		);
 	}
 }

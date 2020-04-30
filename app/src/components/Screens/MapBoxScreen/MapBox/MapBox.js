@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
-// import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 import classes from './MapBox.module.css';
 import Aux from './../../../../hoc/Auxiliary/Auxiliary';
@@ -61,12 +60,36 @@ class MapBox extends Component {
 				.setLngLat(coordinates)
 				.addTo(this.map);
 
+			const lookForNames = [
+				'c6h6IndexLevel',
+				'coIndexLevel',
+				'no2IndexLevel',
+				'o3IndexLevel',
+				'pm10IndexLevel',
+				'pm25IndexLevel',
+				'so2IndexLevel',
+				'stIndexLevel',
+			];
+
+			const dataKeys = Object.keys(
+				this.props.displayedStation.measurement
+			);
+			const isInTheArray = (value, array) => {
+				return (value = array.includes(value));
+			};
+			const filteredResoults = dataKeys.filter((el) =>
+				isInTheArray(el, dataKeys)
+			);
+			console.log(dataKeys);
+			console.log(filteredResoults);
+
 			const popupText = Object.entries(
 				this.props.displayedStation.measurement
 			)
 				.map(([key, value]) => key + ':' + value)
 				.join('\n');
-			const popup = new mapboxgl.Popup({
+
+			new mapboxgl.Popup({
 				offset: 30,
 			})
 				.setLngLat(displayedStationCoord)

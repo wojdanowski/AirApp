@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import classes from './LocationForm.module.css';
 import GeoIcon from './../../UI/GeoIcon/GeoIcon';
-import MainButton from './../../UI/Buttons/MainButton/MainButton';
 import PlaceSuggestion from './PlaceSuggestion/PlaceSuggestion';
 
 class LocationForm extends Component {
@@ -70,7 +69,7 @@ class LocationForm extends Component {
 								<input
 									className={classes.InputFormField}
 									type='text'
-									placeholder='Lokalizacja'
+									placeholder='Wpisz swoją lokalizację'
 									onChange={(event) => {
 										this.props.changeHandler(
 											event.target.value
@@ -89,8 +88,6 @@ class LocationForm extends Component {
 							</div>
 						</div>
 					</label>
-					<MainButton label='Subskrybuj lokalizację' />
-					<MainButton label='pokaż na mapie' />
 				</form>
 			</div>
 		);
