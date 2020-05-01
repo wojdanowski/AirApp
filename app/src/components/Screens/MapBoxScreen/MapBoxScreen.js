@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import classes from './MapBoxScreen.module.css';
-import MapBox from './MapBox/MapBox';
+import MapBox from './../../../containers/MapBox/MapBox';
 import Arrows from './../../UI/Arrows/Arrows';
 
 class MapBoxScreen extends Component {

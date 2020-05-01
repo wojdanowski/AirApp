@@ -21,7 +21,6 @@ class MainPage extends Component {
 		this.state = {
 			isInitial: true,
 			placesSuggestions: [],
-			// initial coordinates for mapbox. Center of Poland
 			selectedCoordinates: [],
 			displayedStation: {
 				stationName: '',

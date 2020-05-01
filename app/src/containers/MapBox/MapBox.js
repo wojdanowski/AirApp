@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
 
 import classes from './MapBox.module.css';
-import Aux from './../../../../hoc/Auxiliary/Auxiliary';
+import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
@@ -71,25 +71,25 @@ class MapBox extends Component {
 				'stIndexLevel',
 			];
 
-			const dataKeys = Object.keys(
-				this.props.displayedStation.measurement
-			);
 			const isInTheArray = (value, array) => {
 				return (value = array.includes(value));
 			};
-			const filteredResoults = dataKeys.filter((el) =>
-				isInTheArray(el, dataKeys)
-			);
-			console.log(dataKeys);
-			console.log(filteredResoults);
 
-			const popupText = Object.entries(
-				this.props.displayedStation.measurement
-			)
-				.map(([key, value]) => key + ':' + value)
-				.join('\n');
+			const data = this.props.displayedStation.measurement;
+			let filteredResponse = [];
 
-			new mapboxgl.Popup({
+			for (const key in data) {
+				if (isInTheArray(key, lookForNames) && data[key]) {
+					filteredResponse.push(
+						`${key} : ${data[key].indexLevelName}`
+					);
+				}
+			}
+
+			console.log(filteredResponse);
+			const popupText = filteredResponse.join('\n');
+
+			const popup = new mapboxgl.Popup({
 				offset: 30,
 			})
 				.setLngLat(displayedStationCoord)

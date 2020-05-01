@@ -1,6 +1,6 @@
 .SideBarContainer {
 	position: fixed;
-	width: 280px;
+	min-width: 300px;
 	max-width: 70%;
 	height: 100%;
 	left: 0;
