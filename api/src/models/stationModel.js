@@ -1,3 +1,5 @@
+const { locationPoint } = require('./nestedSchemas');
+
 const mongoose = require('mongoose');
 
 const stationSchema = mongoose.Schema({
@@ -13,20 +15,7 @@ const stationSchema = mongoose.Schema({
       values: ['Gios'],
     },
   },
-  //TODO: duplikat z subscriptionModel
-  location: {
-    // GeoJSON
-    type: {
-      type: String,
-      default: 'Point', // FIXME: coś default nie działa w update
-      enum: ['Point'],
-      required: true,
-    },
-    coordinates: {
-      type: [Number], // lon, lat
-      required: true,
-    },
-  },
+  location: locationPoint,
   name: String,
 });
 

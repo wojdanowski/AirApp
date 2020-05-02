@@ -27,7 +27,7 @@ exports.getMeasurementStations = async (stationId) => {
   return await giosRequest(endpoint);
 };
 
-exports.getMeasurementData = async (stationId) => {
-  const endpoint = '/rest/data/getData/' + stationId;
+exports.getMeasurementData = async (measurementId) => {
+  const endpoint = '/rest/data/getData/' + measurementId;
   return await giosRequest(endpoint);
 };
