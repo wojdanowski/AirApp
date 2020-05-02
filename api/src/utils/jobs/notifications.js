@@ -2,6 +2,7 @@ const Subscription = require('../../models/subscriptionModel');
 const Station = require('../../models/stationModel');
 const Gios = require('../externalApis/gios');
 const sendEmail = require('../email');
+const { findNearestStation } = require('../../controllers/stationController');
 
 const schedule = require('node-schedule');
 
@@ -11,14 +12,7 @@ const sendNotification = async (subscription) => {
   let message = '';
 
   try {
-    const stationList = await Station.find({
-      location: {
-        $nearSphere: {
-          $geometry: subscription.location,
-        },
-      },
-    }).limit(1);
-    let station = stationList[0];
+    let station = await findNearestStation(lon, lat);
 
     const airData = await Gios.getAirIndex(station.station_id);
     // FIXME: jakaś normalna treść wiadomości
