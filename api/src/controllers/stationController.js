@@ -28,7 +28,6 @@ exports.nearestAirIndex = async (req, res) => {
     return;
   }
 
-  // TODO: duplikat z notifications
   try {
     let station = await findNearestStation(lon, lat);
 

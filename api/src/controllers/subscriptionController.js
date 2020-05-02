@@ -86,16 +86,19 @@ exports.delete = async (req, res) => {
   // TODO: wyszukiwanie po tokenie jwt, a nie id
 
   try {
-    await Subscription.findByIdAndDelete(req.params.subscription_id);
-
-    // FIXME: kod 204 = no content, dlatego json nie ma sensu
-    res.status(204).json({
-      status: 'success',
-      data: null,
-    });
+    const deleted = await Subscription.findByIdAndDelete(
+      req.params.subscription_id
+    );
+    if (!deleted) {
+      res.status(404).json({
+        status: 'fail',
+        message: "Subscription doesn't exist",
+      });
+    } else {
+      res.status(204).end();
+    }
   } catch (err) {
-    // FIXME: nawet jak nic nie znajdzie, to nie rzuci rejecta. Niby ok, miało nie być i nie ma, ale powinien być ten 404
-    res.status(404).json({
+    res.status(400).json({
       status: 'fail',
       message: err,
     });
