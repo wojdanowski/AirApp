@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const env = require('.././env');
+const env = require('../setup/env');
 
 const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({

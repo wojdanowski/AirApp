@@ -6,8 +6,8 @@ router.get('/', function (req, res) {
   });
 });
 
-const subscriptionController = require('./controllers/subscriptionController');
-const stationController = require('./controllers/stationController');
+const subscriptionController = require('../controllers/subscriptionController');
+const stationController = require('../controllers/stationController');
 
 router.route('/subscriptions').post(subscriptionController.new);
 
