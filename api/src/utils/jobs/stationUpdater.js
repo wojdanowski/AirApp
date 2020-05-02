@@ -1,4 +1,4 @@
-const env = require('../../env');
+const env = require('../../setup/env');
 const Gios = require('../externalApis/gios');
 const Station = require('../../models/stationModel');
 
