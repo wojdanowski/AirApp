@@ -1,6 +1,6 @@
-const env = require('.././env');
-const Gios = require('./externalApis/gios');
-const Station = require('../models/stationModel');
+const env = require('../../env');
+const Gios = require('../externalApis/gios');
+const Station = require('../../models/stationModel');
 
 const saveGiosStation = async (giosStation) => {
   try {
@@ -35,10 +35,10 @@ const updateGiosStations = async () => {
   stations.map((station) => saveGiosStation(station));
 };
 
-exports.scheduleUpdateStations = async () => {
+exports.start = async () => {
   // setTimeout > setInterval: https://stackoverflow.com/questions/6685396/execute-the-setinterval-function-without-delay-the-first-time
   delay = env.UPDATESCHEDULE;
-  console.log(`Station update scheduled: ${delay}`);
+  console.log(`Station update job started. Interval: ${delay}`);
   (function runSchedule() {
     updateGiosStations();
     setTimeout(runSchedule, delay);

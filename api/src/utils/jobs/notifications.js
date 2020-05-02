@@ -1,7 +1,8 @@
-const Subscription = require('../models/subscriptionModel');
-const Station = require('../models/stationModel');
-const Gios = require('./externalApis/gios');
-const sendEmail = require('./email');
+const Subscription = require('../../models/subscriptionModel');
+const Station = require('../../models/stationModel');
+const Gios = require('../externalApis/gios');
+const sendEmail = require('../email');
+
 const schedule = require('node-schedule');
 
 const sendNotification = async (subscription) => {
@@ -55,7 +56,8 @@ const sendHourNotifications = async (hour) => {
   }
 };
 
-exports.scheduleNotifications = async () => {
+exports.start = async () => {
+  console.log('Notifications job started');
   const job = schedule.scheduleJob('0 * * * *', (fireDate) => {
     console.log(`Notifications run at ${fireDate}`);
     sendHourNotifications(fireDate.getHours());
