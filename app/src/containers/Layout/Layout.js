@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Aux from '../../hoc/Auxiliary/Auxiliary';
 
-import SideBar from '../../components/UI/SideBar/SideBar';
-import MainPage from './../MainPage/MainPage';
+import Backdrop from './../../components/UI/Backdrop/Backdrop';
+import { UiProvider } from './../../Context/UiContext';
 
 class Layout extends Component {
 	state = {
 		showSidebar: false,
+		showBackdrop: false,
 	};
 
 	toggleSidebarHandler = () => {
@@ -15,15 +15,27 @@ class Layout extends Component {
 		});
 	};
 
+	toggleBackdropHandler = () => {
+		this.setState((prevState) => {
+			return { showBackdrop: !prevState.showBackdrop };
+		});
+	};
+
 	render() {
 		return (
-			<Aux>
-				<SideBar
-					isOpen={this.state.showSidebar}
-					toggleSidebar={this.toggleSidebarHandler}
-				/>
-				<MainPage />
-			</Aux>
+			<UiProvider
+				value={{
+					showSidebar: this.state.showSidebar,
+					showBackdrop: this.state.showBackdrop,
+					uiFunctions: {
+						toggleSidebar: this.toggleSidebarHandler,
+						toggleBackdrop: this.toggleBackdropHandler,
+					},
+				}}
+			>
+				<Backdrop isOpen={this.state.showBackdrop} />
+				<main>{this.props.children}</main>
+			</UiProvider>
 		);
 	}
 }

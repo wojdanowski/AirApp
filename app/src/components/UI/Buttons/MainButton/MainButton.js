@@ -4,8 +4,12 @@ import classes from './MainButton.module.css';
 
 const MainButton = (props) => {
 	return (
-		<div className={classes.ButtonWraper}>
-			<button className={classes.Red} type='button'>
+		<div className={classes.ButtonWrapper}>
+			<button
+				className={classes.Red}
+				type='button'
+				onClick={props.clicked}
+			>
 				{props.label}
 			</button>
 		</div>

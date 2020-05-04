@@ -1,59 +1,44 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import Aux from './../../hoc/Auxiliary/Auxiliary';
 import MapBoxScreen from './../../components/Screens/MapBoxScreen/MapBoxScreen';
 import LocationForm from './../../components/InputForms/LocationForm/LocationForm';
+import SideBar from './../../components/UI/SideBar/SideBar';
 import classes from './MainPage.module.css';
+import Aux from './../../hoc/Auxiliary/Auxiliary';
+import UiContext from './../../Context/UiContext';
+import * as LINKS from './../../Utils/Links';
+import asyncForEach from '../../Utils/asyncForEach';
 
 class MainPage extends Component {
 	constructor(props) {
 		super(props);
 		this.mapBoxRef = React.createRef();
-		this.AIR_API_URL = 'https://air-data-api.herokuapp.com/api/';
-		this.MAP_BOX_API_URL =
-			'https://api.mapbox.com/geocoding/v5/mapbox.places/';
-		this.MAP_BOX_KEY =
-			'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
-		this.MAP_BOX_QUERY_OPT =
-			'cachebuster=1587665183995&autocomplete=true&country=pl&types=poi%2Cplace%2Cregion%2Caddress&bbox=13.628935705399272%2C48.64958968470896%2C24.63306192625683%2C55.12432296512296&language=pl';
+		this.mainScreenRef = React.createRef();
 		this.state = {
 			isInitial: true,
 			placesSuggestions: [],
-			// initial coordinates for mapbox. Center of Poland
 			selectedCoordinates: [],
 			displayedStation: {
 				stationName: '',
 				coordinates: [],
 				measurement: {},
+				sensorList: null,
+				sensorsData: null,
 			},
-
-			// displayedStations: [
-			// 	{
-			// 		stationId: '',
-			// 		stationCoordinates: {
-			// 			lat: 11,
-			// 			lng: 12,
-			// 		},
-			// 		stationMeasurement: {},
-			// 	},
-			// ],
 		};
 	}
+	static contextType = UiContext;
 
 	placeSuggestionHandler = async (content) => {
 		if (content.length > 0) {
-			const mapBoxQuery = `${this.MAP_BOX_API_URL}${content}.json?access_token=${this.MAP_BOX_KEY}&${this.MAP_BOX_QUERY_OPT}`;
+			const mapBoxQuery = `${LINKS.MAP_BOX_API_URL}${content}.json?access_token=${LINKS.MAP_BOX_KEY}&${LINKS.MAP_BOX_QUERY_OPT}`;
 
 			try {
 				const res = await axios(mapBoxQuery);
 				const placesSuggestions = res.data.features.map((place) => {
 					const filteredPlace = {};
-					filteredPlace.coordinates = [
-						...place.geometry.coordinates,
-						// lat: place.geometry.coordinates[1],
-						// lng: place.geometry.coordinates[0],
-					];
+					filteredPlace.coordinates = [...place.geometry.coordinates];
 					filteredPlace.name = place.place_name
 						.split(', ')
 						.slice(0, 3)
@@ -72,11 +57,10 @@ class MainPage extends Component {
 	};
 
 	getStationData = async (coordinates) => {
-		const proxy = 'https://cors-anywhere.herokuapp.com/';
-		const query = `${proxy}${this.AIR_API_URL}nearestAirIndex/?lat=${coordinates[1]}&lon=${coordinates[0]}`;
+		const query = `${LINKS.PROXY}${LINKS.AIR_API_URL}nearestAirIndex/?lat=${coordinates[1]}&lon=${coordinates[0]}`;
 		try {
 			const res = (await axios(query)).data;
-			console.log(res.data);
+			console.log(res);
 			this.setState({
 				displayedStation: {
 					stationName: res.data.station.name,
@@ -90,6 +74,56 @@ class MainPage extends Component {
 		}
 	};
 
+	getSensorList = async (stationId) => {
+		const query = `${LINKS.PROXY}${LINKS.GIOS_API_URL}station/sensors/${stationId}`;
+		try {
+			const res = await axios(query);
+			console.log(res);
+			this.setState({
+				displayedStation: {
+					sensorList: res.data,
+					...this.state.displayedStation,
+				},
+			});
+			this.getSensorData(res.data);
+		} catch (error) {
+			alert(error);
+			return error;
+		}
+	};
+
+	getSensorData = async (sensorsList) => {
+		const query = `${LINKS.PROXY}${LINKS.GIOS_API_URL}data/getData/`;
+		const fetchDataPromises = sensorsList.map((el, index) => {
+			return new Promise(() => {
+				axios(query + el.id).then((res) => {
+					let newSensorsData = [];
+					const oldState = this.state.displayedStation.sensorsData;
+					if (oldState) {
+						newSensorsData = [...oldState];
+					}
+					newSensorsData.push(res.data);
+
+					this.setState({
+						displayedStation: {
+							...this.state.displayedStation,
+							sensorsData: newSensorsData,
+						},
+					});
+
+					console.log(
+						`Wynik dla id: ${el.id} wynosi ${res.data.values[1].value}`
+					);
+				});
+			});
+		});
+		try {
+			await Promise.all([...fetchDataPromises]);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	scrollToRef = (ref) => {
 		window.scrollTo(0, ref.current.offsetTop);
 	};
@@ -98,10 +132,14 @@ class MainPage extends Component {
 		const fetchError = await this.getStationData(coordinates);
 		if (!fetchError) {
 			this.scrollToRef(this.mapBoxRef);
+			if (!this.context.showSidebar) {
+				this.context.uiFunctions.toggleSidebar();
+			}
 			this.setState({
 				selectedCoordinates: [...coordinates],
 				isInitial: false,
 			});
+			this.getSensorList(this.state.displayedStation.measurement.id);
 		} else {
 			alert(fetchError);
 		}
@@ -126,7 +164,8 @@ class MainPage extends Component {
 	render() {
 		return (
 			<Aux>
-				<div className={classes.MainScreenBox}>
+				<SideBar stationData={this.state.displayedStation} />
+				<div className={classes.MainScreenBox} ref={this.mainScreenRef}>
 					<LocationForm
 						geoIconClicked={this.geoIconClickedHandler}
 						changeHandler={this.placeSuggestionHandler}
@@ -135,7 +174,10 @@ class MainPage extends Component {
 					/>
 				</div>
 				<MapBoxScreen
-					refProp={this.mapBoxRef}
+					arrowClickedHandler={() =>
+						this.scrollToRef(this.mainScreenRef)
+					}
+					mapRef={this.mapBoxRef}
 					isInitial={this.state.isInitial}
 					selectedCoordinates={this.state.selectedCoordinates}
 					displayedStation={this.state.displayedStation}
