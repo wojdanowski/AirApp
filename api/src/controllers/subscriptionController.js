@@ -82,7 +82,6 @@ exports.update = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  // TODO: właściwe kody http
   // TODO: wyszukiwanie po tokenie jwt, a nie id
 
   try {

@@ -1,4 +1,4 @@
-const { locationPoint } = require('./nestedSchemas');
+const { locationPoint, mIndex } = require('./nestedSchemas');
 
 const mongoose = require('mongoose');
 
@@ -17,6 +17,17 @@ const stationSchema = mongoose.Schema({
   },
   location: locationPoint,
   name: String,
+  stIndex: {
+    indexLevel: {
+      id: Number,
+      indexLevelName: String,
+    },
+    calcDate: Date,
+    sourceDataDate: Date,
+    indexStatus: Boolean,
+    indexParam: String,
+  },
+  mIndexes: [mIndex],
 });
 
 stationSchema.index({ location: '2dsphere' });

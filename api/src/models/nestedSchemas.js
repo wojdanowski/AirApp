@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 exports.locationPoint = {
   type: {
     type: String,
@@ -10,3 +12,16 @@ exports.locationPoint = {
     required: true,
   },
 };
+
+exports.mIndex = mongoose.Schema(
+  {
+    param: String,
+    sourceDataDate: Date,
+    calcDate: Date,
+    indexLevel: {
+      id: Number,
+      indexLevelName: String,
+    },
+  },
+  { _id: false }
+);

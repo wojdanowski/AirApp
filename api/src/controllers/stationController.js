@@ -45,6 +45,7 @@ exports.nearestAirIndex = async (req, res) => {
   }
 };
 
+// TODO: nadaje się na stationService
 const findNearestStation = async (lon, lat) => {
   // bez try/catch - obsługa w metodzie nadrzędnej
   const stationList = await Station.find({
