@@ -8,11 +8,13 @@ const schedule = require('node-schedule');
 
 const sendNotification = async (subscription) => {
   // get air data for nearest station
-  // TODO: duplikat z stationController
   let message = '';
 
   try {
-    let station = await findNearestStation(lon, lat);
+    let station = await findNearestStation(
+      subscription.location.coordinates[0],
+      subscription.location.coordinates[1]
+    );
 
     const airData = await Gios.getAirIndex(station.station_id);
     // FIXME: jakaś normalna treść wiadomości
