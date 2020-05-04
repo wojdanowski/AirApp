@@ -1,24 +1,48 @@
-import React from 'react';
-import classes from '../InputForms.module.css';
+import React, { Component } from 'react';
+import MainButton from './../../UI/Buttons/MainButton/MainButton';
+import Aux from './../../../hoc/Auxiliary/Auxiliary';
 
-const EmailSubForm = props => {
-	return (
-		<form>
-			<div className={classes.segment}>
-				<h1>Get email notification</h1>
-			</div>
+class EmailSubForm extends Component {
+	state = {
+		typedEmail: '',
+	};
 
-			<label>
-				<input type='email' placeholder='Email Address' />
-			</label>
-			<label>
-				<input type='text' placeholder='Location' />
-			</label>
-			<button className={classes.red} type='button'>
-				<i className={classes.icon}></i> SUBSCRIBE
-			</button>
-		</form>
-	);
-};
+	subscribeLocationHandler = () => {
+		console.log(`submit form`);
+	};
+
+	formChangedHandler = (event) => {
+		console.log(event.target.value);
+		this.setState({
+			typedEmail: event.target.value,
+		});
+	};
+
+	render() {
+		return (
+			<Aux>
+				<h3>Get email notification</h3>
+				<label>
+					<input
+						type='email'
+						placeholder='Email Address'
+						onChange={(event) => this.formChangedHandler(event)}
+					/>
+				</label>
+				<form
+					onSubmit={(event) => {
+						event.preventDefault();
+						this.subscribeLocationHandler();
+					}}
+				>
+					<MainButton
+						label={'SUBSCRIBE'}
+						clicked={() => this.subscribeLocationHandler()}
+					/>
+				</form>
+			</Aux>
+		);
+	}
+}
 
 export default EmailSubForm;

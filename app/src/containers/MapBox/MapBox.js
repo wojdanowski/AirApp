@@ -87,9 +87,9 @@ class MapBox extends Component {
 			}
 
 			console.log(filteredResponse);
-			const popupText = filteredResponse.join('\n');
+			const popupText = filteredResponse.join('<br />');
 
-			const popup = new mapboxgl.Popup({
+			new mapboxgl.Popup({
 				offset: 30,
 			})
 				.setLngLat(displayedStationCoord)
