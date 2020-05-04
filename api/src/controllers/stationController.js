@@ -1,4 +1,3 @@
-const Gios = require('../utils/externalApis/gios');
 const Station = require('../models/stationModel');
 
 exports.all = async (req, res) => {
@@ -31,11 +30,9 @@ exports.nearestAirIndex = async (req, res) => {
   try {
     let station = await findNearestStation(lon, lat);
 
-    const airData = await Gios.getAirIndex(station.station_id);
-
     res.status(200).json({
       status: 'success',
-      data: { station, airData },
+      data: { station },
     });
   } catch (err) {
     res.status(400).json({

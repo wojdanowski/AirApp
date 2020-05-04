@@ -1,6 +1,4 @@
 const Subscription = require('../../models/subscriptionModel');
-const Station = require('../../models/stationModel');
-const Gios = require('../externalApis/gios');
 const sendEmail = require('../email');
 const { findNearestStation } = require('../../controllers/stationController');
 
@@ -16,9 +14,7 @@ const sendNotification = async (subscription) => {
       subscription.location.coordinates[1]
     );
 
-    const airData = await Gios.getAirIndex(station.station_id);
-    // FIXME: jakaś normalna treść wiadomości
-    message = JSON.stringify(airData);
+    message = JSON.stringify(station);
   } catch (err) {
     console.log(`Error while LOOKING for air data for ${subscription.email}`);
     console.log(err);
