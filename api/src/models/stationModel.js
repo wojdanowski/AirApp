@@ -1,3 +1,5 @@
+const { locationPoint, mIndex } = require('./nestedSchemas');
+
 const mongoose = require('mongoose');
 
 const stationSchema = mongoose.Schema({
@@ -13,21 +15,19 @@ const stationSchema = mongoose.Schema({
       values: ['Gios'],
     },
   },
-  //TODO: duplikat z subscriptionModel
-  location: {
-    // GeoJSON
-    type: {
-      type: String,
-      default: 'Point', // FIXME: coś default nie działa w update
-      enum: ['Point'],
-      required: true,
-    },
-    coordinates: {
-      type: [Number], // lon, lat
-      required: true,
-    },
-  },
+  location: locationPoint,
   name: String,
+  stIndex: {
+    indexLevel: {
+      id: Number,
+      indexLevelName: String,
+    },
+    calcDate: Date,
+    sourceDataDate: Date,
+    indexStatus: Boolean,
+    indexParam: String,
+  },
+  mIndexes: [mIndex],
 });
 
 stationSchema.index({ location: '2dsphere' });

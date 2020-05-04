@@ -13,4 +13,5 @@ exports.EMAIL_PORT = process.env.EMAIL_PORT || 25;
 exports.EMAIL_USERNAME = process.env.EMAIL_USERNAME;
 exports.EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 // CONFIG
-exports.UPDATESCHEDULE = process.env.UPDATESCHEDULE || 1000 * 60 * 60 * 12;
+exports.STATIONSCHEDULE = process.env.STATIONCHEDULE || 1000 * 60 * 60 * 12;
+exports.AIRDATASCHEDULE = process.env.AIRDATASCHEDULE || 1000 * 60 * 30;

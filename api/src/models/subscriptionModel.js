@@ -1,3 +1,5 @@
+const { locationPoint } = require('./nestedSchemas');
+
 const mongoose = require('mongoose');
 
 const normaliseHours = (hours) => {
@@ -12,28 +14,7 @@ const subscriptionSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  //TODO: duplikat z stationModel
-  location: {
-    type: {
-      type: String,
-      default: 'Point',
-      enum: ['Point'],
-      required: true,
-    },
-    coordinates: {
-      type: [Number], // lon, lat
-      required: true,
-    },
-  },
-  hours: {
-    type: [Number],
-    required: true,
-    set: (hours) => normaliseHours(hours),
-  },
-  subscription_date: {
-    type: Date,
-    default: Date.now,
-  },
+  location: locationPoint,
 });
 
 subscriptionSchema.index({ location: '2dsphere' });

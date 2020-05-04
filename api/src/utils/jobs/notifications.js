@@ -1,28 +1,20 @@
 const Subscription = require('../../models/subscriptionModel');
-const Station = require('../../models/stationModel');
-const Gios = require('../externalApis/gios');
 const sendEmail = require('../email');
+const { findNearestStation } = require('../../controllers/stationController');
 
 const schedule = require('node-schedule');
 
 const sendNotification = async (subscription) => {
   // get air data for nearest station
-  // TODO: duplikat z stationController
   let message = '';
 
   try {
-    const stationList = await Station.find({
-      location: {
-        $nearSphere: {
-          $geometry: subscription.location,
-        },
-      },
-    }).limit(1);
-    let station = stationList[0];
+    let station = await findNearestStation(
+      subscription.location.coordinates[0],
+      subscription.location.coordinates[1]
+    );
 
-    const airData = await Gios.getAirIndex(station.station_id);
-    // FIXME: jakaś normalna treść wiadomości
-    message = JSON.stringify(airData);
+    message = JSON.stringify(station);
   } catch (err) {
     console.log(`Error while LOOKING for air data for ${subscription.email}`);
     console.log(err);

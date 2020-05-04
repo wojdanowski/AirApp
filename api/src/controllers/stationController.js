@@ -1,4 +1,3 @@
-const Gios = require('../utils/externalApis/gios');
 const Station = require('../models/stationModel');
 
 exports.all = async (req, res) => {
@@ -28,25 +27,12 @@ exports.nearestAirIndex = async (req, res) => {
     return;
   }
 
-  // TODO: duplikat z notifications
   try {
-    const stationList = await Station.find({
-      location: {
-        $nearSphere: {
-          $geometry: {
-            type: 'Point',
-            coordinates: [lon, lat],
-          },
-        },
-      },
-    }).limit(1);
-    let station = stationList[0];
-
-    const airData = await Gios.getAirIndex(station.station_id);
+    let station = await findNearestStation(lon, lat);
 
     res.status(200).json({
       status: 'success',
-      data: { station, airData },
+      data: { station },
     });
   } catch (err) {
     res.status(400).json({
@@ -55,3 +41,21 @@ exports.nearestAirIndex = async (req, res) => {
     });
   }
 };
+
+// TODO: nadaje się na stationService
+const findNearestStation = async (lon, lat) => {
+  // bez try/catch - obsługa w metodzie nadrzędnej
+  const stationList = await Station.find({
+    location: {
+      $nearSphere: {
+        $geometry: {
+          type: 'Point',
+          coordinates: [lon, lat],
+        },
+      },
+    },
+  }).limit(1);
+  return stationList[0];
+};
+
+exports.findNearestStation = findNearestStation;
