@@ -8,7 +8,6 @@ import classes from './MainPage.module.css';
 import Aux from './../../hoc/Auxiliary/Auxiliary';
 import UiContext from './../../Context/UiContext';
 import * as LINKS from './../../Utils/Links';
-import asyncForEach from '../../Utils/asyncForEach';
 
 class MainPage extends Component {
 	constructor(props) {
@@ -16,6 +15,7 @@ class MainPage extends Component {
 		this.mapBoxRef = React.createRef();
 		this.mainScreenRef = React.createRef();
 		this.state = {
+			isSensorDataLoading: true,
 			isInitial: true,
 			placesSuggestions: [],
 			selectedCoordinates: [],
@@ -93,6 +93,9 @@ class MainPage extends Component {
 	};
 
 	getSensorData = async (sensorsList) => {
+		if (!this.state.isSensorDataLoading) {
+			this.setState({ isSensorDataLoading: true });
+		}
 		const query = `${LINKS.PROXY}${LINKS.GIOS_API_URL}data/getData/`;
 		const fetchDataPromises = sensorsList.map((el, index) => {
 			return new Promise(() => {
