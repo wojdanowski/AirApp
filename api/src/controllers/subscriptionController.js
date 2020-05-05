@@ -11,7 +11,6 @@ exports.new = async (req, res) => {
       },
       hours: req.body.hours,
     });
-    //FIXME: na heroku jest czas gmt - najatwiej byłoby gdyby czas przychodził w gmt - musiałoby to być rozwiązane w frontendzie
 
     res.status(201).json({
       status: 'success',
@@ -66,15 +65,21 @@ exports.update = async (req, res) => {
       }
     );
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        subscription,
-      },
-    });
+    if (!subscription) {
+      res.status(404).json({
+        status: 'fail',
+        message: 'Subscription not found',
+      });
+    } else {
+      res.status(200).json({
+        status: 'success',
+        data: {
+          subscription,
+        },
+      });
+    }
   } catch (err) {
-    res.status(404).json({
-      //TODO: no 404 to średnio, mogą być niepoprawne dane
+    res.status(400).json({
       status: 'fail',
       message: err,
     });

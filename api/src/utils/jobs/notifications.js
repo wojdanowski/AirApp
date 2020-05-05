@@ -1,13 +1,14 @@
-const Subscription = require('../../models/subscriptionModel');
-const sendEmail = require('../email');
+const env = require('../../setup/env');
 const { findNearestStation } = require('../../controllers/stationController');
+const sendEmail = require('../email');
+const Subscription = require('../../models/subscriptionModel');
 
+const moment = require('moment-timezone');
 const schedule = require('node-schedule');
 
 const sendNotification = async (subscription) => {
-  // get air data for nearest station
   let message = '';
-
+  // get air data for nearest station
   try {
     let station = await findNearestStation(
       subscription.location.coordinates[0],
@@ -51,7 +52,8 @@ const sendHourNotifications = async (hour) => {
 exports.start = async () => {
   console.log('Notifications job started');
   const job = schedule.scheduleJob('0 * * * *', (fireDate) => {
-    console.log(`Notifications run at ${fireDate}`);
+    const localTime = moment(fireDate).tz(env.TIMEZONE);
+    console.log(`Notifications run at ${localTime}`);
     sendHourNotifications(fireDate.getHours());
   });
 };
