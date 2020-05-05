@@ -20,5 +20,6 @@ router
 
 router.route('/stations').get(stationController.all);
 router.route('/nearestAirIndex').get(stationController.nearestAirIndex); // ?lat=X&lon=Y
+router.route('/indexes').get(stationController.indexList);
 
 module.exports = router;

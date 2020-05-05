@@ -42,6 +42,22 @@ exports.nearestAirIndex = async (req, res) => {
   }
 };
 
+exports.indexList = async (req, res) => {
+  try {
+    const indexes = await Station.distinct('mIndexes.param');
+
+    res.status(200).json({
+      status: 'success',
+      data: { indexes },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
+
 // TODO: nadaje się na stationService
 const findNearestStation = async (lon, lat) => {
   // bez try/catch - obsługa w metodzie nadrzędnej
