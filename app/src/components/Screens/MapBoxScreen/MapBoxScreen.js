@@ -16,7 +16,6 @@ class MapBoxScreen extends Component {
 					displayedStation={this.props.displayedStation}
 					selectedCoordinates={this.props.selectedCoordinates}
 					isInitial={this.props.isInitial}
-					shouldUpdateMap={this.props.shouldUpdateMap}
 				/>
 			</div>
 		);

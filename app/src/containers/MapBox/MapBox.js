@@ -29,73 +29,50 @@ class MapBox extends Component {
 		const coordinates = this.props.selectedCoordinates;
 		const displayedStationCoord = this.props.displayedStation.coordinates;
 
-		if (coordinates !== prevProps.selectedCoordinates) {
-			this.bounds = new mapboxgl.LngLatBounds();
-			this.bounds.extend(coordinates);
-			this.bounds.extend(displayedStationCoord);
-			this.map.fitBounds(this.bounds, {
-				padding: {
-					top: 200,
-					bottom: 200,
-					left: 200,
-					right: 200,
-				},
-			});
+		if (coordinates === prevProps.selectedCoordinates) return;
 
-			const stationMarker = document.createElement('div');
-			stationMarker.className = classes.stationMarker;
-			new mapboxgl.Marker({
-				element: stationMarker,
-				anchor: 'center',
-			})
-				.setLngLat(displayedStationCoord)
-				.addTo(this.map);
+		this.bounds = new mapboxgl.LngLatBounds();
+		this.bounds.extend(coordinates);
+		this.bounds.extend(displayedStationCoord);
+		this.map.fitBounds(this.bounds, {
+			padding: {
+				top: 200,
+				bottom: 200,
+				left: 200,
+				right: 200,
+			},
+		});
 
-			const seleLocationMarker = document.createElement('div');
-			seleLocationMarker.className = classes.selectedLocation;
-			new mapboxgl.Marker({
-				element: seleLocationMarker,
-				anchor: 'center',
-			})
-				.setLngLat(coordinates)
-				.addTo(this.map);
+		const stationMarker = document.createElement('div');
+		stationMarker.className = classes.stationMarker;
+		new mapboxgl.Marker({
+			element: stationMarker,
+			anchor: 'center',
+		})
+			.setLngLat(displayedStationCoord)
+			.addTo(this.map);
 
-			const lookForNames = [
-				'c6h6IndexLevel',
-				'coIndexLevel',
-				'no2IndexLevel',
-				'o3IndexLevel',
-				'pm10IndexLevel',
-				'pm25IndexLevel',
-				'so2IndexLevel',
-				'stIndexLevel',
-			];
+		const seleLocationMarker = document.createElement('div');
+		seleLocationMarker.className = classes.selectedLocation;
+		new mapboxgl.Marker({
+			element: seleLocationMarker,
+			anchor: 'center',
+		})
+			.setLngLat(coordinates)
+			.addTo(this.map);
 
-			const isInTheArray = (value, array) => {
-				return (value = array.includes(value));
-			};
+		const allIndexesFromStation = this.props.displayedStation.measurement;
+		const allPopupText = allIndexesFromStation.map((el) => {
+			const text = `${el.param} : ${el.indexLevel.indexLevelName}<br />`;
+			return text;
+		});
 
-			const data = this.props.displayedStation.measurement;
-			let filteredResponse = [];
-
-			for (const key in data) {
-				if (isInTheArray(key, lookForNames) && data[key]) {
-					filteredResponse.push(
-						`${key} : ${data[key].indexLevelName}`
-					);
-				}
-			}
-
-			console.log(filteredResponse);
-			const popupText = filteredResponse.join('<br />');
-
-			new mapboxgl.Popup({
-				offset: 30,
-			})
-				.setLngLat(displayedStationCoord)
-				.setHTML(popupText)
-				.addTo(this.map);
-		}
+		new mapboxgl.Popup({
+			offset: 30,
+		})
+			.setLngLat(displayedStationCoord)
+			.setHTML(allPopupText.join(''))
+			.addTo(this.map);
 	}
 
 	render() {
