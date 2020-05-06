@@ -26,7 +26,9 @@ const SideBar = (props) => {
 			/>
 			<SideBarCard>
 				{stationInfo}
-				<EmailSubForm />
+				<EmailSubForm
+					stationCoordinates={props.stationData.coordinates}
+				/>
 			</SideBarCard>
 		</div>
 	);
