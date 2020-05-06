@@ -1,13 +1,15 @@
 import React from 'react';
 
+import Spinner from './../../UI/Spinner/Spinner';
+import classes from './StationInfoCard.module.css';
+
 const StationInfoCard = (props) => {
-	const spinner = <p>spinner</p>;
-	let measurment = null;
+	let paramValue = <Spinner />;
 
 	return (
-		<div>
-			<div>{props.paramName}</div>
-			<div>{spinner}</div>
+		<div className={classes.Param}>
+			<div className={classes.ParamName}>{props.paramName}</div>
+			<div className={classes.ParamValue}>{paramValue}</div>
 		</div>
 	);
 };

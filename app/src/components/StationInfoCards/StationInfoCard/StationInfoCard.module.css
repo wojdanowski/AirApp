@@ -1,0 +1,22 @@
+.Param {
+	display: table;
+	vertical-align: middle;
+	table-layout: fixed;
+	width: 100%;
+	height: 2em;
+}
+
+.ParamName {
+	display: table-cell;
+	width: 90%;
+	text-align: left;
+	margin: auto;
+	vertical-align: middle;
+}
+
+.ParamValue {
+	display: table-cell;
+	height: 100%;
+	margin: auto;
+	vertical-align: middle;
+}

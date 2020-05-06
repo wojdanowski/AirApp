@@ -8,7 +8,6 @@ import classes from './MainPage.module.css';
 import Aux from './../../hoc/Auxiliary/Auxiliary';
 import UiContext from './../../Context/UiContext';
 import * as LINKS from './../../Utils/Links';
-import asyncForEach from '../../Utils/asyncForEach';
 
 class MainPage extends Component {
 	constructor(props) {
@@ -16,15 +15,17 @@ class MainPage extends Component {
 		this.mapBoxRef = React.createRef();
 		this.mainScreenRef = React.createRef();
 		this.state = {
+			isSensorDataLoading: true,
 			isInitial: true,
 			placesSuggestions: [],
 			selectedCoordinates: [],
 			displayedStation: {
 				stationName: '',
 				coordinates: [],
-				measurement: {},
+				measurement: [],
 				sensorList: null,
 				sensorsData: null,
+				stationId: null,
 			},
 		};
 	}
@@ -60,15 +61,17 @@ class MainPage extends Component {
 		const query = `${LINKS.PROXY}${LINKS.AIR_API_URL}nearestAirIndex/?lat=${coordinates[1]}&lon=${coordinates[0]}`;
 		try {
 			const res = (await axios(query)).data;
-			console.log(res);
 			this.setState({
 				displayedStation: {
+					...this.state.displayedStation,
 					stationName: res.data.station.name,
 					coordinates: [...res.data.station.location.coordinates],
-					measurement: res.data.airData,
+					measurement: res.data.station.mIndexes,
+					stationId: res.data.station.station_id,
 				},
 			});
 		} catch (error) {
+			console.log(`error in getStationData`);
 			console.log(error);
 			return error;
 		}
@@ -78,21 +81,24 @@ class MainPage extends Component {
 		const query = `${LINKS.PROXY}${LINKS.GIOS_API_URL}station/sensors/${stationId}`;
 		try {
 			const res = await axios(query);
-			console.log(res);
 			this.setState({
 				displayedStation: {
-					sensorList: res.data,
 					...this.state.displayedStation,
+					sensorList: res.data,
 				},
 			});
 			this.getSensorData(res.data);
 		} catch (error) {
+			console.log(`error in getSensorList`);
 			alert(error);
 			return error;
 		}
 	};
 
 	getSensorData = async (sensorsList) => {
+		if (!this.state.isSensorDataLoading) {
+			this.setState({ isSensorDataLoading: true });
+		}
 		const query = `${LINKS.PROXY}${LINKS.GIOS_API_URL}data/getData/`;
 		const fetchDataPromises = sensorsList.map((el, index) => {
 			return new Promise(() => {
@@ -110,10 +116,6 @@ class MainPage extends Component {
 							sensorsData: newSensorsData,
 						},
 					});
-
-					console.log(
-						`Wynik dla id: ${el.id} wynosi ${res.data.values[1].value}`
-					);
 				});
 			});
 		});
@@ -139,8 +141,9 @@ class MainPage extends Component {
 				selectedCoordinates: [...coordinates],
 				isInitial: false,
 			});
-			this.getSensorList(this.state.displayedStation.measurement.id);
+			this.getSensorList(this.state.displayedStation.stationId);
 		} else {
+			console.log(`fetchError in showLocationOnMap`);
 			alert(fetchError);
 		}
 	};

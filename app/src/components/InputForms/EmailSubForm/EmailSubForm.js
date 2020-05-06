@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import * as LINKS from './../../../Utils/Links';
+
 import MainButton from './../../UI/Buttons/MainButton/MainButton';
 import Aux from './../../../hoc/Auxiliary/Auxiliary';
 
@@ -7,7 +10,27 @@ class EmailSubForm extends Component {
 		typedEmail: '',
 	};
 
-	subscribeLocationHandler = () => {
+	subscribeLocationHandler = async () => {
+		const query = `${LINKS.AIR_API_URL}subscriptions`;
+
+		try {
+			const res = await axios({
+				method: 'GET',
+				url: query,
+				data: {
+					email: this.state.typedEmail,
+					lat: this.props.stationCoordinates[0],
+					lon: this.props.stationCoordinates[1],
+					hours: [7],
+				},
+			});
+			console.log(res);
+		} catch (error) {
+			console.log(`error in subscribeLocationHandler`);
+			console.log(error);
+			return error;
+		}
+
 		console.log(`submit form`);
 	};
 
