@@ -1,8 +1,12 @@
-const Station = require('../models/stationModel');
+const {
+  allStations,
+  distinctIndexes,
+  findNearestStation,
+} = require('../services/stationService');
 
 exports.all = async (req, res) => {
   try {
-    const stations = await Station.find();
+    const stations = await allStations();
 
     res.status(200).json({
       status: 'success',
@@ -44,7 +48,7 @@ exports.nearestAirIndex = async (req, res) => {
 
 exports.indexList = async (req, res) => {
   try {
-    const indexes = await Station.distinct('mIndexes.param');
+    const indexes = await distinctIndexes();
 
     res.status(200).json({
       status: 'success',
@@ -57,21 +61,3 @@ exports.indexList = async (req, res) => {
     });
   }
 };
-
-// TODO: nadaje się na stationService
-const findNearestStation = async (lon, lat) => {
-  // bez try/catch - obsługa w metodzie nadrzędnej
-  const stationList = await Station.find({
-    location: {
-      $nearSphere: {
-        $geometry: {
-          type: 'Point',
-          coordinates: [lon, lat],
-        },
-      },
-    },
-  }).limit(1);
-  return stationList[0];
-};
-
-exports.findNearestStation = findNearestStation;

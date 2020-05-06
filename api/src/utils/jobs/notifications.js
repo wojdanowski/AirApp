@@ -1,5 +1,5 @@
 const env = require('../../setup/env');
-const { findNearestStation } = require('../../controllers/stationController');
+const { findNearestStation } = require('../../services/stationService');
 const sendEmail = require('../email');
 const Subscription = require('../../models/subscriptionModel');
 

@@ -1,90 +1,21 @@
 const env = require('../../setup/env');
 const Gios = require('../externalApis/gios');
-const Station = require('../../models/stationModel');
+const {
+  allStations,
+  saveGiosStationLocation,
+  saveGiosStationAirIndex,
+} = require('../../services/stationService');
 
-// 1. STACJE GIOS
-const saveGiosStationLocation = async (giosStation) => {
-  try {
-    let station = await Station.findOneAndUpdate(
-      { station_id: giosStation.id },
-      {
-        source: 'Gios',
-        location: {
-          type: 'Point',
-          coordinates: [giosStation.gegrLon, giosStation.gegrLat],
-        },
-        name: giosStation.stationName,
-      },
-      {
-        upsert: true,
-        setDefaultsOnInsert: true,
-        new: true,
-        runValidators: true,
-      }
-    );
-  } catch (err) {
-    console.log(
-      `Error when inserting station ${giosStation.id}, ${giosStation.stationName}`
-    );
-    console.log(err);
-  }
-};
-
-const saveGiosStationAirIndex = async (airIndex) => {
-  if (airIndex.id) {
-    const keyPart = 'IndexLevel';
-    const measurements = Object.keys(airIndex)
-      .filter((element) => element.includes(keyPart))
-      .map((element) => element.replace(keyPart, ''))
-      .filter((element) => !element.includes('st'));
-
-    const stIndex = {
-      indexLevel: airIndex.stIndexLevel,
-      calcDate: airIndex.stCalcDate,
-      sourceDataDate: airIndex.stSourceDataDate,
-      indexStatus: airIndex.stIndexStatus,
-      indexParam: airIndex.stIndexCrParam,
-    };
-
-    const mIndexes = [];
-    measurements.forEach((m) => {
-      if (airIndex[m + keyPart]) {
-        const index = {
-          param: m,
-          sourceDataDate: airIndex[m + 'SourceDataDate'],
-          calcDate: airIndex[m + 'CalcDate'],
-          indexLevel: airIndex[m + 'IndexLevel'],
-        };
-        mIndexes.push(index);
-      }
-    });
-
-    let station = await Station.findOneAndUpdate(
-      { station_id: airIndex.id },
-      {
-        stIndex: stIndex,
-        mIndexes: mIndexes,
-      },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-  } else {
-    throw 'Air Index is empty!';
-  }
-};
-
-// AKTUALIZACJA WSZYSTKICH STACJI
 const updateStationsLocations = async () => {
   // stacje GIOS
   const giosStations = await Gios.getStations();
   console.log(`Got ${giosStations.length} stations from Gios`);
   giosStations.map((station) => saveGiosStationLocation(station));
+  // miejsce na kolejne API
 };
 
 const updateStationsAirData = async () => {
-  const stations = await Station.find();
+  const stations = await allStations();
   console.log(`Getting air data for ${stations.length} stations`);
   stations.map(async (station) => {
     switch (station.source) {
@@ -97,6 +28,7 @@ const updateStationsAirData = async () => {
           console.log(err);
         }
         break;
+      // miejsce na kolejne API
       default:
         console.log(
           `Unknown station source '${station.source}' for station ${station._id}`
@@ -113,11 +45,12 @@ exports.start = async () => {
   console.log(
     `Station update job started. \nLocation interval: ${stationDelay}\nData interval: ${airDataDelay}`
   );
+  // lista stacji
   (function runLocationsSchedule() {
     updateStationsLocations();
     setTimeout(runLocationsSchedule, stationDelay);
   })();
-
+  // indeksy powietrza
   (function runAirDataSchedule() {
     updateStationsAirData();
     setTimeout(runAirDataSchedule, airDataDelay);
