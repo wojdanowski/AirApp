@@ -3,9 +3,16 @@ const { saveGiosStationLocation } = require('../../services/stationService');
 
 const updateStationsLocations = async () => {
   // stacje GIOS
-  const giosStations = await Gios.getStations();
-  console.log(`Got ${giosStations.length} stations from Gios`);
-  giosStations.map((station) => saveGiosStationLocation(station));
+  try {
+    const giosStations = await Gios.getStations();
+    console.log(`Got ${giosStations.length} stations from Gios`);
+    giosStations.forEach((station) => {
+      saveGiosStationLocation(station);
+    });
+  } catch (err) {
+    console.log('Error when collectiong Gios stations');
+    console.log(err);
+  }
   // miejsce na kolejne API
 };
 

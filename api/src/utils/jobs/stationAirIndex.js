@@ -7,7 +7,7 @@ const {
 const updateStationsAirIndex = async () => {
   const stations = await allStations();
   console.log(`Getting air indexes for ${stations.length} stations`);
-  stations.map(async (station) => {
+  stations.forEach(async (station) => {
     switch (station.source) {
       case 'Gios':
         try {
