@@ -1,4 +1,4 @@
-const { sensorData } = require('./nestedSchemas');
+const { sensorValue } = require('./nestedSchemas');
 
 const mongoose = require('mongoose');
 
@@ -7,12 +7,7 @@ const sensorSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  values: [
-    {
-      date: Date,
-      value: Number,
-    },
-  ],
+  values: [sensorValue],
   station: { type: mongoose.Schema.Types.ObjectId, ref: 'Station' },
 });
 

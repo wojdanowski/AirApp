@@ -25,3 +25,11 @@ exports.mIndex = mongoose.Schema(
   },
   { _id: false }
 );
+
+exports.sensorValue = mongoose.Schema(
+  {
+    date: Date,
+    value: Number,
+  },
+  { _id: false }
+);

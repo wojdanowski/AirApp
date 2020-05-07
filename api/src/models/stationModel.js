@@ -28,7 +28,7 @@ const stationSchema = mongoose.Schema({
     indexParam: String,
   },
   mIndexes: [mIndex],
-  // sensors: [{ type: Schema.Types.ObjectId, ref: 'sensor' }]
+  // sensors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'sensor' }],
 });
 
 stationSchema.index({ location: '2dsphere' });
