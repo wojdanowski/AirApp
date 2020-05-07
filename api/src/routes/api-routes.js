@@ -1,11 +1,5 @@
 const router = require('express').Router();
 
-router.get('/', function (req, res) {
-  res.json({
-    message: 'API works',
-  });
-});
-
 const subscriptionController = require('../controllers/subscriptionController');
 const stationController = require('../controllers/stationController');
 

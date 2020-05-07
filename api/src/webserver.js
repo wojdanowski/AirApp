@@ -1,18 +1,16 @@
 // modules
 const env = require('./setup/env');
 const db = require('./setup/db');
+const apiRoutes = require('./routes/api-routes');
 
 const express = require('express');
 const bodyParser = require('body-parser');
 
 //app
 const app = express();
-const apiRoutes = require('./routes/api-routes');
-
 // body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 // cors
 // TODO: ogarnąć lepiej
 app.use(function (req, res, next) {
@@ -23,7 +21,6 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
 // routes
 app.get('/', (req, res) => {
   res.send('Server is up.');
