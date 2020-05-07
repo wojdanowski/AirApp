@@ -74,7 +74,7 @@ exports.saveGiosStationAirIndex = async (airIndex) => {
     measurements.forEach((m) => {
       if (airIndex[m + keyPart]) {
         const index = {
-          param: m,
+          param: m.toUpperCase(),
           sourceDataDate: airIndex[m + 'SourceDataDate'],
           calcDate: airIndex[m + 'CalcDate'],
           indexLevel: airIndex[m + 'IndexLevel'],
@@ -98,5 +98,3 @@ exports.saveGiosStationAirIndex = async (airIndex) => {
     throw 'Air Index is empty!';
   }
 };
-
-exports.saveGiosStationSensorData = async () => {};

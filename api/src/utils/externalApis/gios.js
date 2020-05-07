@@ -22,12 +22,12 @@ exports.getAirIndex = async (stationId) => {
   return await giosRequest(endpoint);
 };
 
-exports.getMeasurementStations = async (stationId) => {
+exports.getStationSensors = async (stationId) => {
   const endpoint = '/station/sensors/' + stationId;
   return await giosRequest(endpoint);
 };
 
-exports.getMeasurementData = async (measurementId) => {
-  const endpoint = '/rest/data/getData/' + measurementId;
+exports.getSensorData = async (sensorId) => {
+  const endpoint = '/data/getData/' + sensorId;
   return await giosRequest(endpoint);
 };

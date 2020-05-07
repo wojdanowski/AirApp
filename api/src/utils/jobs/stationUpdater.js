@@ -5,6 +5,7 @@ const {
   saveGiosStationLocation,
   saveGiosStationAirIndex,
 } = require('../../services/stationService');
+const { saveSensorData } = require('../../services/sensorService');
 
 const updateStationsLocations = async () => {
   // stacje GIOS
@@ -14,9 +15,9 @@ const updateStationsLocations = async () => {
   // miejsce na kolejne API
 };
 
-const updateStationsAirData = async () => {
+const updateStationsAirIndex = async () => {
   const stations = await allStations();
-  console.log(`Getting air data for ${stations.length} stations`);
+  console.log(`Getting air indexes for ${stations.length} stations`);
   stations.map(async (station) => {
     switch (station.source) {
       case 'Gios':
@@ -24,7 +25,9 @@ const updateStationsAirData = async () => {
           const airData = await Gios.getAirIndex(station.station_id);
           await saveGiosStationAirIndex(airData);
         } catch (err) {
-          console.log(`Error updating air data for ${station.station_id}`);
+          console.log(
+            `Error updating air index for GIOS ${station.station_id}`
+          );
           console.log(err);
         }
         break;
@@ -38,6 +41,38 @@ const updateStationsAirData = async () => {
   });
 };
 
+const updateSensorsData = async () => {
+  const stations = await allStations();
+  console.log(`Getting sensors data for ${stations.length} stations`);
+  stations.map(async (station) => {
+    switch (station.source) {
+      case 'Gios':
+        try {
+          const stationSensors = await Gios.getStationSensors(
+            station.station_id
+          );
+          stationSensors.map(async (sensor) => {
+            const sensorData = await Gios.getSensorData(sensor.id);
+            await saveSensorData(sensorData, station);
+          });
+        } catch (err) {
+          console.log(
+            `Error updating sensors data for GIOS ${station.station_id}`
+          );
+          console.log(err);
+        }
+        break;
+      // miejsce na kolejne API
+      default:
+        console.log(
+          `Unknown station source '${station.source}' for station ${station._id}`
+        );
+        break;
+    }
+  });
+};
+
+// TODO: wydzielić o osbnych modułów każdy job
 exports.start = async () => {
   // setTimeout > setInterval: https://stackoverflow.com/questions/6685396/execute-the-setinterval-function-without-delay-the-first-time
   const stationDelay = env.STATIONSCHEDULE;
@@ -45,6 +80,8 @@ exports.start = async () => {
   console.log(
     `Station update job started. \nLocation interval: ${stationDelay}\nData interval: ${airDataDelay}`
   );
+
+  // FIXME: wymagany jest jakiś offset pomiędzy jobami. GIOS odrzuca część requestów jak idzie wszystko na raz
   // lista stacji
   (function runLocationsSchedule() {
     updateStationsLocations();
@@ -52,7 +89,14 @@ exports.start = async () => {
   })();
   // indeksy powietrza
   (function runAirDataSchedule() {
-    updateStationsAirData();
+    const offset = 1000 * 60 * 2;
+    updateStationsAirIndex();
     setTimeout(runAirDataSchedule, airDataDelay);
+  })();
+  // dane z sensorów
+  (function runSensorDataSchedule() {
+    const offset = 1000 * 60 * 4;
+    updateSensorsData();
+    setTimeout(runSensorDataSchedule, airDataDelay);
   })();
 };
