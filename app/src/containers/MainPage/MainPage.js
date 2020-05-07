@@ -57,7 +57,7 @@ class MainPage extends Component {
 		}
 	};
 
-	getStationData = async (coordinates) => {
+	getNearestStation = async (coordinates) => {
 		const query = `${LINKS.PROXY}${LINKS.AIR_API_URL}nearestAirIndex/?lat=${coordinates[1]}&lon=${coordinates[0]}`;
 		try {
 			const res = (await axios(query)).data;
@@ -71,7 +71,7 @@ class MainPage extends Component {
 				},
 			});
 		} catch (error) {
-			console.log(`error in getStationData`);
+			console.log(`error in getNearestStation`);
 			console.log(error);
 			return error;
 		}
@@ -131,7 +131,7 @@ class MainPage extends Component {
 	};
 
 	showLocationOnMap = async (coordinates) => {
-		const fetchError = await this.getStationData(coordinates);
+		const fetchError = await this.getNearestStation(coordinates);
 		if (!fetchError) {
 			this.scrollToRef(this.mapBoxRef);
 			if (!this.context.showSidebar) {
