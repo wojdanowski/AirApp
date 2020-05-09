@@ -1,7 +1,9 @@
 // modules
 const env = require('./setup/env');
 const db = require('./setup/db');
-const apiRoutes = require('./routes/api-routes');
+const stationRouter = require('./routes/stationRoutes');
+const subscriptionRouter = require('./routes/subscriptionRoutes');
+const indexRouter = require('./routes/indexRoutes');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -16,9 +18,8 @@ if (env.NODE_ENV !== 'production') {
 }
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// TODO: ogarnąć lepiej
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', '*'); // TODO: ogarnąć lepiej
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
@@ -30,7 +31,9 @@ app.use(function (req, res, next) {
 app.get('/', (req, res) => {
   res.send('Server is up.');
 });
-app.use('/api', apiRoutes);
+app.use('/api/subscriptions', subscriptionRouter);
+app.use('/api/stations', stationRouter);
+app.use('/api', indexRouter);
 
 // RUN
 console.log(`Environment: ${env.NODE_ENV}`);

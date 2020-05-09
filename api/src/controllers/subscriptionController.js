@@ -29,9 +29,7 @@ exports.new = async (req, res) => {
 exports.get = async (req, res) => {
   // TODO: wyszukiwanie po tokenie jwt, a nie id
   try {
-    const subscription = await Subscription.findById(
-      req.params.subscription_id
-    );
+    const subscription = await Subscription.findById(req.params.subscriptionId);
 
     res.status(200).json({
       status: 'success',
@@ -51,7 +49,7 @@ exports.update = async (req, res) => {
 
   try {
     const subscription = await Subscription.findByIdAndUpdate(
-      req.params.subscription_id,
+      req.params.subscriptionId,
       {
         location: {
           type: 'Point',
@@ -91,7 +89,7 @@ exports.delete = async (req, res) => {
 
   try {
     const deleted = await Subscription.findByIdAndDelete(
-      req.params.subscription_id
+      req.params.subscriptionId
     );
     if (!deleted) {
       res.status(404).json({
