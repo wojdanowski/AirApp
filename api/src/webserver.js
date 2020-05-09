@@ -6,12 +6,16 @@ const apiRoutes = require('./routes/api-routes');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-//app
+// APP
 const app = express();
-// body-parser
+
+// MIDDLEWARE
+if (env.NODE_ENV !== 'production') {
+  const morgan = require('morgan');
+  app.use(morgan('dev'));
+}
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// cors
 // TODO: ogarnąć lepiej
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -21,13 +25,14 @@ app.use(function (req, res, next) {
   );
   next();
 });
-// routes
+
+// ROUTES
 app.get('/', (req, res) => {
   res.send('Server is up.');
 });
 app.use('/api', apiRoutes);
 
-// run
+// RUN
 console.log(`Environment: ${env.NODE_ENV}`);
 app.listen(env.PORT, function () {
   console.log('Running on port ' + env.PORT);
