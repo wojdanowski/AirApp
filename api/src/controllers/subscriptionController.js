@@ -1,5 +1,16 @@
 const Subscription = require('../models/subscriptionModel');
 
+exports.verifyBodyNew = (req, res, next) => {
+  // TODO: zaznaczyć, czego brakuje
+  // TODO: walidacja typu danych
+  if (!req.body.email || !req.body.lon || !req.body.lat || !req.body.hours) {
+    return res
+      .status(422)
+      .json({ status: 'fail', message: 'Missing required parameters' });
+  }
+  next();
+};
+
 exports.new = async (req, res) => {
   // TODO: walidacja danych
   try {
