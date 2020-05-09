@@ -1,10 +1,9 @@
+const moment = require('moment-timezone');
+const schedule = require('node-schedule');
 const env = require('../../setup/env');
 const { findNearestStation } = require('../../services/stationService');
 const sendEmail = require('../email');
 const Subscription = require('../../models/subscriptionModel');
-
-const moment = require('moment-timezone');
-const schedule = require('node-schedule');
 
 const sendNotification = async (subscription) => {
   let message = '';
@@ -31,7 +30,6 @@ const sendNotification = async (subscription) => {
   } catch (err) {
     console.log(`Error while SENDING air data for ${subscription.email}`);
     console.log(err);
-    return;
   }
 };
 
@@ -45,7 +43,6 @@ const sendHourNotifications = async (hour) => {
   } catch (err) {
     console.log(`Error while looking for hour ${hour} subscriptions`);
     console.log(err);
-    return;
   }
 };
 

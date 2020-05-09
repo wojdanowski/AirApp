@@ -1,9 +1,9 @@
 const superagent = require('superagent');
 
-const gios_url = 'http://api.gios.gov.pl/pjp-api/rest';
+const giosUrl = 'http://api.gios.gov.pl/pjp-api/rest';
 
 const giosRequest = async (endpoint) => {
-  const res = await superagent.get(gios_url + endpoint);
+  const res = await superagent.get(giosUrl + endpoint);
   return res.body;
 };
 
@@ -13,16 +13,16 @@ exports.getStations = () => {
 };
 
 exports.getAirIndex = (stationId) => {
-  const endpoint = '/aqindex/getIndex/' + stationId;
+  const endpoint = `/aqindex/getIndex/${stationId}`;
   return giosRequest(endpoint);
 };
 
 exports.getStationSensors = (stationId) => {
-  const endpoint = '/station/sensors/' + stationId;
+  const endpoint = `/station/sensors/${stationId}`;
   return giosRequest(endpoint);
 };
 
 exports.getSensorData = (sensorId) => {
-  const endpoint = '/data/getData/' + sensorId;
+  const endpoint = `/data/getData/${sensorId}`;
   return giosRequest(endpoint);
 };

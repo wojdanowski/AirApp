@@ -1,12 +1,11 @@
 // modules
+const express = require('express');
+const bodyParser = require('body-parser');
 const env = require('./setup/env');
 const db = require('./setup/db');
 const stationRouter = require('./routes/stationRoutes');
 const subscriptionRouter = require('./routes/subscriptionRoutes');
 const indexRouter = require('./routes/indexRoutes');
-
-const express = require('express');
-const bodyParser = require('body-parser');
 
 // APP
 const app = express();
@@ -38,5 +37,5 @@ app.use('/api', indexRouter);
 // RUN
 console.log(`Environment: ${env.NODE_ENV}`);
 app.listen(env.PORT, function () {
-  console.log('Running on port ' + env.PORT);
+  console.log(`Running on port ${env.PORT}`);
 });

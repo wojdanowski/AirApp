@@ -75,9 +75,9 @@ exports.saveGiosStationAirIndex = async (airIndex) => {
       if (airIndex[m + keyPart]) {
         const index = {
           param: m.toUpperCase(),
-          sourceDataDate: airIndex[m + 'SourceDataDate'],
-          calcDate: airIndex[m + 'CalcDate'],
-          indexLevel: airIndex[m + 'IndexLevel'],
+          sourceDataDate: airIndex[`${m}SourceDataDate`],
+          calcDate: airIndex[`${m}CalcDate`],
+          indexLevel: airIndex[`${m}IndexLevel`],
         };
         mIndexes.push(index);
       }
@@ -95,6 +95,6 @@ exports.saveGiosStationAirIndex = async (airIndex) => {
       }
     );
   } else {
-    throw 'Air Index is empty!';
+    throw Error('Air Index is empty!');
   }
 };

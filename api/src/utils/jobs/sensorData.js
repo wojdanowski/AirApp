@@ -7,11 +7,13 @@ const updateSensorsData = async () => {
   console.log(`Getting sensors data for ${stations.length} stations`);
   // stacje GIOS
   const giosStations = stations.filter(
-    (station) => station.source.toUpperCase() == 'GIOS'
+    (station) => station.source.toUpperCase() === 'GIOS'
   );
-  //   GIOS odrzuca requesty jak idzie wszystko na raz. Dlatego for.
+
   for (let i = 0; i < giosStations.length; i++) {
     try {
+      //   GIOS odrzuca requesty jak idzie wszystko na raz. Dlatego for z await
+      // eslint-disable-next-line no-await-in-loop
       const stationSensors = await Gios.getStationSensors(
         giosStations[i].station_id
       );
