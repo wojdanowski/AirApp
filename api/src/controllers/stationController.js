@@ -21,9 +21,7 @@ exports.all = async (req, res) => {
 };
 
 exports.nearestAirIndex = async (req, res) => {
-  const lon = req.query.lon;
-  const lat = req.query.lat;
-  if (lon == null || lat == null) {
+  if (req.query.lon == null || req.query.lat == null) {
     res.status(422).json({
       status: 'fail',
       message: 'Lack of required parameters (lat, lon)',
@@ -32,7 +30,7 @@ exports.nearestAirIndex = async (req, res) => {
   }
 
   try {
-    let station = await findNearestStation(lon, lat);
+    let station = await findNearestStation(req.query);
 
     res.status(200).json({
       status: 'success',

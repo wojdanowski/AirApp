@@ -10,17 +10,21 @@ exports.distinctIndexes = async () => {
   return Station.distinct('mIndexes.param');
 };
 
-exports.findNearestStation = async (lon, lat) => {
-  const stationList = await Station.find({
-    location: {
-      $nearSphere: {
-        $geometry: {
-          type: 'Point',
-          coordinates: [lon, lat],
+exports.findNearestStation = async (query) => {
+  const features = new DbQueryFeatures(
+    Station.find({
+      location: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [query.lon, query.lat],
+          },
         },
       },
-    },
-  }).limit(1);
+    }).limit(1),
+    query
+  ).limitFields();
+  const stationList = await features.query;
   return stationList[0];
 };
 
