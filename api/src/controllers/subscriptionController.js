@@ -1,4 +1,5 @@
 const Subscription = require('../models/subscriptionModel');
+const { createNew } = require('../services/subscriptionService');
 const DbQueryFeatures = require('../utils/dbQueryFeatures');
 
 exports.verifyBodyNew = (req, res, next) => {
@@ -14,14 +15,7 @@ exports.verifyBodyNew = (req, res, next) => {
 
 exports.new = async (req, res) => {
   try {
-    const newSubscription = await Subscription.create({
-      email: req.body.email,
-      location: {
-        type: 'Point',
-        coordinates: [req.body.lon, req.body.lat],
-      },
-      hours: req.body.hours,
-    });
+    const newSubscription = await createNew(req.body);
 
     res.status(201).json({
       status: 'success',

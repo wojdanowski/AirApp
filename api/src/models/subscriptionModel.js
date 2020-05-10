@@ -1,4 +1,6 @@
+const crypto = require('crypto');
 const mongoose = require('mongoose');
+const validator = require('validator');
 const { locationPoint } = require('./nestedSchemas');
 
 const normaliseHours = (hours) => {
@@ -10,8 +12,10 @@ const normaliseHours = (hours) => {
 const subscriptionSchema = mongoose.Schema({
   email: {
     type: String,
-    required: true,
+    required: [true, 'Please provide email'],
     unique: true,
+    lowercase: true,
+    validate: [validator.isEmail, 'Please provide a valid email'],
   },
   location: locationPoint,
   hours: {
@@ -23,7 +27,20 @@ const subscriptionSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  active: {
+    type: Boolean,
+    default: false,
+  },
+  token: String,
 });
+
+subscriptionSchema.methods.createManageToken = function () {
+  const manageToken = crypto.randomBytes(32).toString('hex');
+
+  this.token = crypto.createHash('sha256').update(manageToken).digest('hex');
+
+  return manageToken;
+};
 
 subscriptionSchema.index({ location: '2dsphere' });
 
