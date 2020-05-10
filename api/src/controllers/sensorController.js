@@ -1,13 +1,8 @@
-const Sensor = require('../models/sensorModel');
-const DbQueryFeatures = require('../utils/dbQueryFeatures');
+const { stationSensors } = require('../services/sensorService');
 
 exports.stationSensorsData = async (req, res) => {
   try {
-    const features = new DbQueryFeatures(
-      Sensor.find({ station: req.params.stationId }),
-      req.query
-    ).limitFields();
-    const sensors = await features.query;
+    const sensors = await stationSensors(req.params.stationId, req.query);
 
     // const sensors = await Sensor.find({ station: req.params.stationId });
     if (sensors.length === 0) {

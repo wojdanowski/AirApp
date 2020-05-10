@@ -1,4 +1,5 @@
 const Sensor = require('../models/sensorModel');
+const DbQueryFeatures = require('../utils/dbQueryFeatures');
 
 exports.saveSensorData = async (sensorData, station) => {
   try {
@@ -20,4 +21,12 @@ exports.saveSensorData = async (sensorData, station) => {
     );
     console.log(err);
   }
+};
+
+exports.stationSensors = async (stationId, query) => {
+  const features = new DbQueryFeatures(
+    Sensor.find({ station: stationId }),
+    query
+  ).limitFields();
+  return await features.query;
 };

@@ -9,7 +9,6 @@ exports.distinctIndexes = async () => {
 };
 
 exports.findNearestStation = async (lon, lat) => {
-  // bez try/catch - obsługa w metodzie nadrzędnej
   const stationList = await Station.find({
     location: {
       $nearSphere: {
