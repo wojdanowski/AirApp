@@ -18,7 +18,12 @@ const SideBar = (props) => {
 	if (props.stationData.sensorList) {
 		stationInfo = <StationInfoCard stationData={props.stationData} />;
 	}
-
+	let subscriptionContent = null;
+	if (props.stationData.stationId) {
+		subscriptionContent = (
+			<EmailSubForm stationCoordinates={props.stationData.coordinates} />
+		);
+	}
 	return (
 		<div className={attachedClasses.join(' ')}>
 			<HamburgerButton
@@ -26,9 +31,7 @@ const SideBar = (props) => {
 			/>
 			<SideBarCard>
 				{stationInfo}
-				<EmailSubForm
-					stationCoordinates={props.stationData.coordinates}
-				/>
+				{subscriptionContent}
 			</SideBarCard>
 		</div>
 	);

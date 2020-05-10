@@ -30,8 +30,6 @@ class EmailSubForm extends Component {
 			console.log(error);
 			return error;
 		}
-
-		console.log(`submit form`);
 	};
 
 	formChangedHandler = (event) => {

@@ -19,6 +19,7 @@ class MainPage extends Component {
 			isInitial: true,
 			placesSuggestions: [],
 			selectedCoordinates: [],
+			allStations: null,
 			displayedStation: {
 				stationName: '',
 				coordinates: [],
@@ -30,6 +31,26 @@ class MainPage extends Component {
 		};
 	}
 	static contextType = UiContext;
+
+	componentDidMount() {
+		this.getAllStations();
+	}
+
+	geoIconClickedHandler = () => {
+		const success = (position) => {
+			const selectedCoordinates = [
+				position.coords.longitude,
+				position.coords.latitude,
+			];
+			this.showLocationOnMap(selectedCoordinates);
+		};
+
+		const error = () => {
+			console.log(`Error retrieving position`);
+		};
+
+		navigator.geolocation.getCurrentPosition(success, error);
+	};
 
 	placeSuggestionHandler = async (content) => {
 		if (content.length > 0) {
@@ -57,7 +78,19 @@ class MainPage extends Component {
 		}
 	};
 
-	getStationData = async (coordinates) => {
+	getAllStations = async () => {
+		const query = `${LINKS.PROXY}${LINKS.AIR_API_URL}stations`;
+		try {
+			const res = (await axios(query)).data;
+			console.log(res);
+		} catch (error) {
+			console.log(`error in getAllStations`);
+			console.log(error);
+			return error;
+		}
+	};
+
+	getNearestStation = async (coordinates) => {
 		const query = `${LINKS.PROXY}${LINKS.AIR_API_URL}nearestAirIndex/?lat=${coordinates[1]}&lon=${coordinates[0]}`;
 		try {
 			const res = (await axios(query)).data;
@@ -71,7 +104,7 @@ class MainPage extends Component {
 				},
 			});
 		} catch (error) {
-			console.log(`error in getStationData`);
+			console.log(`error in getNearestStation`);
 			console.log(error);
 			return error;
 		}
@@ -131,7 +164,7 @@ class MainPage extends Component {
 	};
 
 	showLocationOnMap = async (coordinates) => {
-		const fetchError = await this.getStationData(coordinates);
+		const fetchError = await this.getNearestStation(coordinates);
 		if (!fetchError) {
 			this.scrollToRef(this.mapBoxRef);
 			if (!this.context.showSidebar) {
@@ -146,22 +179,6 @@ class MainPage extends Component {
 			console.log(`fetchError in showLocationOnMap`);
 			alert(fetchError);
 		}
-	};
-
-	geoIconClickedHandler = () => {
-		const success = (position) => {
-			const selectedCoordinates = [
-				position.coords.longitude,
-				position.coords.latitude,
-			];
-			this.showLocationOnMap(selectedCoordinates);
-		};
-
-		const error = () => {
-			console.log(`Error retrieving position`);
-		};
-
-		navigator.geolocation.getCurrentPosition(success, error);
 	};
 
 	render() {
