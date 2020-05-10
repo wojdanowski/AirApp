@@ -25,6 +25,7 @@ exports.createNew = async (body) => {
       message: message,
     });
   } catch (err) {
+    // TODO: jeśli nie uda się wysłać, to powinien być zwrócony error w response
     console.log(
       `Error while sending verification link for ${newSubscription.email}`
     );
@@ -32,4 +33,12 @@ exports.createNew = async (body) => {
   }
 
   return newSubscription;
+};
+exports.activate = async (token) => {
+  const subscription = await Subscription.findOneAndUpdate(
+    { token: token },
+    { active: true },
+    { new: true }
+  );
+  return subscription;
 };

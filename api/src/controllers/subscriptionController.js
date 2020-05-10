@@ -1,5 +1,6 @@
+const crypto = require('crypto');
 const Subscription = require('../models/subscriptionModel');
-const { createNew } = require('../services/subscriptionService');
+const { activate, createNew } = require('../services/subscriptionService');
 const DbQueryFeatures = require('../utils/dbQueryFeatures');
 
 exports.verifyBodyNew = (req, res, next) => {
@@ -13,6 +14,14 @@ exports.verifyBodyNew = (req, res, next) => {
   next();
 };
 
+exports.hashToken = (req, res, next) => {
+  req.params.hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+  next();
+};
+
 exports.new = async (req, res) => {
   try {
     const newSubscription = await createNew(req.body);
@@ -23,6 +32,31 @@ exports.new = async (req, res) => {
         subscription: newSubscription,
       },
     });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
+
+exports.activate = async (req, res) => {
+  try {
+    const subscription = await activate(req.params.hashedToken);
+
+    if (!subscription) {
+      res.status(404).json({
+        status: 'fail',
+        message: 'Subscription not found',
+      });
+    } else {
+      res.status(200).json({
+        status: 'success',
+        data: {
+          subscription,
+        },
+      });
+    }
   } catch (err) {
     res.status(400).json({
       status: 'fail',
