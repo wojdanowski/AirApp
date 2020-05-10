@@ -15,7 +15,9 @@ exports.saveSensorData = async (sensorData, station) => {
       }
     );
   } catch (err) {
-    console.log(`Error when inserting sensor ${sensorData.key} for ${station._id}`);
+    console.log(
+      `Error when inserting sensor ${sensorData.key} for ${station._id}`
+    );
     console.log(err);
   }
 };
