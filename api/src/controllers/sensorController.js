@@ -4,7 +4,6 @@ exports.stationSensorsData = async (req, res) => {
   try {
     const sensors = await stationSensors(req.params.stationId, req.query);
 
-    // const sensors = await Sensor.find({ station: req.params.stationId });
     if (sensors.length === 0) {
       res.status(404).json({
         status: 'fail',

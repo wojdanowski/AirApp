@@ -1,7 +1,9 @@
 const Station = require('../models/stationModel');
+const DbQueryFeatures = require('../utils/dbQueryFeatures');
 
-exports.allStations = async () => {
-  return Station.find();
+exports.allStations = async (query) => {
+  const features = new DbQueryFeatures(Station.find(), query).limitFields();
+  return await features.query;
 };
 
 exports.distinctIndexes = async () => {

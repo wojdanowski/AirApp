@@ -6,7 +6,7 @@ const {
 
 exports.all = async (req, res) => {
   try {
-    const stations = await allStations();
+    const stations = await allStations(req.query);
 
     res.status(200).json({
       status: 'success',
