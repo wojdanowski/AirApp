@@ -75,3 +75,7 @@ exports.remove = async (hashedToken) => {
   const deleted = await Subscription.findOneAndDelete({ token: hashedToken });
   return deleted;
 };
+
+exports.getActiveForHour = async (hour) => {
+  return await Subscription.find({ hours: hour, active: true });
+};

@@ -2,19 +2,20 @@ const moment = require('moment-timezone');
 const schedule = require('node-schedule');
 const env = require('../../setup/env');
 const { findNearestStation } = require('../../services/stationService');
+const { getActiveForHour } = require('../../services/subscriptionService');
 const sendEmail = require('../email');
-const Subscription = require('../../models/subscriptionModel');
 
 const sendNotification = async (subscription) => {
   let message = '';
   // get air data for nearest station
   try {
-    let station = await findNearestStation(
-      subscription.location.coordinates[0],
-      subscription.location.coordinates[1]
-    );
+    let station = await findNearestStation({
+      lon: subscription.location.coordinates[0],
+      lat: subscription.location.coordinates[1],
+    });
 
     message = JSON.stringify(station);
+    // FIXME: message musi zawierać link do delete oraz link do update (generować nowy token)
   } catch (err) {
     console.log(`Error while LOOKING for air data for ${subscription.email}`);
     console.log(err);
@@ -35,7 +36,7 @@ const sendNotification = async (subscription) => {
 
 const sendHourNotifications = async (hour) => {
   try {
-    const subscriptions = await Subscription.find({ hours: hour });
+    const subscriptions = await getActiveForHour(hour);
     console.log(`Sending ${subscriptions.length} notifications (${hour})`);
     subscriptions.map(async (subscription) => {
       await sendNotification(subscription);
@@ -48,7 +49,7 @@ const sendHourNotifications = async (hour) => {
 
 exports.start = async () => {
   console.log('Notifications job started');
-  const job = schedule.scheduleJob('0 * * * *', (fireDate) => {
+  const job = schedule.scheduleJob('0 * * * * *', (fireDate) => {
     const localTime = moment(fireDate).tz(env.TIMEZONE);
     console.log(`Notifications run at ${localTime}`);
     sendHourNotifications(fireDate.getHours());
