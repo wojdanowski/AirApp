@@ -1,4 +1,5 @@
 const Subscription = require('../models/subscriptionModel');
+const DbQueryFeatures = require('../utils/dbQueryFeatures');
 
 exports.verifyBodyNew = (req, res, next) => {
   // TODO: zaznaczyć, czego brakuje
@@ -12,7 +13,6 @@ exports.verifyBodyNew = (req, res, next) => {
 };
 
 exports.new = async (req, res) => {
-  // TODO: walidacja danych
   try {
     const newSubscription = await Subscription.create({
       email: req.body.email,
@@ -40,7 +40,11 @@ exports.new = async (req, res) => {
 exports.get = async (req, res) => {
   // TODO: wyszukiwanie po tokenie jwt, a nie id
   try {
-    const subscription = await Subscription.findById(req.params.subscriptionId);
+    const features = new DbQueryFeatures(
+      Subscription.findById(req.params.subscriptionId),
+      req.query
+    ).limitFields();
+    const subscription = await features.query;
 
     res.status(200).json({
       status: 'success',
