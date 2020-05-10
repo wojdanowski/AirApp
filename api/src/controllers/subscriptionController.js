@@ -1,7 +1,11 @@
 const crypto = require('crypto');
-const Subscription = require('../models/subscriptionModel');
-const { activate, createNew } = require('../services/subscriptionService');
-const DbQueryFeatures = require('../utils/dbQueryFeatures');
+const {
+  activate,
+  createNew,
+  remove,
+  get,
+  update,
+} = require('../services/subscriptionService');
 
 exports.verifyBodyNew = (req, res, next) => {
   // TODO: zaznaczyć, czego brakuje
@@ -66,20 +70,24 @@ exports.activate = async (req, res) => {
 };
 
 exports.get = async (req, res) => {
-  // TODO: wyszukiwanie po tokenie jwt, a nie id
   try {
-    const features = new DbQueryFeatures(
-      Subscription.findById(req.params.subscriptionId),
-      req.query
-    ).limitFields();
-    const subscription = await features.query;
+    const subscription = await get(req.params.hashedToken, req.query);
 
-    res.status(200).json({
-      status: 'success',
-      data: { subscription },
-    });
+    if (!subscription) {
+      res.status(404).json({
+        status: 'fail',
+        message: 'Subscription not found',
+      });
+    } else {
+      res.status(200).json({
+        status: 'success',
+        data: {
+          subscription,
+        },
+      });
+    }
   } catch (err) {
-    res.status(404).json({
+    res.status(400).json({
       status: 'fail',
       message: err,
     });
@@ -88,23 +96,9 @@ exports.get = async (req, res) => {
 
 exports.update = async (req, res) => {
   // TODO: walidacja danych
-  // TODO: wyszukiwanie po tokenie jwt, a nie id
 
   try {
-    const subscription = await Subscription.findByIdAndUpdate(
-      req.params.subscriptionId,
-      {
-        location: {
-          type: 'Point',
-          coordinates: [req.body.lon, req.body.lat],
-        },
-        hours: req.body.hours,
-      },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const subscription = await update(req.params.hashedToken, req.body);
 
     if (!subscription) {
       res.status(404).json({
@@ -131,9 +125,7 @@ exports.delete = async (req, res) => {
   // TODO: wyszukiwanie po tokenie jwt, a nie id
 
   try {
-    const deleted = await Subscription.findByIdAndDelete(
-      req.params.subscriptionId
-    );
+    const deleted = await remove(req.params.hashedToken);
     if (!deleted) {
       res.status(404).json({
         status: 'fail',

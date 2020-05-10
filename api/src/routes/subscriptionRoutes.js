@@ -8,10 +8,9 @@ router
   .route('/activate/:token')
   .get(subController.hashToken, subController.activate);
 router
-  .route('/:subscriptionId') // TODO: zamiast id token jwt
-  .get(subController.get)
-  .patch(subController.update)
-  .put(subController.update)
-  .delete(subController.delete);
+  .route('/:token')
+  .get(subController.hashToken, subController.get)
+  .patch(subController.hashToken, subController.update)
+  .delete(subController.hashToken, subController.delete);
 
 module.exports = router;
