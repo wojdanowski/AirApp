@@ -6,6 +6,7 @@ exports.locationPoint = {
     default: 'Point', // FIXME: coś default nie działa w update
     enum: ['Point'],
     required: true,
+    select: false,
   },
   coordinates: {
     type: [Number], // lon, lat

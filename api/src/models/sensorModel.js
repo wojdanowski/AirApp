@@ -1,6 +1,5 @@
-const { sensorValue } = require('./nestedSchemas');
-
 const mongoose = require('mongoose');
+const { sensorValue } = require('./nestedSchemas');
 
 const sensorSchema = mongoose.Schema({
   key: {
@@ -11,4 +10,4 @@ const sensorSchema = mongoose.Schema({
   station: { type: mongoose.Schema.Types.ObjectId, ref: 'Station' },
 });
 
-const Station = (module.exports = mongoose.model('sensor', sensorSchema));
+module.exports = mongoose.model('sensor', sensorSchema);

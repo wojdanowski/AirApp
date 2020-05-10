@@ -1,6 +1,5 @@
-const { locationPoint } = require('./nestedSchemas');
-
 const mongoose = require('mongoose');
+const { locationPoint } = require('./nestedSchemas');
 
 const normaliseHours = (hours) => {
   return Array.from(new Set(hours)) // usunąć duplikaty
@@ -15,14 +14,17 @@ const subscriptionSchema = mongoose.Schema({
     unique: true,
   },
   location: locationPoint,
+  hours: {
+    type: [Number],
+    required: true,
+    set: (hours) => normaliseHours(hours),
+  },
+  subscription_date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 subscriptionSchema.index({ location: '2dsphere' });
 
-const Subscription = (module.exports = mongoose.model(
-  'subscription',
-  subscriptionSchema
-));
-module.exports.get = (callback, limit) => {
-  Subscription.find(callback).limit(limit);
-};
+module.exports = mongoose.model('subscription', subscriptionSchema);
