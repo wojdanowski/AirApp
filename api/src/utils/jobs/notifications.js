@@ -9,7 +9,7 @@ const sendNotification = async (subscription) => {
   let message = '';
   // get air data for nearest station
   try {
-    let station = await findNearestStation({
+    const station = await findNearestStation({
       lon: subscription.location.coordinates[0],
       lat: subscription.location.coordinates[1],
     });
