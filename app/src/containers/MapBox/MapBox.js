@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
 
 import classes from './MapBox.module.css';
+import './mapboxCustom.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
+import gradientImg from '../../assets/RadialGradient.png';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
@@ -26,54 +28,175 @@ class MapBox extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const coordinates = this.props.selectedCoordinates;
-		const displayedStationCoord = this.props.displayedStation.coordinates;
+		if (
+			this.props.areAllStationsLoaded &&
+			!prevProps.areAllStationsLoaded
+		) {
+			this.generateAllStations();
+		}
 
-		if (coordinates === prevProps.selectedCoordinates) return;
+		// const coordinates = this.props.selectedCoordinates;
+		// const displayedStationCoord = this.props.displayedStation.coordinates;
 
-		this.bounds = new mapboxgl.LngLatBounds();
-		this.bounds.extend(coordinates);
-		this.bounds.extend(displayedStationCoord);
-		this.map.fitBounds(this.bounds, {
-			padding: {
-				top: 200,
-				bottom: 200,
-				left: 200,
-				right: 200,
+		// if (coordinates === prevProps.selectedCoordinates) return;
+
+		// this.bounds = new mapboxgl.LngLatBounds();
+		// this.bounds.extend(coordinates);
+		// this.bounds.extend(displayedStationCoord);
+		// this.map.fitBounds(this.bounds, {
+		// 	padding: {
+		// 		top: 200,
+		// 		bottom: 200,
+		// 		left: 200,
+		// 		right: 200,
+		// 	},
+		// });
+
+		// const stationMarker = document.createElement('div');
+		// stationMarker.className = classes.stationMarker;
+		// new mapboxgl.Marker({
+		// 	element: stationMarker,
+		// 	anchor: 'center',
+		// })
+		// 	.setLngLat(displayedStationCoord)
+		// 	.addTo(this.map);
+
+		// const seleLocationMarker = document.createElement('div');
+		// seleLocationMarker.className = classes.selectedLocation;
+		// new mapboxgl.Marker({
+		// 	element: seleLocationMarker,
+		// 	anchor: 'center',
+		// })
+		// 	.setLngLat(coordinates)
+		// 	.addTo(this.map);
+
+		// const allIndexesFromStation = this.props.displayedStation.measurement;
+		// const allPopupText = allIndexesFromStation.map((el) => {
+		// 	const text = `${el.param} : ${el.indexLevel.indexLevelName}<br />`;
+		// 	return text;
+		// });
+
+		// new mapboxgl.Popup({
+		// 	offset: 30,
+		// })
+		// 	.setLngLat(displayedStationCoord)
+		// 	.setHTML(allPopupText.join(''))
+		// 	.addTo(this.map);
+	}
+
+	generateAllStations = () => {
+		// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+		// const width = 64; // The image will be 64 pixels square
+		// const bytesPerPixel = 4; // Each pixel is represented by 4 bytes: red, green, blue, and alpha.
+		// const data = new Uint8Array(width * width * bytesPerPixel);
+
+		// for (let x = 0; x < width; x++) {
+		// 	for (let y = 0; y < width; y++) {
+		// 		const offset = (y * width + x) * bytesPerPixel;
+		// 		data[offset + 0] = (y / width) * 255; // red
+		// 		data[offset + 1] = (x / width) * 255; // green
+		// 		data[offset + 2] = 128; // blue
+		// 		data[offset + 3] = 255; // alpha
+		// 	}
+		// }
+
+		this.map.loadImage(gradientImg, (error, image) => {
+			if (error) throw error;
+			this.map.addImage('gradient', image);
+		});
+
+		const stationsDataSet = this.props.allStationsData.map((station) => {
+			let stationPopupDescription = `<strong>${station.name}</strong><br />`;
+			const allIndexes = station.mIndexes.map((el) => {
+				const text = `${el.param} : ${el.indexLevel.indexLevelName}<br />`;
+				return text;
+			});
+			stationPopupDescription += allIndexes.join('');
+
+			return {
+				type: 'Feature',
+				properties: {
+					description: stationPopupDescription,
+					icon: 'gradient',
+					id: station._id,
+				},
+				geometry: {
+					type: 'Point',
+					coordinates: station.location.coordinates,
+				},
+			};
+		});
+
+		const stationsLayerData = {
+			type: 'geojson',
+			data: {
+				type: 'FeatureCollection',
+				features: stationsDataSet,
+			},
+		};
+
+		this.map.addSource('stations', stationsLayerData);
+		const createMarkers = () => {
+			stationsLayerData.data.features.forEach((marker) => {
+				const stationMarker = document.createElement('div');
+				stationMarker.id = `marker-${marker.properties.id}`;
+				stationMarker.className = classes.stationMarker;
+
+				new mapboxgl.Marker({
+					element: stationMarker,
+					anchor: 'center',
+				})
+					.setLngLat(marker.geometry.coordinates)
+					.addTo(this.map);
+			});
+		};
+
+		createMarkers();
+		this.assignEventHandlers();
+
+		this.map.addLayer({
+			id: 'stations',
+			type: 'symbol',
+			source: 'stations',
+			layout: {
+				'icon-image': '{icon}',
+				'icon-size': 0.25,
+				'icon-allow-overlap': true,
 			},
 		});
+	};
 
-		const stationMarker = document.createElement('div');
-		stationMarker.className = classes.stationMarker;
-		new mapboxgl.Marker({
-			element: stationMarker,
-			anchor: 'center',
-		})
-			.setLngLat(displayedStationCoord)
-			.addTo(this.map);
+	assignEventHandlers = () => {
+		// When a click event occurs on a feature in the stations layer, open a popup at the
+		// location of the feature, with description HTML from its properties.
+		this.map.on('click', 'stations', (e) => {
+			var coordinates = e.features[0].geometry.coordinates.slice();
+			var description = e.features[0].properties.description;
 
-		const seleLocationMarker = document.createElement('div');
-		seleLocationMarker.className = classes.selectedLocation;
-		new mapboxgl.Marker({
-			element: seleLocationMarker,
-			anchor: 'center',
-		})
-			.setLngLat(coordinates)
-			.addTo(this.map);
+			// Ensure that if the map is zoomed out such that multiple
+			// copies of the feature are visible, the popup appears
+			// over the copy being pointed to.
+			while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+				coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+			}
 
-		const allIndexesFromStation = this.props.displayedStation.measurement;
-		const allPopupText = allIndexesFromStation.map((el) => {
-			const text = `${el.param} : ${el.indexLevel.indexLevelName}<br />`;
-			return text;
+			new mapboxgl.Popup()
+				.setLngLat(coordinates)
+				.setHTML(description)
+				.addTo(this.map);
 		});
 
-		new mapboxgl.Popup({
-			offset: 30,
-		})
-			.setLngLat(displayedStationCoord)
-			.setHTML(allPopupText.join(''))
-			.addTo(this.map);
-	}
+		// Change the cursor to a pointer when the mouse is over the stations layer.
+		this.map.on('mouseenter', 'stations', () => {
+			this.map.getCanvas().style.cursor = 'pointer';
+		});
+
+		// Change it back to a pointer when it leaves.
+		this.map.on('mouseleave', 'stations', () => {
+			this.map.getCanvas().style.cursor = '';
+		});
+	};
 
 	render() {
 		return (

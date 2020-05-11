@@ -20,6 +20,7 @@ class MainPage extends Component {
 			placesSuggestions: [],
 			selectedCoordinates: [],
 			allStations: null,
+			areAllStationsLoaded: false,
 			displayedStation: {
 				stationName: '',
 				coordinates: [],
@@ -79,10 +80,16 @@ class MainPage extends Component {
 	};
 
 	getAllStations = async () => {
+		this.setState({
+			areAllStationsLoaded: false,
+		});
 		const query = `${LINKS.PROXY}${LINKS.AIR_API_URL}stations`;
 		try {
 			const res = (await axios(query)).data;
-			console.log(res);
+			this.setState({
+				allStations: res.data.stations,
+				areAllStationsLoaded: true,
+			});
 		} catch (error) {
 			console.log(`error in getAllStations`);
 			console.log(error);
@@ -164,21 +171,21 @@ class MainPage extends Component {
 	};
 
 	showLocationOnMap = async (coordinates) => {
-		const fetchError = await this.getNearestStation(coordinates);
-		if (!fetchError) {
-			this.scrollToRef(this.mapBoxRef);
-			if (!this.context.showSidebar) {
-				this.context.uiFunctions.toggleSidebar();
-			}
-			this.setState({
-				selectedCoordinates: [...coordinates],
-				isInitial: false,
-			});
-			this.getSensorList(this.state.displayedStation.stationId);
-		} else {
-			console.log(`fetchError in showLocationOnMap`);
-			alert(fetchError);
-		}
+		// const fetchError = await this.getNearestStation(coordinates);
+		// if (!fetchError) {
+		// 	this.scrollToRef(this.mapBoxRef);
+		// 	if (!this.context.showSidebar) {
+		// 		this.context.uiFunctions.toggleSidebar();
+		// 	}
+		// 	this.setState({
+		// 		selectedCoordinates: [...coordinates],
+		// 		isInitial: false,
+		// 	});
+		// 	this.getSensorList(this.state.displayedStation.stationId);
+		// } else {
+		// 	console.log(`fetchError in showLocationOnMap`);
+		// 	alert(fetchError);
+		// }
 	};
 
 	render() {
@@ -194,6 +201,8 @@ class MainPage extends Component {
 					/>
 				</div>
 				<MapBoxScreen
+					allStationsData={this.state.allStations}
+					areAllStationsLoaded={this.state.areAllStationsLoaded}
 					arrowClickedHandler={() =>
 						this.scrollToRef(this.mainScreenRef)
 					}

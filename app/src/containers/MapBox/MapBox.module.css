@@ -10,9 +10,19 @@
 	height: 2vh;
 	border-radius: 50%;
 	cursor: pointer;
+	display: none;
 }
 
-.selectedLocation {
+.tempMarker {
+	background-color: red;
+	background-size: cover;
+	width: 2vh;
+	height: 2vh;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.selectedLocationMarker {
 	background-color: green;
 	background-size: cover;
 	width: 2vh;
