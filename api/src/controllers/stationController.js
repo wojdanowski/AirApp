@@ -4,6 +4,7 @@ const {
   findNearestStation,
 } = require('../services/stationService');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 exports.all = catchAsync(async (req, res, next) => {
   const stations = await allStations(req.query);
@@ -16,11 +17,7 @@ exports.all = catchAsync(async (req, res, next) => {
 
 exports.nearestAirIndex = catchAsync(async (req, res, next) => {
   if (req.query.lon == null || req.query.lat == null) {
-    res.status(422).json({
-      status: 'fail',
-      message: 'Lack of required parameters (lat, lon)',
-    });
-    return;
+    return next(new AppError('Lack of required parameters (lat, lon)', 422));
   }
 
   const station = await findNearestStation(req.query);
