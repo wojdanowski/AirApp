@@ -6,6 +6,8 @@ const db = require('./setup/db');
 const stationRouter = require('./routes/stationRoutes');
 const subscriptionRouter = require('./routes/subscriptionRoutes');
 const indexRouter = require('./routes/indexRoutes');
+const AppError = require('./utils/appError');
+const errorController = require('./controllers/errorController');
 
 // APP
 const app = express();
@@ -33,6 +35,13 @@ app.get('/', (req, res) => {
 app.use('/api/subscriptions', subscriptionRouter);
 app.use('/api/stations', stationRouter);
 app.use('/api', indexRouter);
+
+// UNHANDLED ROUTES
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl}`, 404));
+});
+
+app.use(errorController);
 
 // RUN
 console.log(`Environment: ${env.NODE_ENV}`);
