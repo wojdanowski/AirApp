@@ -6,14 +6,14 @@ const {
   get,
   update,
 } = require('../services/subscriptionService');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 exports.verifyBodyNew = (req, res, next) => {
   // TODO: zaznaczyć, czego brakuje
   // TODO: walidacja typu danych
   if (!req.body.email || !req.body.lon || !req.body.lat || !req.body.hours) {
-    return res
-      .status(422)
-      .json({ status: 'fail', message: 'Missing required parameters' });
+    return next(new AppError('Missing required parameters', 422));
   }
   next();
 };
@@ -26,118 +26,65 @@ exports.hashToken = (req, res, next) => {
   next();
 };
 
-exports.new = async (req, res) => {
-  try {
-    const newSubscription = await createNew(req.body);
+exports.new = catchAsync(async (req, res, next) => {
+  const newSubscription = await createNew(req.body);
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        subscription: newSubscription,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
+  res.status(201).json({
+    status: 'success',
+    data: {
+      subscription: newSubscription,
+    },
+  });
+});
+
+exports.activate = catchAsync(async (req, res, next) => {
+  const subscription = await activate(req.params.hashedToken);
+
+  if (!subscription) {
+    return next(new AppError('Subscription not found', 404));
   }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      subscription,
+    },
+  });
+});
 
-exports.activate = async (req, res) => {
-  try {
-    const subscription = await activate(req.params.hashedToken);
+exports.get = catchAsync(async (req, res, next) => {
+  const subscription = await get(req.params.hashedToken, req.query);
 
-    if (!subscription) {
-      res.status(404).json({
-        status: 'fail',
-        message: 'Subscription not found',
-      });
-    } else {
-      res.status(200).json({
-        status: 'success',
-        data: {
-          subscription,
-        },
-      });
-    }
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
+  if (!subscription) {
+    return next(new AppError('Subscription not found', 404));
   }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      subscription,
+    },
+  });
+});
 
-exports.get = async (req, res) => {
-  try {
-    const subscription = await get(req.params.hashedToken, req.query);
-
-    if (!subscription) {
-      res.status(404).json({
-        status: 'fail',
-        message: 'Subscription not found',
-      });
-    } else {
-      res.status(200).json({
-        status: 'success',
-        data: {
-          subscription,
-        },
-      });
-    }
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
-
-exports.update = async (req, res) => {
+exports.update = catchAsync(async (req, res, next) => {
   // TODO: walidacja danych
+  const subscription = await update(req.params.hashedToken, req.body);
 
-  try {
-    const subscription = await update(req.params.hashedToken, req.body);
-
-    if (!subscription) {
-      res.status(404).json({
-        status: 'fail',
-        message: 'Subscription not found',
-      });
-    } else {
-      res.status(200).json({
-        status: 'success',
-        data: {
-          subscription,
-        },
-      });
-    }
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
+  if (!subscription) {
+    return next(new AppError('Subscription not found', 404));
   }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      subscription,
+    },
+  });
+});
 
-exports.delete = async (req, res) => {
-  // TODO: wyszukiwanie po tokenie jwt, a nie id
+exports.delete = catchAsync(async (req, res, next) => {
+  const deleted = await remove(req.params.hashedToken);
 
-  try {
-    const deleted = await remove(req.params.hashedToken);
-    if (!deleted) {
-      res.status(404).json({
-        status: 'fail',
-        message: "Subscription doesn't exist",
-      });
-    } else {
-      res.status(204).end();
-    }
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
+  if (!deleted) {
+    return next(new AppError('Subscription not found', 404));
   }
-};
+  res.status(204).end();
+});

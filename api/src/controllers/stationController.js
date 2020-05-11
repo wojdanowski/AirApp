@@ -3,24 +3,18 @@ const {
   distinctIndexes,
   findNearestStation,
 } = require('../services/stationService');
+const catchAsync = require('../utils/catchAsync');
 
-exports.all = async (req, res) => {
-  try {
-    const stations = await allStations(req.query);
+exports.all = catchAsync(async (req, res, next) => {
+  const stations = await allStations(req.query);
 
-    res.status(200).json({
-      status: 'success',
-      data: { stations },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: { stations },
+  });
+});
 
-exports.nearestAirIndex = async (req, res) => {
+exports.nearestAirIndex = catchAsync(async (req, res, next) => {
   if (req.query.lon == null || req.query.lat == null) {
     res.status(422).json({
       status: 'fail',
@@ -29,33 +23,19 @@ exports.nearestAirIndex = async (req, res) => {
     return;
   }
 
-  try {
-    let station = await findNearestStation(req.query);
+  const station = await findNearestStation(req.query);
 
-    res.status(200).json({
-      status: 'success',
-      data: { station },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: { station },
+  });
+});
 
-exports.indexList = async (req, res) => {
-  try {
-    const indexes = await distinctIndexes();
+exports.indexList = catchAsync(async (req, res, next) => {
+  const indexes = await distinctIndexes();
 
-    res.status(200).json({
-      status: 'success',
-      data: { indexes },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: { indexes },
+  });
+});
