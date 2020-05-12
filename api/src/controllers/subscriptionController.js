@@ -1,105 +1,82 @@
-const Subscription = require('../models/subscriptionModel');
+const crypto = require('crypto');
+const {
+  activate,
+  createNew,
+  remove,
+  get,
+  update,
+} = require('../services/subscriptionService');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
-exports.new = async (req, res) => {
-  // TODO: walidacja danych
-  try {
-    const newSubscription = await Subscription.create({
-      email: req.body.email,
-      location: {
-        type: 'Point',
-        coordinates: [req.body.lon, req.body.lat],
-      },
-      hours: req.body.hours,
-    });
-    //FIXME: na heroku jest czas gmt - najatwiej byłoby gdyby czas przychodził w gmt - musiałoby to być rozwiązane w frontendzie
-
-    res.status(201).json({
-      status: 'success',
-      data: {
-        subscription: newSubscription,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
+exports.hashToken = (req, res, next) => {
+  req.params.hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+  next();
 };
 
-exports.get = async (req, res) => {
-  // TODO: wyszukiwanie po tokenie jwt, a nie id
-  try {
-    const subscription = await Subscription.findById(
-      req.params.subscription_id
-    );
+exports.new = catchAsync(async (req, res, next) => {
+  const newSubscription = await createNew(req.body);
 
-    res.status(200).json({
-      status: 'success',
-      data: { subscription },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
+  res.status(201).json({
+    status: 'success',
+    data: {
+      subscription: newSubscription,
+    },
+  });
+});
+
+exports.activate = catchAsync(async (req, res, next) => {
+  const subscription = await activate(req.params.hashedToken);
+
+  // TODO: subskrypcja po aktywowaniu nie powinna dać się znowu aktywować
+  // Niby nic nie psuje, ale dla porządku warto obsłużyć taki przypadek
+  if (!subscription) {
+    return next(new AppError('Subscription not found', 404));
   }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      subscription,
+    },
+  });
+});
 
-exports.update = async (req, res) => {
-  // TODO: walidacja danych
-  // TODO: wyszukiwanie po tokenie jwt, a nie id
+exports.get = catchAsync(async (req, res, next) => {
+  const subscription = await get(req.params.hashedToken, req.query);
 
-  try {
-    const subscription = await Subscription.findByIdAndUpdate(
-      req.params.subscription_id,
-      {
-        location: {
-          type: 'Point',
-          coordinates: [req.body.lon, req.body.lat],
-        },
-        hours: req.body.hours,
-      },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        subscription,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      //TODO: no 404 to średnio, mogą być niepoprawne dane
-      status: 'fail',
-      message: err,
-    });
+  if (!subscription) {
+    return next(new AppError('Subscription not found', 404));
   }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      subscription,
+    },
+  });
+});
 
-exports.delete = async (req, res) => {
-  // TODO: wyszukiwanie po tokenie jwt, a nie id
+exports.update = catchAsync(async (req, res, next) => {
+  const subscription = await update(req.params.hashedToken, req.body);
 
-  try {
-    const deleted = await Subscription.findByIdAndDelete(
-      req.params.subscription_id
-    );
-    if (!deleted) {
-      res.status(404).json({
-        status: 'fail',
-        message: "Subscription doesn't exist",
-      });
-    } else {
-      res.status(204).end();
-    }
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
+  if (!subscription) {
+    return next(new AppError('Subscription not found', 404));
   }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      subscription,
+    },
+  });
+});
+
+exports.delete = catchAsync(async (req, res, next) => {
+  const deleted = await remove(req.params.hashedToken);
+
+  if (!deleted) {
+    return next(new AppError('Subscription not found', 404));
+  }
+  res.status(204).end();
+});

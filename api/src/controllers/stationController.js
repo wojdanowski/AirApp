@@ -1,61 +1,38 @@
-const Station = require('../models/stationModel');
+const {
+  allStations,
+  distinctIndexes,
+  findNearestStation,
+} = require('../services/stationService');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
-exports.all = async (req, res) => {
-  try {
-    const stations = await Station.find();
+exports.all = catchAsync(async (req, res, next) => {
+  const stations = await allStations(req.query);
 
-    res.status(200).json({
-      status: 'success',
-      data: { stations },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: { stations },
+  });
+});
 
-exports.nearestAirIndex = async (req, res) => {
-  const lon = req.query.lon;
-  const lat = req.query.lat;
-  if (lon == null || lat == null) {
-    res.status(422).json({
-      status: 'fail',
-      message: 'Lack of required parameters (lat, lon)',
-    });
-    return;
+exports.nearestAirIndex = catchAsync(async (req, res, next) => {
+  if (req.query.lon == null || req.query.lat == null) {
+    return next(new AppError('Lack of required parameters (lat, lon)', 422));
   }
 
-  try {
-    let station = await findNearestStation(lon, lat);
+  const station = await findNearestStation(req.query);
 
-    res.status(200).json({
-      status: 'success',
-      data: { station },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: { station },
+  });
+});
 
-// TODO: nadaje się na stationService
-const findNearestStation = async (lon, lat) => {
-  // bez try/catch - obsługa w metodzie nadrzędnej
-  const stationList = await Station.find({
-    location: {
-      $nearSphere: {
-        $geometry: {
-          type: 'Point',
-          coordinates: [lon, lat],
-        },
-      },
-    },
-  }).limit(1);
-  return stationList[0];
-};
+exports.indexList = catchAsync(async (req, res, next) => {
+  const indexes = await distinctIndexes();
 
-exports.findNearestStation = findNearestStation;
+  res.status(200).json({
+    status: 'success',
+    data: { indexes },
+  });
+});

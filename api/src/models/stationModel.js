@@ -1,6 +1,5 @@
-const { locationPoint, mIndex } = require('./nestedSchemas');
-
 const mongoose = require('mongoose');
+const { locationPoint, mIndex } = require('./nestedSchemas');
 
 const stationSchema = mongoose.Schema({
   station_id: {
@@ -28,11 +27,9 @@ const stationSchema = mongoose.Schema({
     indexParam: String,
   },
   mIndexes: [mIndex],
+  // sensors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'sensor' }],
 });
 
 stationSchema.index({ location: '2dsphere' });
 
-const Station = (module.exports = mongoose.model('station', stationSchema));
-module.exports.get = (callback, limit) => {
-  Station.find(callback).limit(limit);
-};
+module.exports = mongoose.model('station', stationSchema);
