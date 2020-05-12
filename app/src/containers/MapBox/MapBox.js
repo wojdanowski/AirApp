@@ -85,8 +85,6 @@ class MapBox extends Component {
 	}
 
 	generateAllStations = () => {
-		// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 		this.map.loadImage(gradientImg, (error, image) => {
 			if (error) throw error;
 			this.map.addImage('gradient', image);
@@ -94,7 +92,7 @@ class MapBox extends Component {
 
 		const stationsDataSet = this.props.allStationsData.map((station) => {
 			let stationPopupDescription = `<strong>${station.name}</strong><br />`;
-			if (station.mIndexes.length == 0) {
+			if (station.mIndexes.length === 0) {
 				stationPopupDescription += 'Brak danych';
 			} else {
 				const allIndexes = station.mIndexes.map((el) => {
