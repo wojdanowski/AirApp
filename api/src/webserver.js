@@ -9,6 +9,12 @@ const indexRouter = require('./routes/indexRoutes');
 const AppError = require('./utils/appError');
 const errorController = require('./controllers/errorController');
 
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION. Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+
 // APP
 const app = express();
 
@@ -45,6 +51,14 @@ app.use(errorController);
 
 // RUN
 console.log(`Environment: ${env.NODE_ENV}`);
-app.listen(env.PORT, function () {
+const server = app.listen(env.PORT, function () {
   console.log(`Running on port ${env.PORT}`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION. Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
 });

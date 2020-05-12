@@ -19,6 +19,7 @@ const subscriptionSchema = mongoose.Schema({
   },
   location: locationPoint,
   hours: {
+    // TODO: przerobić
     type: [Number],
     required: true,
     set: (hours) => normaliseHours(hours),
