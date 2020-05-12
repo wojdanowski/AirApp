@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const subController = require('../controllers/subscriptionController');
 
-router.route('/').post(subController.verifyBodyNew, subController.new);
+router.route('/').post(subController.new);
 
 router
   .route('/activate/:token')

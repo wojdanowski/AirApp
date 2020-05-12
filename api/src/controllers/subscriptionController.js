@@ -9,15 +9,6 @@ const {
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-exports.verifyBodyNew = (req, res, next) => {
-  // TODO: zaznaczyć, czego brakuje
-  // TODO: walidacja typu danych
-  if (!req.body.email || !req.body.lon || !req.body.lat || !req.body.hours) {
-    return next(new AppError('Missing required parameters', 422));
-  }
-  next();
-};
-
 exports.hashToken = (req, res, next) => {
   req.params.hashedToken = crypto
     .createHash('sha256')
@@ -66,7 +57,6 @@ exports.get = catchAsync(async (req, res, next) => {
 });
 
 exports.update = catchAsync(async (req, res, next) => {
-  // TODO: walidacja danych
   const subscription = await update(req.params.hashedToken, req.body);
 
   if (!subscription) {
