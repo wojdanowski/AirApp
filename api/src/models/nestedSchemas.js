@@ -49,12 +49,14 @@ exports.subscriptionTime = mongoose.Schema(
       required: true,
       min: 0,
       max: 6,
+      set: (num) => toInteger(num),
     },
     hour: {
       type: Number,
       required: true,
       min: 1,
       max: 24,
+      set: (num) => toInteger(num),
     },
     minutes: {
       type: Number,

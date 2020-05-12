@@ -18,19 +18,11 @@ exports.createNew = async (body) => {
 
   const message = `Link: ${env.ACTIVATE_SUB_LINK}/${token}`;
 
-  try {
-    await sendEmail({
-      email: newSubscription.email,
-      subject: 'Aktywuj subskrypcję - Air App',
-      message: message,
-    });
-  } catch (err) {
-    // TODO: jeśli nie uda się wysłać, to powinien być zwrócony error w response
-    console.log(
-      `Error while sending verification link for ${newSubscription.email}`
-    );
-    console.log(err);
-  }
+  await sendEmail({
+    email: newSubscription.email,
+    subject: 'Aktywuj subskrypcję - Air App',
+    message: message,
+  });
 
   return newSubscription;
 };
@@ -75,6 +67,11 @@ exports.remove = async (hashedToken) => {
   return deleted;
 };
 
-exports.getActiveForHour = async (hour) => {
-  return await Subscription.find({ hours: hour, active: true });
+exports.getActiveForHour = async (day, hour, minute) => {
+  return await Subscription.find({
+    'hours.weekDay': day,
+    'hours.hour': hour,
+    'hours.minutes': minute,
+    active: true,
+  });
 };

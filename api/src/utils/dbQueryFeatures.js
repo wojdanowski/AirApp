@@ -1,7 +1,11 @@
 class DbQueryFeatures {
   constructor(query, queryString) {
     this.query = query;
-    this.queryString = queryString;
+    if (queryString) {
+      this.queryString = queryString;
+    } else {
+      this.queryString = {};
+    }
   }
 
   limitFields() {

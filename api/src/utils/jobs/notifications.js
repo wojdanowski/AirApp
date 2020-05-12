@@ -34,10 +34,12 @@ const sendNotification = async (subscription) => {
   }
 };
 
-const sendActualNotifications = async (hour) => {
+const sendActualNotifications = async (day, hour, minute) => {
   try {
-    const subscriptions = await getActiveForHour(hour);
-    console.log(`Sending ${subscriptions.length} notifications (${hour})`);
+    const subscriptions = await getActiveForHour(day, hour, minute);
+    console.log(
+      `Sending ${subscriptions.length} notifications (Day: ${day}, Hour: ${hour}, ${minute})`
+    );
     subscriptions.map(async (subscription) => {
       await sendNotification(subscription);
     });
@@ -50,9 +52,13 @@ const sendActualNotifications = async (hour) => {
 exports.run = async () => {
   console.log('Notifications job started');
   //FIXME: dostosować do nowego formatu daty
-  const job = schedule.scheduleJob('0 * * * * *', (fireDate) => {
+  const job = schedule.scheduleJob('* * * * *', (fireDate) => {
     const localTime = moment(fireDate).tz(env.TIMEZONE);
     console.log(`Notifications run at ${localTime}`);
-    sendActualNotifications(fireDate.getHours());
+    sendActualNotifications(
+      localTime.day(),
+      localTime.hour(),
+      localTime.minute()
+    );
   });
 };
