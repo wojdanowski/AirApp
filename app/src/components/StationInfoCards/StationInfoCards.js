@@ -2,18 +2,24 @@ import React from 'react';
 import StationInfoCard from './StationInfoCard/StationInfoCard';
 
 const StationInfoCards = (props) => {
-	const content = props.stationData.sensorList;
+	const sensorsData = props.stationData.sensorsData;
 
 	return (
 		<div>
 			<p>{props.stationData.stationName}</p>
-			{content.map((el, index) => {
+			{sensorsData.map((el, index) => {
+				let availableValue;
+				el.values.some((el) => {
+					availableValue = { ...el };
+					return el.value !== null;
+				});
+
 				return (
 					<StationInfoCard
-						key={el.id}
-						paramName={el.param.paramName}
+						key={el._id}
+						paramName={el.key}
 						index={index}
-						sensorsData={props.stationData.sensorsData}
+						paramValue={availableValue}
 					/>
 				);
 			})}

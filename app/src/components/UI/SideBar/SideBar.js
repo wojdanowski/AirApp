@@ -5,7 +5,7 @@ import HamburgerButton from '../Buttons/HamburgerButton/HamburgerButton';
 import EmailSubForm from './../../InputForms/EmailSubForm/EmailSubForm';
 import SideBarCard from '../../../hoc/SideBarCard/SideBarCard';
 import UiContext from './../../../Context/UiContext';
-import StationInfoCard from '../../StationInfoCards/StationInfoCards';
+import StationInfoCards from '../../StationInfoCards/StationInfoCards';
 
 const SideBar = (props) => {
 	const uiState = useContext(UiContext);
@@ -15,8 +15,8 @@ const SideBar = (props) => {
 		attachedClasses = [classes.SideBarContainer, classes.Open];
 	}
 	let stationInfo = null;
-	if (props.stationData.sensorList) {
-		stationInfo = <StationInfoCard stationData={props.stationData} />;
+	if (props.stationData.sensorsData) {
+		stationInfo = <StationInfoCards stationData={props.stationData} />;
 	}
 	let subscriptionContent = null;
 	if (props.stationData.stationId) {

@@ -25,7 +25,6 @@ class MainPage extends Component {
 				stationName: '',
 				coordinates: [],
 				measurement: [],
-				sensorList: null,
 				sensorsData: null,
 				stationId: null,
 			},

@@ -8,13 +8,14 @@
 
 .ParamName {
 	display: table-cell;
-	width: 90%;
+
 	text-align: left;
 	margin: auto;
 	vertical-align: middle;
 }
 
 .ParamValue {
+	text-align: right;
 	display: table-cell;
 	height: 100%;
 	margin: auto;
