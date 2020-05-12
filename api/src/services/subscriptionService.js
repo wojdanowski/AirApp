@@ -49,7 +49,6 @@ exports.get = async (hashedToken, query) => {
     query
   ).limitFields();
   const subscription = await features.query;
-  console.log(subscription);
   return await features.query;
 };
 

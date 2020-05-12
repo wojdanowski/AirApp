@@ -31,6 +31,8 @@ exports.new = catchAsync(async (req, res, next) => {
 exports.activate = catchAsync(async (req, res, next) => {
   const subscription = await activate(req.params.hashedToken);
 
+  // TODO: subskrypcja po aktywowaniu nie powinna dać się znowu aktywować
+  // Niby nic nie psuje, ale dla porządku warto obsłużyć taki przypadek
   if (!subscription) {
     return next(new AppError('Subscription not found', 404));
   }

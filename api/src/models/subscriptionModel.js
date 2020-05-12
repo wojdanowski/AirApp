@@ -1,13 +1,7 @@
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
-const { locationPoint } = require('./nestedSchemas');
-
-const normaliseHours = (hours) => {
-  return Array.from(new Set(hours)) // usunąć duplikaty
-    .map((h) => Math.floor(h)) // zamienić na integer
-    .sort(); // posortować
-};
+const { locationPoint, subscriptionTime } = require('./nestedSchemas');
 
 const subscriptionSchema = mongoose.Schema({
   email: {
@@ -19,10 +13,13 @@ const subscriptionSchema = mongoose.Schema({
   },
   location: locationPoint,
   hours: {
-    // TODO: przerobić
-    type: [Number],
-    required: true,
-    set: (hours) => normaliseHours(hours),
+    type: [subscriptionTime],
+    validate: {
+      validator: function (v) {
+        return v.length > 0;
+      },
+      message: 'Provide at least 1 subscription time',
+    },
   },
   subscription_date: {
     type: Date,
