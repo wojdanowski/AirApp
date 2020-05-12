@@ -83,7 +83,7 @@ class MainPage extends Component {
 		this.setState({
 			areAllStationsLoaded: false,
 		});
-		const query = `${LINKS.PROXY}${LINKS.AIR_API_URL}stations`;
+		const query = `${LINKS.AIR_API_URL}stations`;
 		try {
 			const res = (await axios(query)).data;
 			this.setState({

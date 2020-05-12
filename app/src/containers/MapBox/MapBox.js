@@ -4,7 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import classes from './MapBox.module.css';
 import './mapboxCustom.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
-import gradientImg from '../../assets/RadialGradient.png';
+import gradientImg from '../../assets/gradient_temp.png';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
@@ -124,6 +124,22 @@ class MapBox extends Component {
 
 		this.map.addSource('stations', stationsLayerData);
 
+		// const createMarkers = () => {
+		// 	stationsLayerData.data.features.forEach((marker) => {
+		// 		const stationMarker = document.createElement('div');
+		// 		stationMarker.id = `marker-${marker.properties.id}`;
+		// 		stationMarker.className = classes.stationMarker;
+
+		// 		new mapboxgl.Marker({
+		// 			element: stationMarker,
+		// 			anchor: 'center',
+		// 		})
+		// 			.setLngLat(marker.geometry.coordinates)
+		// 			.addTo(this.map);
+		// 	});
+		// };
+
+		// createMarkers();
 		this.assignEventHandlers();
 
 		this.map.addLayer({
@@ -132,7 +148,7 @@ class MapBox extends Component {
 			source: 'stations',
 			layout: {
 				'icon-image': '{icon}',
-				'icon-size': 0.25,
+				'icon-size': 0.7,
 				'icon-allow-overlap': true,
 			},
 		});

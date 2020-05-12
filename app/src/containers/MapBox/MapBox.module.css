@@ -10,7 +10,6 @@
 	height: 2vh;
 	border-radius: 50%;
 	cursor: pointer;
-	display: none;
 }
 
 .selectedLocationMarker {
