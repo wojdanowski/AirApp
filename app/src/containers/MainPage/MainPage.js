@@ -171,21 +171,21 @@ class MainPage extends Component {
 	};
 
 	showLocationOnMap = async (coordinates) => {
-		// const fetchError = await this.getNearestStation(coordinates);
-		// if (!fetchError) {
-		// 	this.scrollToRef(this.mapBoxRef);
-		// 	if (!this.context.showSidebar) {
-		// 		this.context.uiFunctions.toggleSidebar();
-		// 	}
-		// 	this.setState({
-		// 		selectedCoordinates: [...coordinates],
-		// 		isInitial: false,
-		// 	});
-		// 	this.getSensorList(this.state.displayedStation.stationId);
-		// } else {
-		// 	console.log(`fetchError in showLocationOnMap`);
-		// 	alert(fetchError);
-		// }
+		const fetchError = await this.getNearestStation(coordinates);
+		if (!fetchError) {
+			this.scrollToRef(this.mapBoxRef);
+			if (!this.context.showSidebar) {
+				this.context.uiFunctions.toggleSidebar();
+			}
+			this.setState({
+				selectedCoordinates: [...coordinates],
+				isInitial: false,
+			});
+			this.getSensorList(this.state.displayedStation.stationId);
+		} else {
+			console.log(`fetchError in showLocationOnMap`);
+			alert(fetchError);
+		}
 	};
 
 	render() {

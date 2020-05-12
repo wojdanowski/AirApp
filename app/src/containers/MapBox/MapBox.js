@@ -94,11 +94,15 @@ class MapBox extends Component {
 
 		const stationsDataSet = this.props.allStationsData.map((station) => {
 			let stationPopupDescription = `<strong>${station.name}</strong><br />`;
-			const allIndexes = station.mIndexes.map((el) => {
-				const text = `${el.param} : ${el.indexLevel.indexLevelName}<br />`;
-				return text;
-			});
-			stationPopupDescription += allIndexes.join('');
+			if (station.mIndexes.length == 0) {
+				stationPopupDescription += 'Brak danych';
+			} else {
+				const allIndexes = station.mIndexes.map((el) => {
+					const text = `${el.param} : ${el.indexLevel.indexLevelName}<br />`;
+					return text;
+				});
+				stationPopupDescription += allIndexes.join('');
+			}
 
 			return {
 				type: 'Feature',
