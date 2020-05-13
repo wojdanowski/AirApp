@@ -10,6 +10,10 @@ mongoose
     useCreateIndex: true,
     useFindAndModify: false,
   })
-  .then(() => console.log('Db connected successfully'));
+  .then((con) => {
+    console.log(
+      `Db connected successfully. Host: ${con.connections[0].host} Name: ${con.connections[0].name}`
+    );
+  });
 
 module.exports = mongoose.connection;
