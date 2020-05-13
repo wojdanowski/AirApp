@@ -5,6 +5,7 @@ import classes from './MapBox.module.css';
 import './mapboxCustom.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import gradientImg from '../../assets/gradient_temp.png';
+// import pin from '../../assets/pin.png';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
@@ -35,22 +36,37 @@ class MapBox extends Component {
 			this.generateAllStations();
 		}
 
-		// const coordinates = this.props.selectedCoordinates;
-		// const displayedStationCoord = this.props.displayedStation.coordinates;
+		const coordinates = this.props.selectedCoordinates;
+		const displayedStationCoord = this.props.displayedStation.coordinates;
 
-		// if (coordinates === prevProps.selectedCoordinates) return;
+		if (coordinates === prevProps.selectedCoordinates) return;
 
-		// this.bounds = new mapboxgl.LngLatBounds();
-		// this.bounds.extend(coordinates);
-		// this.bounds.extend(displayedStationCoord);
-		// this.map.fitBounds(this.bounds, {
-		// 	padding: {
-		// 		top: 200,
-		// 		bottom: 200,
-		// 		left: 200,
-		// 		right: 200,
-		// 	},
-		// });
+		this.bounds = new mapboxgl.LngLatBounds();
+		this.bounds.extend(coordinates);
+		this.bounds.extend(displayedStationCoord);
+		this.map.fitBounds(this.bounds, {
+			padding: {
+				top: 200,
+				bottom: 200,
+				left: 400,
+				right: 200,
+			},
+		});
+
+		const foundStationFeature = this.map.querySourceFeatures('stations', {
+			sourceLayer: 'stations',
+			filter: ['==', 'id', this.props.displayedStation.stationId],
+		});
+		let foundDescription;
+		if (foundStationFeature[0]) {
+			foundDescription = foundStationFeature[0].properties.description;
+		} else {
+			foundDescription = 'Station with that id not found';
+		}
+
+		console.log(foundStationFeature);
+
+		this.createPopup(displayedStationCoord, foundDescription, this.map);
 
 		// const stationMarker = document.createElement('div');
 		// stationMarker.className = classes.stationMarker;
@@ -61,13 +77,20 @@ class MapBox extends Component {
 		// 	.setLngLat(displayedStationCoord)
 		// 	.addTo(this.map);
 
-		// const seleLocationMarker = document.createElement('div');
-		// seleLocationMarker.className = classes.selectedLocation;
-		// new mapboxgl.Marker({
-		// 	element: seleLocationMarker,
-		// 	anchor: 'center',
+		const seleLocationMarker = document.createElement('div');
+		seleLocationMarker.className = classes.selectedLocationMarker;
+		new mapboxgl.Marker({
+			element: seleLocationMarker,
+			anchor: 'center',
+		})
+			.setLngLat(coordinates)
+			.addTo(this.map);
+
+		// new mapboxgl.Popup({
+		// 	offset: 30,
 		// })
 		// 	.setLngLat(coordinates)
+		// 	.setHTML('Your Location')
 		// 	.addTo(this.map);
 
 		// const allIndexesFromStation = this.props.displayedStation.measurement;
@@ -170,10 +193,7 @@ class MapBox extends Component {
 				coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
 			}
 
-			new mapboxgl.Popup()
-				.setLngLat(coordinates)
-				.setHTML(description)
-				.addTo(this.map);
+			this.createPopup(coordinates, description, this.map);
 		});
 
 		// Change the cursor to a pointer when the mouse is over the stations layer.
@@ -185,6 +205,13 @@ class MapBox extends Component {
 		this.map.on('mouseleave', 'stations', () => {
 			this.map.getCanvas().style.cursor = '';
 		});
+	};
+
+	createPopup = (coordinates, description, target) => {
+		new mapboxgl.Popup()
+			.setLngLat(coordinates)
+			.setHTML(description)
+			.addTo(target);
 	};
 
 	render() {

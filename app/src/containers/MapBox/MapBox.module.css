@@ -13,10 +13,11 @@
 }
 
 .selectedLocationMarker {
-	background-color: green;
+	background-image: url('/assets/pin.png');
+	opacity: 60%;
 	background-size: cover;
-	width: 2vh;
-	height: 2vh;
-	border-radius: 50%;
+	width: 5vh;
+	height: 5vh;
+	/* border-radius: 50%; */
 	cursor: pointer;
 }
