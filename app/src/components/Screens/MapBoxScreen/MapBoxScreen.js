@@ -13,6 +13,8 @@ class MapBoxScreen extends Component {
 					clicked={this.props.arrowClickedHandler}
 				/>
 				<MapBox
+					allStationsData={this.props.allStationsData}
+					areAllStationsLoaded={this.props.areAllStationsLoaded}
 					displayedStation={this.props.displayedStation}
 					selectedCoordinates={this.props.selectedCoordinates}
 					isInitial={this.props.isInitial}
