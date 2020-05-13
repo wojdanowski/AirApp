@@ -5,7 +5,6 @@ import classes from './MapBox.module.css';
 import './mapboxCustom.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import gradientImg from '../../assets/gradient_temp.png';
-// import pin from '../../assets/pin.png';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
@@ -64,18 +63,7 @@ class MapBox extends Component {
 			foundDescription = 'Station with that id not found';
 		}
 
-		console.log(foundStationFeature);
-
 		this.createPopup(displayedStationCoord, foundDescription, this.map);
-
-		// const stationMarker = document.createElement('div');
-		// stationMarker.className = classes.stationMarker;
-		// new mapboxgl.Marker({
-		// 	element: stationMarker,
-		// 	anchor: 'center',
-		// })
-		// 	.setLngLat(displayedStationCoord)
-		// 	.addTo(this.map);
 
 		const seleLocationMarker = document.createElement('div');
 		seleLocationMarker.className = classes.selectedLocationMarker;
@@ -85,26 +73,6 @@ class MapBox extends Component {
 		})
 			.setLngLat(coordinates)
 			.addTo(this.map);
-
-		// new mapboxgl.Popup({
-		// 	offset: 30,
-		// })
-		// 	.setLngLat(coordinates)
-		// 	.setHTML('Your Location')
-		// 	.addTo(this.map);
-
-		// const allIndexesFromStation = this.props.displayedStation.measurement;
-		// const allPopupText = allIndexesFromStation.map((el) => {
-		// 	const text = `${el.param} : ${el.indexLevel.indexLevelName}<br />`;
-		// 	return text;
-		// });
-
-		// new mapboxgl.Popup({
-		// 	offset: 30,
-		// })
-		// 	.setLngLat(displayedStationCoord)
-		// 	.setHTML(allPopupText.join(''))
-		// 	.addTo(this.map);
 	}
 
 	generateAllStations = () => {
@@ -149,22 +117,6 @@ class MapBox extends Component {
 
 		this.map.addSource('stations', stationsLayerData);
 
-		// const createMarkers = () => {
-		// 	stationsLayerData.data.features.forEach((marker) => {
-		// 		const stationMarker = document.createElement('div');
-		// 		stationMarker.id = `marker-${marker.properties.id}`;
-		// 		stationMarker.className = classes.stationMarker;
-
-		// 		new mapboxgl.Marker({
-		// 			element: stationMarker,
-		// 			anchor: 'center',
-		// 		})
-		// 			.setLngLat(marker.geometry.coordinates)
-		// 			.addTo(this.map);
-		// 	});
-		// };
-
-		// createMarkers();
 		this.assignEventHandlers();
 
 		this.map.addLayer({
