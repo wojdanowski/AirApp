@@ -116,55 +116,6 @@ class MainPage extends Component {
 		}
 	};
 
-	// getSensorList = async (stationId) => {
-	// 	const query = `${LINKS.PROXY}${LINKS.GIOS_API_URL}station/sensors/${stationId}`;
-	// 	try {
-	// 		const res = await axios(query);
-	// 		this.setState({
-	// 			displayedStation: {
-	// 				...this.state.displayedStation,
-	// 				sensorList: res.data,
-	// 			},
-	// 		});
-	// 		this.getSensorData(res.data);
-	// 	} catch (error) {
-	// 		console.log(`error in getSensorList`);
-	// 		alert(error);
-	// 		return error;
-	// 	}
-	// };
-
-	// getSensorData = async (sensorsList) => {
-	// 	if (!this.state.isSensorDataLoading) {
-	// 		this.setState({ isSensorDataLoading: true });
-	// 	}
-	// 	const query = `${LINKS.PROXY}${LINKS.GIOS_API_URL}data/getData/`;
-	// 	const fetchDataPromises = sensorsList.map((el, index) => {
-	// 		return new Promise(() => {
-	// 			axios(query + el.id).then((res) => {
-	// 				let newSensorsData = [];
-	// 				const oldState = this.state.displayedStation.sensorsData;
-	// 				if (oldState) {
-	// 					newSensorsData = [...oldState];
-	// 				}
-	// 				newSensorsData.push(res.data);
-
-	// 				this.setState({
-	// 					displayedStation: {
-	// 						...this.state.displayedStation,
-	// 						sensorsData: newSensorsData,
-	// 					},
-	// 				});
-	// 			});
-	// 		});
-	// 	});
-	// 	try {
-	// 		await Promise.all([...fetchDataPromises]);
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// };
-
 	scrollToRef = (ref) => {
 		window.scrollTo(0, ref.current.offsetTop);
 	};
