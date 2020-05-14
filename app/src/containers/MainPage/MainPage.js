@@ -41,7 +41,7 @@ class MainPage extends Component {
 				position.coords.longitude,
 				position.coords.latitude,
 			];
-			this.showLocationOnMap(selectedCoordinates);
+			this.showNearestStation(selectedCoordinates);
 		};
 
 		const error = () => {
@@ -119,7 +119,7 @@ class MainPage extends Component {
 		window.scrollTo(0, ref.current.offsetTop);
 	};
 
-	showLocationOnMap = async (coordinates) => {
+	showNearestStation = async (coordinates) => {
 		const fetchError = await this.getNearestStation(coordinates);
 		if (!fetchError) {
 			this.scrollToRef(this.mapBoxRef);
@@ -132,7 +132,7 @@ class MainPage extends Component {
 			});
 			this.readAllForStation(this.context.selectedStationId);
 		} else {
-			console.log(`fetchError in showLocationOnMap`);
+			console.log(`fetchError in showNearestStation`);
 			alert(fetchError);
 		}
 	};
@@ -162,10 +162,11 @@ class MainPage extends Component {
 						geoIconClicked={this.geoIconClickedHandler}
 						changeHandler={this.placeSuggestionHandler}
 						placesSuggestions={this.state.placesSuggestions}
-						suggestionClickedHandler={this.showLocationOnMap}
+						suggestionClickedHandler={this.showNearestStation}
 					/>
 				</div>
 				<MapBoxScreen
+					readAllForStation={this.readAllForStation}
 					allStationsData={this.state.allStations}
 					areAllStationsLoaded={this.state.areAllStationsLoaded}
 					arrowClickedHandler={() =>

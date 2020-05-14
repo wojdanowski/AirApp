@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import classes from './SideBar.module.css';
 import HamburgerButton from '../Buttons/HamburgerButton/HamburgerButton';
@@ -18,8 +18,9 @@ const SideBar = (props) => {
 	if (props.stationData.sensorsData) {
 		stationInfo = <StationInfoCards stationData={props.stationData} />;
 	}
+
 	let subscriptionContent = null;
-	if (props.stationData.stationId) {
+	if (uiState.selectedStationId) {
 		subscriptionContent = (
 			<EmailSubForm stationCoordinates={props.stationData.coordinates} />
 		);
