@@ -18,6 +18,7 @@ class MapBox extends Component {
 		};
 		this.map = null;
 		this.bounds = null;
+		this.displayedMarker = null;
 	}
 
 	static contextType = UiContext;
@@ -63,7 +64,10 @@ class MapBox extends Component {
 
 		const seleLocationMarker = document.createElement('div');
 		seleLocationMarker.className = classes.selectedLocationMarker;
-		new mapboxgl.Marker({
+		if (this.displayedMarker) {
+			this.displayedMarker.remove();
+		}
+		this.displayedMarker = new mapboxgl.Marker({
 			element: seleLocationMarker,
 			anchor: 'center',
 		})

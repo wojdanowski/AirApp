@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import classes from './SideBar.module.css';
 import HamburgerButton from '../Buttons/HamburgerButton/HamburgerButton';
