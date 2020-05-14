@@ -26,7 +26,6 @@ class MainPage extends Component {
 				coordinates: [],
 				measurement: [],
 				sensorsData: null,
-				stationId: null,
 			},
 		};
 	}
@@ -97,16 +96,16 @@ class MainPage extends Component {
 	};
 
 	getNearestStation = async (coordinates) => {
-		const query = `${LINKS.PROXY}${LINKS.AIR_API_URL}nearestAirIndex/?lat=${coordinates[1]}&lon=${coordinates[0]}`;
+		const query = `${LINKS.AIR_API_URL}nearestAirIndex/?lat=${coordinates[1]}&lon=${coordinates[0]}`;
 		try {
 			const res = (await axios(query)).data;
+			this.context.uiFunctions.setSelectedStationId(res.data.station._id);
 			this.setState({
 				displayedStation: {
 					...this.state.displayedStation,
 					stationName: res.data.station.name,
 					coordinates: [...res.data.station.location.coordinates],
 					measurement: res.data.station.mIndexes,
-					stationId: res.data.station._id,
 				},
 			});
 		} catch (error) {
@@ -131,7 +130,7 @@ class MainPage extends Component {
 				selectedCoordinates: [...coordinates],
 				isInitial: false,
 			});
-			this.readAllForStation(this.state.displayedStation.stationId);
+			this.readAllForStation(this.context.selectedStationId);
 		} else {
 			console.log(`fetchError in showLocationOnMap`);
 			alert(fetchError);
