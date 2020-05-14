@@ -131,9 +131,16 @@ class MainPage extends Component {
 		}
 	};
 
-	manualSelectionHandler = (stationId) => {
+	manualSelectionHandler = (stationId, coordinates, name) => {
 		this.context.uiFunctions.openSidebar();
 		this.readAllForStation(stationId);
+		this.setState({
+			displayedStation: {
+				...this.state.displayedStation,
+				coordinates: coordinates,
+				stationName: name,
+			},
+		});
 	};
 
 	readAllForStation = async (stationId) => {

@@ -92,6 +92,7 @@ class MapBox extends Component {
 					description: stationPopupDescription,
 					icon: 'gradient',
 					id: station._id,
+					stationName: station.name,
 				},
 				geometry: {
 					type: 'Point',
@@ -131,6 +132,7 @@ class MapBox extends Component {
 			const coordinates = e.features[0].geometry.coordinates.slice();
 			const description = e.features[0].properties.description;
 			const selectedStationId = e.features[0].properties.id;
+			const stationName = e.features[0].properties.stationName;
 			console.log('id of clicked station:');
 			console.log(e.features[0].properties.id);
 
@@ -143,7 +145,11 @@ class MapBox extends Component {
 
 			this.createPopup(coordinates, description, this.map);
 			this.context.uiFunctions.setSelectedStationId(selectedStationId);
-			this.props.stationSelectionHandler(selectedStationId);
+			this.props.stationSelectionHandler(
+				selectedStationId,
+				coordinates,
+				stationName
+			);
 		});
 
 		// Change the cursor to a pointer when the mouse is over the stations layer.

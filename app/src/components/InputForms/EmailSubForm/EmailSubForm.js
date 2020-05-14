@@ -15,13 +15,28 @@ class EmailSubForm extends Component {
 
 		try {
 			const res = await axios({
-				method: 'GET',
+				method: 'post',
 				url: query,
 				data: {
 					email: this.state.typedEmail,
-					lat: this.props.stationCoordinates[0],
-					lon: this.props.stationCoordinates[1],
-					hours: [7],
+					lat: this.props.stationCoordinates[1],
+					lon: this.props.stationCoordinates[0],
+					hours: [
+						{
+							weekDay: 1,
+							hour: 10,
+							minutes: 15,
+						},
+						{
+							weekDay: 2,
+							hour: 11,
+							minutes: 0,
+						},
+						{
+							weekDay: 2,
+							hour: 12,
+						},
+					],
 				},
 			});
 			console.log(res);

@@ -1,12 +1,15 @@
 import React from 'react';
 import StationInfoCard from './StationInfoCard/StationInfoCard';
+import classes from './StationInfoCards.module.css';
 
 const StationInfoCards = (props) => {
 	const sensorsData = props.stationData.sensorsData;
 
 	return (
 		<div>
-			<p>{props.stationData.stationName}</p>
+			<p className={classes.StationName}>
+				{props.stationData.stationName}
+			</p>
 			{sensorsData.map((el, index) => {
 				let availableValue;
 				el.values.some((el) => {
