@@ -18,8 +18,9 @@ const SideBar = (props) => {
 	if (props.stationData.sensorsData) {
 		stationInfo = <StationInfoCards stationData={props.stationData} />;
 	}
+
 	let subscriptionContent = null;
-	if (props.stationData.stationId) {
+	if (uiState.selectedStationId) {
 		subscriptionContent = (
 			<EmailSubForm stationCoordinates={props.stationData.coordinates} />
 		);

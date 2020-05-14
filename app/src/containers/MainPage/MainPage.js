@@ -26,7 +26,6 @@ class MainPage extends Component {
 				coordinates: [],
 				measurement: [],
 				sensorsData: null,
-				stationId: null,
 			},
 		};
 	}
@@ -42,7 +41,7 @@ class MainPage extends Component {
 				position.coords.longitude,
 				position.coords.latitude,
 			];
-			this.showLocationOnMap(selectedCoordinates);
+			this.showNearestStation(selectedCoordinates);
 		};
 
 		const error = () => {
@@ -97,16 +96,16 @@ class MainPage extends Component {
 	};
 
 	getNearestStation = async (coordinates) => {
-		const query = `${LINKS.PROXY}${LINKS.AIR_API_URL}nearestAirIndex/?lat=${coordinates[1]}&lon=${coordinates[0]}`;
+		const query = `${LINKS.AIR_API_URL}nearestAirIndex/?lat=${coordinates[1]}&lon=${coordinates[0]}`;
 		try {
 			const res = (await axios(query)).data;
+			this.context.uiFunctions.setSelectedStationId(res.data.station._id);
 			this.setState({
 				displayedStation: {
 					...this.state.displayedStation,
 					stationName: res.data.station.name,
 					coordinates: [...res.data.station.location.coordinates],
 					measurement: res.data.station.mIndexes,
-					stationId: res.data.station._id,
 				},
 			});
 		} catch (error) {
@@ -116,75 +115,25 @@ class MainPage extends Component {
 		}
 	};
 
-	// getSensorList = async (stationId) => {
-	// 	const query = `${LINKS.PROXY}${LINKS.GIOS_API_URL}station/sensors/${stationId}`;
-	// 	try {
-	// 		const res = await axios(query);
-	// 		this.setState({
-	// 			displayedStation: {
-	// 				...this.state.displayedStation,
-	// 				sensorList: res.data,
-	// 			},
-	// 		});
-	// 		this.getSensorData(res.data);
-	// 	} catch (error) {
-	// 		console.log(`error in getSensorList`);
-	// 		alert(error);
-	// 		return error;
-	// 	}
-	// };
-
-	// getSensorData = async (sensorsList) => {
-	// 	if (!this.state.isSensorDataLoading) {
-	// 		this.setState({ isSensorDataLoading: true });
-	// 	}
-	// 	const query = `${LINKS.PROXY}${LINKS.GIOS_API_URL}data/getData/`;
-	// 	const fetchDataPromises = sensorsList.map((el, index) => {
-	// 		return new Promise(() => {
-	// 			axios(query + el.id).then((res) => {
-	// 				let newSensorsData = [];
-	// 				const oldState = this.state.displayedStation.sensorsData;
-	// 				if (oldState) {
-	// 					newSensorsData = [...oldState];
-	// 				}
-	// 				newSensorsData.push(res.data);
-
-	// 				this.setState({
-	// 					displayedStation: {
-	// 						...this.state.displayedStation,
-	// 						sensorsData: newSensorsData,
-	// 					},
-	// 				});
-	// 			});
-	// 		});
-	// 	});
-	// 	try {
-	// 		await Promise.all([...fetchDataPromises]);
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// };
-
-	scrollToRef = (ref) => {
-		window.scrollTo(0, ref.current.offsetTop);
-	};
-
-	showLocationOnMap = async (coordinates) => {
+	showNearestStation = async (coordinates) => {
 		const fetchError = await this.getNearestStation(coordinates);
 		if (!fetchError) {
-			this.scrollToRef(this.mapBoxRef);
-			if (!this.context.showSidebar) {
-				this.context.uiFunctions.toggleSidebar();
-			}
+			this.context.uiFunctions.scrollToRef(this.mapBoxRef);
+			this.context.uiFunctions.openSidebar();
 			this.setState({
 				selectedCoordinates: [...coordinates],
 				isInitial: false,
 			});
-			this.readAllForStation(this.state.displayedStation.stationId);
+			this.readAllForStation(this.context.selectedStationId);
 		} else {
-			console.log(`fetchError in showLocationOnMap`);
+			console.log(`fetchError in showNearestStation`);
 			alert(fetchError);
 		}
+	};
+
+	manualSelectionHandler = (stationId) => {
+		this.context.uiFunctions.openSidebar();
+		this.readAllForStation(stationId);
 	};
 
 	readAllForStation = async (stationId) => {
@@ -212,14 +161,15 @@ class MainPage extends Component {
 						geoIconClicked={this.geoIconClickedHandler}
 						changeHandler={this.placeSuggestionHandler}
 						placesSuggestions={this.state.placesSuggestions}
-						suggestionClickedHandler={this.showLocationOnMap}
+						suggestionClickedHandler={this.showNearestStation}
 					/>
 				</div>
 				<MapBoxScreen
+					stationSelectionHandler={this.manualSelectionHandler}
 					allStationsData={this.state.allStations}
 					areAllStationsLoaded={this.state.areAllStationsLoaded}
 					arrowClickedHandler={() =>
-						this.scrollToRef(this.mainScreenRef)
+						this.context.uiFunctions.scrollToRef(this.mainScreenRef)
 					}
 					mapRef={this.mapBoxRef}
 					isInitial={this.state.isInitial}

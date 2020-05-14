@@ -7,6 +7,7 @@ class Layout extends Component {
 	state = {
 		showSidebar: false,
 		showBackdrop: false,
+		selectedStationId: null,
 	};
 
 	toggleSidebarHandler = () => {
@@ -21,15 +22,34 @@ class Layout extends Component {
 		});
 	};
 
+	setSelectedStationId = (id) => {
+		console.log(`New selected station id: ${id}`);
+		this.setState(() => {
+			return { selectedStationId: id };
+		});
+	};
+
+	scrollToRef = (ref) => {
+		window.scrollTo(0, ref.current.offsetTop);
+	};
+
+	openSidebar = () => {
+		if (!this.state.showSidebar) this.toggleSidebarHandler();
+	};
+
 	render() {
 		return (
 			<UiProvider
 				value={{
 					showSidebar: this.state.showSidebar,
 					showBackdrop: this.state.showBackdrop,
+					selectedStationId: this.state.selectedStationId,
 					uiFunctions: {
+						setSelectedStationId: this.setSelectedStationId,
 						toggleSidebar: this.toggleSidebarHandler,
 						toggleBackdrop: this.toggleBackdropHandler,
+						openSidebar: this.openSidebar,
+						scrollToRef: this.scrollToRef,
 					},
 				}}
 			>

@@ -5,6 +5,7 @@ import classes from './MapBox.module.css';
 import './mapboxCustom.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import gradientImg from '../../assets/gradient_temp.png';
+import UiContext from './../../Context/UiContext';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
@@ -17,7 +18,10 @@ class MapBox extends Component {
 		};
 		this.map = null;
 		this.bounds = null;
+		this.displayedMarker = null;
 	}
+
+	static contextType = UiContext;
 
 	componentDidMount() {
 		this.map = new mapboxgl.Map({
@@ -52,22 +56,18 @@ class MapBox extends Component {
 			},
 		});
 
-		const foundStationFeature = this.map.querySourceFeatures('stations', {
-			sourceLayer: 'stations',
-			filter: ['==', 'id', this.props.displayedStation.stationId],
-		});
-		let foundDescription;
-		if (foundStationFeature[0]) {
-			foundDescription = foundStationFeature[0].properties.description;
-		} else {
-			foundDescription = 'Station with that id not found';
-		}
-
-		this.createPopup(displayedStationCoord, foundDescription, this.map);
+		const popupDescription = this.createPopupText(
+			this.props.displayedStation.stationName,
+			this.props.displayedStation.measurement
+		);
+		this.createPopup(displayedStationCoord, popupDescription, this.map);
 
 		const seleLocationMarker = document.createElement('div');
 		seleLocationMarker.className = classes.selectedLocationMarker;
-		new mapboxgl.Marker({
+		if (this.displayedMarker) {
+			this.displayedMarker.remove();
+		}
+		this.displayedMarker = new mapboxgl.Marker({
 			element: seleLocationMarker,
 			anchor: 'center',
 		})
@@ -82,17 +82,10 @@ class MapBox extends Component {
 		});
 
 		const stationsDataSet = this.props.allStationsData.map((station) => {
-			let stationPopupDescription = `<strong>${station.name}</strong><br />`;
-			if (station.mIndexes.length === 0) {
-				stationPopupDescription += 'Brak danych';
-			} else {
-				const allIndexes = station.mIndexes.map((el) => {
-					const text = `${el.param} : ${el.indexLevel.indexLevelName}<br />`;
-					return text;
-				});
-				stationPopupDescription += allIndexes.join('');
-			}
-
+			const stationPopupDescription = this.createPopupText(
+				station.name,
+				station.mIndexes
+			);
 			return {
 				type: 'Feature',
 				properties: {
@@ -135,8 +128,11 @@ class MapBox extends Component {
 		// When a click event occurs on a feature in the stations layer, open a popup at the
 		// location of the feature, with description HTML from its properties.
 		this.map.on('click', 'stations', (e) => {
-			var coordinates = e.features[0].geometry.coordinates.slice();
-			var description = e.features[0].properties.description;
+			const coordinates = e.features[0].geometry.coordinates.slice();
+			const description = e.features[0].properties.description;
+			const selectedStationId = e.features[0].properties.id;
+			console.log('id of clicked station:');
+			console.log(e.features[0].properties.id);
 
 			// Ensure that if the map is zoomed out such that multiple
 			// copies of the feature are visible, the popup appears
@@ -146,6 +142,8 @@ class MapBox extends Component {
 			}
 
 			this.createPopup(coordinates, description, this.map);
+			this.context.uiFunctions.setSelectedStationId(selectedStationId);
+			this.props.stationSelectionHandler(selectedStationId);
 		});
 
 		// Change the cursor to a pointer when the mouse is over the stations layer.
@@ -157,6 +155,20 @@ class MapBox extends Component {
 		this.map.on('mouseleave', 'stations', () => {
 			this.map.getCanvas().style.cursor = '';
 		});
+	};
+
+	createPopupText = (stationName, data) => {
+		let stationPopupDescription = `<strong>${stationName}</strong><br />`;
+		if (data.length === 0) {
+			stationPopupDescription += 'Brak danych';
+		} else {
+			const allIndexes = data.map((el) => {
+				const text = `${el.param} : ${el.indexLevel.indexLevelName}<br />`;
+				return text;
+			});
+			stationPopupDescription += allIndexes.join('');
+		}
+		return stationPopupDescription;
 	};
 
 	createPopup = (coordinates, description, target) => {
