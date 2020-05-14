@@ -145,9 +145,14 @@ class MainPage extends Component {
 
 	readAllForStation = async (stationId) => {
 		const query = `${LINKS.AIR_API_URL}stations/sensors/${stationId}`;
+		this.setState({
+			isSensorDataLoading: true,
+		});
+
 		try {
 			const res = (await axios(query)).data;
 			this.setState({
+				isSensorDataLoading: false,
 				displayedStation: {
 					...this.state.displayedStation,
 					sensorsData: res.data,
@@ -159,10 +164,20 @@ class MainPage extends Component {
 		}
 	};
 
+	sleeper = (ms) => {
+		console.log(`sleep`);
+		return function (x) {
+			return new Promise((resolve) => setTimeout(() => resolve(x), ms));
+		};
+	};
+
 	render() {
 		return (
 			<Aux>
-				<SideBar stationData={this.state.displayedStation} />
+				<SideBar
+					stationData={this.state.displayedStation}
+					isSensorDataLoading={this.state.isSensorDataLoading}
+				/>
 				<div className={classes.MainScreenBox} ref={this.mainScreenRef}>
 					<LocationForm
 						geoIconClicked={this.geoIconClickedHandler}
