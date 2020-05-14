@@ -115,17 +115,11 @@ class MainPage extends Component {
 		}
 	};
 
-	scrollToRef = (ref) => {
-		window.scrollTo(0, ref.current.offsetTop);
-	};
-
 	showNearestStation = async (coordinates) => {
 		const fetchError = await this.getNearestStation(coordinates);
 		if (!fetchError) {
-			this.scrollToRef(this.mapBoxRef);
-			if (!this.context.showSidebar) {
-				this.context.uiFunctions.toggleSidebar();
-			}
+			this.context.uiFunctions.scrollToRef(this.mapBoxRef);
+			this.context.uiFunctions.openSidebar();
 			this.setState({
 				selectedCoordinates: [...coordinates],
 				isInitial: false,
@@ -135,6 +129,11 @@ class MainPage extends Component {
 			console.log(`fetchError in showNearestStation`);
 			alert(fetchError);
 		}
+	};
+
+	manualSelectionHandler = (stationId) => {
+		this.context.uiFunctions.openSidebar();
+		this.readAllForStation(stationId);
 	};
 
 	readAllForStation = async (stationId) => {
@@ -166,11 +165,11 @@ class MainPage extends Component {
 					/>
 				</div>
 				<MapBoxScreen
-					readAllForStation={this.readAllForStation}
+					stationSelectionHandler={this.manualSelectionHandler}
 					allStationsData={this.state.allStations}
 					areAllStationsLoaded={this.state.areAllStationsLoaded}
 					arrowClickedHandler={() =>
-						this.scrollToRef(this.mainScreenRef)
+						this.context.uiFunctions.scrollToRef(this.mainScreenRef)
 					}
 					mapRef={this.mapBoxRef}
 					isInitial={this.state.isInitial}

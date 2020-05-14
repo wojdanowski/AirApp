@@ -29,6 +29,14 @@ class Layout extends Component {
 		});
 	};
 
+	scrollToRef = (ref) => {
+		window.scrollTo(0, ref.current.offsetTop);
+	};
+
+	openSidebar = () => {
+		if (!this.state.showSidebar) this.toggleSidebarHandler();
+	};
+
 	render() {
 		return (
 			<UiProvider
@@ -40,6 +48,8 @@ class Layout extends Component {
 						setSelectedStationId: this.setSelectedStationId,
 						toggleSidebar: this.toggleSidebarHandler,
 						toggleBackdrop: this.toggleBackdropHandler,
+						openSidebar: this.openSidebar,
+						scrollToRef: this.scrollToRef,
 					},
 				}}
 			>

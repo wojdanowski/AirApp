@@ -139,9 +139,7 @@ class MapBox extends Component {
 
 			this.createPopup(coordinates, description, this.map);
 			this.context.uiFunctions.setSelectedStationId(selectedStationId);
-			this.props.readAllForStation(selectedStationId);
-			if (!this.context.showSidebar)
-				this.context.uiFunctions.toggleSidebar();
+			this.props.stationSelectionHandler(selectedStationId);
 		});
 
 		// Change the cursor to a pointer when the mouse is over the stations layer.
