@@ -11,7 +11,8 @@
     "worker": "nodemon src/worker.js",
     "start": "npm-run-all --parallel webserver worker",
     "debug:server": "ndb src/webserver.js",
-    "debug:worker": "ndb src/worker.js"
+    "debug:worker": "ndb src/worker.js",
+    "devData": "node src/devData/data/importDevData.js"
   },
   "author": "",
   "license": "ISC",

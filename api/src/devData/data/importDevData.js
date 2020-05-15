@@ -6,16 +6,15 @@ const Subscription = require('../../models/subscriptionModel');
 const Sensor = require('../../models/sensorModel');
 
 const fileList = [
-  ['stations.json', Station],
-  //   ['sensors.json', Sensor],
-  //   ['subscriptions.json', Subscription],
+  [`${__dirname}/stations.json`, Station],
+  [`${__dirname}/sensors.json`, Sensor],
+  // [`${__dirname}/subscriptions.json`, Subscription],
 ];
 
 // IMPORT DATA
 const importData = async (jsonData, model) => {
   try {
-    await Station.create(jsonData);
-    console.log(`${model.name} data imported`);
+    await model.create(jsonData);
   } catch (err) {
     console.log(err);
   }
@@ -25,7 +24,6 @@ const importData = async (jsonData, model) => {
 const deleteData = async (model) => {
   try {
     await model.deleteMany();
-    console.log(`${model.name} data deleted`);
   } catch (err) {
     console.log(err);
   }
@@ -40,4 +38,6 @@ if (env.NODE_ENV === 'production') {
     await deleteData(file[1]);
     await importData(jsonData, file[1]);
   });
+  console.log('End');
+  // TODO: poczekaj na forEach i potem process.exit(0)
 }

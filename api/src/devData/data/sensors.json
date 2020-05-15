@@ -1,0 +1,168 @@
+[
+  {
+    "_id": "5eb443e8bbb79f259d22d6c2",
+    "key": "NO2",
+    "station": "5eb3f488bc7e8f9cc8d7bb0b",
+    "values": [
+      {
+        "date": "2020-05-13T15:22:11.000Z",
+        "value": 11.5777
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6c3",
+    "key": "O3",
+    "station": "5eb3f488bc7e8f9cc8d7bb0b",
+    "values": [
+      {
+        "date": "2020-05-13T15:22:11.000Z",
+        "value": 71.1778
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6c4",
+    "key": "SO2",
+    "station": "5eb3f488bc7e8f9cc8d7bb0c",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6c5",
+    "key": "NO2",
+    "station": "5eb3f488bc7e8f9cc8d7bb0c",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6c6",
+    "key": "CO",
+    "station": "5eb3f488bc7e8f9cc8d7bb0c",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6c7",
+    "key": "PM10",
+    "station": "5eb3f488bc7e8f9cc8d7bb0c",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6c8",
+    "key": "PM25",
+    "station": "5eb3f488bc7e8f9cc8d7bb0c",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6c9",
+    "key": "O3",
+    "station": "5eb3f488bc7e8f9cc8d7bb0c",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6d1",
+    "key": "C6H6",
+    "station": "5eb3f488bc7e8f9cc8d7bb0c",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+
+  {
+    "_id": "5eb443e8bbb79f259d22d6d2",
+    "key": "SO2",
+    "station": "5eb3f488bc7e8f9cc8d7bb0e",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6d4",
+    "key": "NO2",
+    "station": "5eb3f488bc7e8f9cc8d7bb0e",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6d5",
+    "key": "CO",
+    "station": "5eb3f488bc7e8f9cc8d7bb0e",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6d6",
+    "key": "PM10",
+    "station": "5eb3f488bc7e8f9cc8d7bb0e",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6d7",
+    "key": "O3",
+    "station": "5eb3f488bc7e8f9cc8d7bb0e",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  },
+  {
+    "_id": "5eb443e8bbb79f259d22d6d8",
+    "key": "C6H6",
+    "station": "5eb3f488bc7e8f9cc8d7bb0e",
+    "values": [
+      {
+        "date": "2020-05-15T10:00:00.000Z",
+        "value": 10.6682
+      }
+    ]
+  }
+]

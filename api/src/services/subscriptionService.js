@@ -18,6 +18,7 @@ exports.createNew = async (body) => {
 
   const message = `Link: ${env.ACTIVATE_SUB_LINK}/${token}`;
 
+  // FIXME: jeśli nie uda się wysłać, to powinno skasować subskrypcję. Inaczej zostajemy z nieaktywną, której nie da się aktywować
   await sendEmail({
     email: newSubscription.email,
     subject: 'Aktywuj subskrypcję - Air App',
