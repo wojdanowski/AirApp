@@ -5,7 +5,8 @@ dotenv.config();
 exports.NODE_ENV = process.env.NODE_ENV;
 exports.PORT = process.env.PORT || 8000;
 exports.DB = process.env.DB || 'mongodb://localhost:27017';
-exports.DB_PASSWORD = process.env.DB;
+exports.DB_ADDRESS = process.env.DB_ADDRESS || 'mongodb://localhost:27017';
+exports.DB_PASSWORD = process.env.DB_PASSWORD;
 // mailing
 exports.EMAIL_HOST = process.env.EMAIL_HOST || 'localhost';
 exports.EMAIL_PORT = process.env.EMAIL_PORT || 25;

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const env = require('./env');
 
 // MongoDB
-const DB = env.DB.replace('<PASSWORD>', env.DB_PASSWORD);
+const DB = env.DB_ADDRESS.replace('<PASSWORD>', env.DB_PASSWORD);
 mongoose
   .connect(`${DB}/airDataDB`, {
     useNewUrlParser: true,
