@@ -18,6 +18,11 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 422);
 };
 
+const handleParseError = (err) => {
+  const message = `Parse error. ${err.message}`;
+  return new AppError(message, 400);
+};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -54,7 +59,7 @@ module.exports = (err, req, res, next) => {
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error.name === 'ValidationError')
       error = handleValidationErrorDB(error);
-
+    if (error.type === 'entity.parse.failed') error = handleParseError(err);
     sendErrorProd(error, res);
   }
 };
