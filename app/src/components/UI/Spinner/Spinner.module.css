@@ -1,3 +1,12 @@
+.LoaderContainer {
+	width: 100px;
+	height: 100px;
+	margin: 0 auto;
+	padding: 20px;
+	position: relative;
+	transition: transform 0.3s ease-out;
+}
+
 .loader,
 .loader:before,
 .loader:after {
@@ -8,11 +17,16 @@
 	height: 3em;
 }
 .loader {
+	vertical-align: middle;
 	margin: 0 auto;
 	color: #7a7d88;
 	text-indent: -9999em;
-	position: relative;
+	position: absolute;
 	font-size: 5px;
+	top: 45%;
+	left: 45%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
 	-webkit-transform: translateZ(0);
 	-ms-transform: translateZ(0);
 	transform: translateZ(0);

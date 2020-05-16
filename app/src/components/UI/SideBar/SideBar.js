@@ -6,6 +6,7 @@ import EmailSubForm from './../../InputForms/EmailSubForm/EmailSubForm';
 import SideBarCard from '../../../hoc/SideBarCard/SideBarCard';
 import UiContext from './../../../Context/UiContext';
 import StationInfoCards from '../../StationInfoCards/StationInfoCards';
+import Spinner from './../Spinner/Spinner';
 
 const SideBar = (props) => {
 	const uiState = useContext(UiContext);
@@ -14,8 +15,11 @@ const SideBar = (props) => {
 	if (uiState.showSidebar) {
 		attachedClasses = [classes.SideBarContainer, classes.Open];
 	}
+
 	let stationInfo = null;
-	if (props.stationData.sensorsData) {
+	if (props.isSensorDataLoading && uiState.selectedStationId) {
+		stationInfo = <Spinner />;
+	} else if (props.stationData.sensorsData) {
 		stationInfo = <StationInfoCards stationData={props.stationData} />;
 	}
 

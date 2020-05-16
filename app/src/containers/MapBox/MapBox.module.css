@@ -13,10 +13,15 @@
 }
 
 .selectedLocationMarker {
-	background-image: url('/assets/pin.png');
 	opacity: 60%;
 	background-size: cover;
 	width: 5vh;
 	height: 5vh;
 	cursor: pointer;
+}
+
+.pinIcon {
+	margin: 0 auto;
+
+	height: 100%;
 }
