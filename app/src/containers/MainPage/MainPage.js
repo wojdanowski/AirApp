@@ -78,6 +78,7 @@ class MainPage extends Component {
 	};
 
 	getAllStations = async () => {
+		this.context.uiFunctions.toggleBackdrop();
 		this.setState({
 			areAllStationsLoaded: false,
 		});
@@ -88,6 +89,7 @@ class MainPage extends Component {
 				allStations: res.data.stations,
 				areAllStationsLoaded: true,
 			});
+			this.context.uiFunctions.toggleBackdrop();
 		} catch (error) {
 			console.log(`error in getAllStations`);
 			console.log(error);
@@ -162,13 +164,6 @@ class MainPage extends Component {
 			console.log(`fetch error in readAllForStation`);
 			console.log(error);
 		}
-	};
-
-	sleeper = (ms) => {
-		console.log(`sleep`);
-		return function (x) {
-			return new Promise((resolve) => setTimeout(() => resolve(x), ms));
-		};
 	};
 
 	render() {

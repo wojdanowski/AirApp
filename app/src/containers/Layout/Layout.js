@@ -53,7 +53,7 @@ class Layout extends Component {
 					},
 				}}
 			>
-				<Backdrop isOpen={this.state.showBackdrop} />
+				<Backdrop show={this.state.showBackdrop} />
 				<main>{this.props.children}</main>
 			</UiProvider>
 		);
