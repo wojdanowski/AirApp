@@ -6,6 +6,7 @@ import './mapboxCustom.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import gradientImg from '../../assets/gradient_temp.png';
 import UiContext from './../../Context/UiContext';
+import pin from '../../assets/pin.png';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
@@ -64,6 +65,11 @@ class MapBox extends Component {
 
 		const seleLocationMarker = document.createElement('div');
 		seleLocationMarker.className = classes.selectedLocationMarker;
+		const pinIcon = document.createElement('img');
+		pinIcon.src = pin;
+		pinIcon.className = classes.pinIcon;
+		seleLocationMarker.appendChild(pinIcon);
+
 		if (this.displayedMarker) {
 			this.displayedMarker.remove();
 		}
