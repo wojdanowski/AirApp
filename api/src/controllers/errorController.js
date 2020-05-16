@@ -18,6 +18,11 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 422);
 };
 
+const handleParseError = (err) => {
+  const message = `Body error. ${err.message}`;
+  return new AppError(message, 400);
+};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -49,12 +54,10 @@ module.exports = (err, req, res, next) => {
   if (env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (env.NODE_ENV === 'production') {
-    let error = { ...err };
-    if (error.name === 'CastError') error = handleCastErrorDB(error);
-    if (error.code === 11000) error = handleDuplicateFieldsDB(error);
-    if (error.name === 'ValidationError')
-      error = handleValidationErrorDB(error);
-
-    sendErrorProd(error, res);
+    if (err.name === 'CastError') err = handleCastErrorDB(err);
+    if (err.code === 11000) err = handleDuplicateFieldsDB(err);
+    if (err.name === 'ValidationError') err = handleValidationErrorDB(err);
+    if (err.type === 'entity.parse.failed') err = handleParseError(err);
+    sendErrorProd(err, res);
   }
 };

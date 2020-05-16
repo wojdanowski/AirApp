@@ -18,12 +18,16 @@ exports.createNew = async (body) => {
 
   const message = `Link: ${env.ACTIVATE_SUB_LINK}/${token}`;
 
-  await sendEmail({
-    email: newSubscription.email,
-    subject: 'Aktywuj subskrypcję - Air App',
-    message: message,
-  });
-
+  try {
+    await sendEmail({
+      email: newSubscription.email,
+      subject: 'Aktywuj subskrypcję - Air App',
+      message: message,
+    });
+  } catch {
+    await Subscription.findByIdAndDelete(newSubscription._id);
+    return -1;
+  }
   return newSubscription;
 };
 exports.activate = async (hashedToken) => {

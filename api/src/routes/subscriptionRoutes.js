@@ -12,5 +12,4 @@ router
   .get(subController.hashToken, subController.get)
   .patch(subController.hashToken, subController.update)
   .delete(subController.hashToken, subController.delete);
-// FIXME: nie działa message w error 404 (nie wysyła się w json)
 module.exports = router;

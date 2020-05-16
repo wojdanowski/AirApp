@@ -20,6 +20,14 @@ exports.hashToken = (req, res, next) => {
 exports.new = catchAsync(async (req, res, next) => {
   const newSubscription = await createNew(req.body);
 
+  if (newSubscription === -1) {
+    return next(
+      new AppError(
+        'There was an error sending activation email. Try again later!',
+        500
+      )
+    );
+  }
   res.status(201).json({
     status: 'success',
     data: {

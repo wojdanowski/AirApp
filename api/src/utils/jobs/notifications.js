@@ -51,7 +51,6 @@ const sendActualNotifications = async (day, hour, minute) => {
 
 exports.run = async () => {
   console.log('Notifications job started');
-  //FIXME: dostosować do nowego formatu daty
   const job = schedule.scheduleJob('* * * * *', (fireDate) => {
     const localTime = moment(fireDate).tz(env.TIMEZONE);
     console.log(`Notifications run at ${localTime}`);
