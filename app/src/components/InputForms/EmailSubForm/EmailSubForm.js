@@ -23,18 +23,39 @@ class EmailSubForm extends Component {
 					lon: this.props.stationCoordinates[0],
 					hours: [
 						{
-							weekDay: 1,
-							hour: 10,
-							minutes: 15,
+							weekDay: 0,
+							hour: 8,
+							minutes: 0,
 						},
 						{
-							weekDay: 2,
-							hour: 11,
+							weekDay: 1,
+							hour: 8,
 							minutes: 0,
 						},
 						{
 							weekDay: 2,
-							hour: 12,
+							hour: 8,
+							minutes: 0,
+						},
+						{
+							weekDay: 3,
+							hour: 8,
+							minutes: 0,
+						},
+						{
+							weekDay: 4,
+							hour: 8,
+							minutes: 0,
+						},
+						{
+							weekDay: 5,
+							hour: 8,
+							minutes: 0,
+						},
+						{
+							weekDay: 6,
+							hour: 8,
+							minutes: 0,
 						},
 					],
 				},
