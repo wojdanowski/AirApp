@@ -13,7 +13,8 @@
 }
 
 .selectedLocationMarker {
-	opacity: 60%;
+	background-image: url('../../assets/pin.png');
+	opacity: 0.6;
 	background-size: cover;
 	width: 5vh;
 	height: 5vh;
