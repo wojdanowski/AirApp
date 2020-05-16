@@ -33,8 +33,8 @@ class MapBox extends Component {
 
 	componentDidUpdate(prevProps) {
 		if (
-			this.props.areAllStationsLoaded &&
-			!prevProps.areAllStationsLoaded
+			!this.props.isAllStationsLoading &&
+			prevProps.isAllStationsLoading
 		) {
 			this.generateAllStations();
 		}
