@@ -11,7 +11,9 @@ const StationInfoCard = (props) => {
 	return (
 		<div className={classes.Param}>
 			<div className={classes.ParamName}>{props.paramName}</div>
-			<div className={classes.ParamValue}>{value}</div>
+			<div className={classes.ParamValue}>
+				{value} µg/m<sup>3</sup>
+			</div>
 		</div>
 	);
 };
