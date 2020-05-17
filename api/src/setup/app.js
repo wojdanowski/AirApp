@@ -11,7 +11,7 @@ const globalErrorHandler = require('../controllers/errorController');
 const app = express();
 
 // MIDDLEWARE
-if (env.NODE_ENV !== 'production') {
+if (env.NODE_ENV === 'development') {
   const morgan = require('morgan');
   app.use(morgan('dev'));
 }
