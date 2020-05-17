@@ -15,7 +15,7 @@ class MapBoxScreen extends Component {
 				<MapBox
 					stationSelectionHandler={this.props.stationSelectionHandler}
 					allStationsData={this.props.allStationsData}
-					areAllStationsLoaded={this.props.areAllStationsLoaded}
+					isAllStationsLoading={this.props.isAllStationsLoading}
 					displayedStation={this.props.displayedStation}
 					selectedCoordinates={this.props.selectedCoordinates}
 					isInitial={this.props.isInitial}
