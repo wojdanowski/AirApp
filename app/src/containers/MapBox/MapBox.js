@@ -124,11 +124,8 @@ class MapBox extends Component {
 
 			el.addEventListener('click', () => {
 				const coordinates = feature.geometry.coordinates.slice();
-				const description = feature.properties.description;
 				const selectedStationId = feature.properties.id;
 				const stationName = feature.properties.stationName;
-				console.log(coordinates);
-				console.log(description);
 
 				this.context.uiFunctions.setSelectedStationId(
 					selectedStationId
@@ -138,11 +135,6 @@ class MapBox extends Component {
 					coordinates,
 					stationName
 				);
-				// this.createPopup(
-				// 	this.props.displayedStation.coordinates,
-				// 	description,
-				// 	this.map
-				// );
 			});
 		});
 
