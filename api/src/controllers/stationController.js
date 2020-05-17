@@ -2,6 +2,7 @@ const {
   allStations,
   distinctIndexes,
   findNearestStation,
+  findNearestWithDistance,
 } = require('../services/stationService');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -20,7 +21,8 @@ exports.nearestAirIndex = catchAsync(async (req, res, next) => {
     return next(new AppError('Lack of required parameters (lat, lon)', 422));
   }
 
-  const station = await findNearestStation(req.query);
+  // const station = await findNearestStation(req.query);
+  const station = await findNearestWithDistance(req.query);
 
   res.status(200).json({
     status: 'success',
