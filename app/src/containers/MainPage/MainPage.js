@@ -125,7 +125,9 @@ class MainPage extends Component {
 		this.context.uiFunctions.toggleBigLoader();
 		if (!fetchError) {
 			this.context.uiFunctions.scrollToRef(this.mapBoxRef);
-			this.context.uiFunctions.openSidebar();
+			if (window.screen.availWidth > 600)
+				this.context.uiFunctions.openSidebar();
+
 			this.setState({
 				selectedCoordinates: [...coordinates],
 				isInitial: false,
