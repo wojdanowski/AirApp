@@ -47,14 +47,25 @@ class MapBox extends Component {
 		this.bounds = new mapboxgl.LngLatBounds();
 		this.bounds.extend(coordinates);
 		this.bounds.extend(displayedStationCoord);
-		this.map.fitBounds(this.bounds, {
-			padding: {
-				top: 200,
-				bottom: 200,
-				left: 400,
-				right: 200,
-			},
-		});
+		if (window.screen.availWidth > 600) {
+			this.map.fitBounds(this.bounds, {
+				padding: {
+					top: 200,
+					bottom: 200,
+					left: 350,
+					right: 200,
+				},
+			});
+		} else {
+			this.map.fitBounds(this.bounds, {
+				padding: {
+					top: 50,
+					bottom: 50,
+					left: 50,
+					right: 50,
+				},
+			});
+		}
 
 		const popupDescription = this.createPopupText(
 			this.props.displayedStation.stationName,
@@ -128,7 +139,6 @@ class MapBox extends Component {
 				.addTo(this.map);
 
 			el.addEventListener('click', () => {
-				console.log(feature);
 				const coordinates = feature.geometry.coordinates.slice();
 				const selectedStationId = feature.properties.id;
 				const stationName = feature.properties.stationName;
@@ -168,7 +178,6 @@ class MapBox extends Component {
 			return;
 		} else paramCondition = paramCondition[0].indexLevel.indexLevelName;
 
-		console.log(paramCondition);
 		switch (paramCondition) {
 			case 'Bardzo dobry':
 				gradientClassName += 'VeryGood';
@@ -192,7 +201,6 @@ class MapBox extends Component {
 				gradientClassName += 'NoData';
 		}
 
-		console.log(gradientClassName);
 		return gradientClassName;
 	};
 
