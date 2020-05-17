@@ -44,7 +44,10 @@ describe('Stations endpoints', () => {
   it('Should return nearest station Wroclaw - Bartnicza', async () => {
     const lat = 51.12;
     const lon = 17.15;
-    const res = await request(app).get(`/api/nearest?lat=${lat}&lon=${lon}`);
+    const res = await request(app).get(
+      `/api/nearestAirIndex?lat=${lat}&lon=${lon}`
+    );
+    // TODO: błędny endpoint powinien od razu rzucić błędem
     expect(res.statusCode).toEqual(200);
     expect(res.body.status).toEqual('success');
     expect(res.body).toHaveProperty('data');
@@ -55,7 +58,9 @@ describe('Stations endpoints', () => {
   it('Should return nearest station Wroclaw - Korzeniowskiego', async () => {
     const lat = 51.11;
     const lon = 17.0;
-    const res = await request(app).get(`/api/nearest?lat=${lat}&lon=${lon}`);
+    const res = await request(app).get(
+      `/api/nearestAirIndex?lat=${lat}&lon=${lon}`
+    );
     expect(res.statusCode).toEqual(200);
     expect(res.body.status).toEqual('success');
     expect(res.body).toHaveProperty('data');
@@ -66,7 +71,9 @@ describe('Stations endpoints', () => {
   it('Should return nearest station Legnica - Rzeczypospolitej', async () => {
     const lat = 51.2;
     const lon = 16.17;
-    const res = await request(app).get(`/api/nearest?lat=${lat}&lon=${lon}`);
+    const res = await request(app).get(
+      `/api/nearestAirIndex?lat=${lat}&lon=${lon}`
+    );
     expect(res.statusCode).toEqual(200);
     expect(res.body.status).toEqual('success');
     expect(res.body).toHaveProperty('data');
