@@ -63,31 +63,36 @@ class LocationForm extends Component {
 						</strong>
 						<br />w twojej okolicy
 					</h1>
-					<label>
-						<div>
-							<div className={classes.InputLabelBox}>
-								<input
-									className={classes.InputFormField}
-									type='text'
-									placeholder='Wpisz swoją lokalizację'
-									onChange={(event) => {
-										this.props.changeHandler(
-											event.target.value
-										);
-										this.setState({
-											typedLocation: event.target.value,
-										});
-									}}
-								/>
-								<GeoIcon
-									geoIconClicked={this.props.geoIconClicked}
-								/>
-							</div>
-							<div className={classes.fullDropDownContainer}>
-								{fullDropDown}
-							</div>
+					<div className={classes.InputForm}>
+						<div className={classes.Left}>
+							<label>
+								<div className={classes.InputLabelBox}>
+									<input
+										className={classes.InputFormField}
+										type='text'
+										placeholder='Wpisz swoją lokalizację'
+										onChange={(event) => {
+											this.props.changeHandler(
+												event.target.value
+											);
+											this.setState({
+												typedLocation:
+													event.target.value,
+											});
+										}}
+									/>
+								</div>
+								<div className={classes.fullDropDownContainer}>
+									{fullDropDown}
+								</div>
+							</label>
 						</div>
-					</label>
+						<div className={classes.Right}>
+							<GeoIcon
+								geoIconClicked={this.props.geoIconClicked}
+							/>
+						</div>
+					</div>
 				</form>
 			</div>
 		);

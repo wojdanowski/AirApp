@@ -174,7 +174,7 @@ class MapBox extends Component {
 
 		if (paramCondition.length === 0) {
 			gradientClassName += 'NoData';
-			return;
+			return gradientClassName;
 		} else paramCondition = paramCondition[0].indexLevel.indexLevelName;
 
 		switch (paramCondition) {
