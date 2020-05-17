@@ -4,9 +4,9 @@ import mapboxgl from 'mapbox-gl';
 import classes from './MapBox.module.css';
 import './mapboxCustom.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
-import gradientImg from '../../assets/gradient_temp.png';
+// import gradientImg from '../../assets/gradient_temp.png';
 import UiContext from './../../Context/UiContext';
-import pinImg from '../../assets/pin.png';
+// import pinImg from '../../assets/pin.png';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
@@ -78,10 +78,10 @@ class MapBox extends Component {
 	}
 
 	generateAllStations = () => {
-		this.map.loadImage(gradientImg, (error, image) => {
-			if (error) throw error;
-			this.map.addImage('gradient', image);
-		});
+		// this.map.loadImage(gradientImg, (error, image) => {
+		// 	if (error) throw error;
+		// 	this.map.addImage('gradient', image);
+		// });
 
 		const stationsDataSet = this.props.allStationsData.map((station) => {
 			const stationPopupDescription = this.createPopupText(
@@ -92,7 +92,7 @@ class MapBox extends Component {
 				type: 'Feature',
 				properties: {
 					description: stationPopupDescription,
-					icon: 'gradient',
+					// icon: 'gradient',
 					id: station._id,
 					stationName: station.name,
 				},
@@ -111,9 +111,42 @@ class MapBox extends Component {
 			},
 		};
 
-		this.map.addSource('stations', stationsLayerData);
+		stationsLayerData.data.features.forEach((feature) => {
+			let el = document.createElement('div');
+			el.className = classes.stationMarker;
 
-		this.assignEventHandlers();
+			new mapboxgl.Marker(el)
+				.setLngLat(feature.geometry.coordinates)
+				.setPopup(
+					new mapboxgl.Popup().setHTML(feature.properties.description)
+				)
+				.addTo(this.map);
+
+			el.addEventListener('click', () => {
+				const coordinates = feature.geometry.coordinates.slice();
+				const description = feature.properties.description;
+				const selectedStationId = feature.properties.id;
+				const stationName = feature.properties.stationName;
+				console.log(coordinates);
+				console.log(description);
+
+				this.context.uiFunctions.setSelectedStationId(
+					selectedStationId
+				);
+				this.props.stationSelectionHandler(
+					selectedStationId,
+					coordinates,
+					stationName
+				);
+				// this.createPopup(
+				// 	this.props.displayedStation.coordinates,
+				// 	description,
+				// 	this.map
+				// );
+			});
+		});
+
+		this.map.addSource('stations', stationsLayerData);
 
 		this.map.addLayer({
 			id: 'stations',
@@ -127,43 +160,43 @@ class MapBox extends Component {
 		});
 	};
 
-	assignEventHandlers = () => {
-		// When a click event occurs on a feature in the stations layer, open a popup at the
-		// location of the feature, with description HTML from its properties.
-		this.map.on('click', 'stations', (e) => {
-			const coordinates = e.features[0].geometry.coordinates.slice();
-			const description = e.features[0].properties.description;
-			const selectedStationId = e.features[0].properties.id;
-			const stationName = e.features[0].properties.stationName;
-			console.log('id of clicked station:');
-			console.log(e.features[0].properties.id);
+	// assignEventHandlers = () => {
+	// 	// When a click event occurs on a feature in the stations layer, open a popup at the
+	// 	// location of the feature, with description HTML from its properties.
+	// 	this.map.on('click', 'stations', (e) => {
+	// 		const coordinates = e.features[0].geometry.coordinates.slice();
+	// 		const description = e.features[0].properties.description;
+	// 		const selectedStationId = e.features[0].properties.id;
+	// 		const stationName = e.features[0].properties.stationName;
+	// 		console.log('id of clicked station:');
+	// 		console.log(e.features[0].properties.id);
 
-			// Ensure that if the map is zoomed out such that multiple
-			// copies of the feature are visible, the popup appears
-			// over the copy being pointed to.
-			while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-				coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-			}
+	// 		// Ensure that if the map is zoomed out such that multiple
+	// 		// copies of the feature are visible, the popup appears
+	// 		// over the copy being pointed to.
+	// 		while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+	// 			coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+	// 		}
 
-			this.createPopup(coordinates, description, this.map);
-			this.context.uiFunctions.setSelectedStationId(selectedStationId);
-			this.props.stationSelectionHandler(
-				selectedStationId,
-				coordinates,
-				stationName
-			);
-		});
+	// 		this.createPopup(coordinates, description, this.map);
+	// 		this.context.uiFunctions.setSelectedStationId(selectedStationId);
+	// 		this.props.stationSelectionHandler(
+	// 			selectedStationId,
+	// 			coordinates,
+	// 			stationName
+	// 		);
+	// 	});
 
-		// Change the cursor to a pointer when the mouse is over the stations layer.
-		this.map.on('mouseenter', 'stations', () => {
-			this.map.getCanvas().style.cursor = 'pointer';
-		});
+	// 	// Change the cursor to a pointer when the mouse is over the stations layer.
+	// 	this.map.on('mouseenter', 'stations', () => {
+	// 		this.map.getCanvas().style.cursor = 'pointer';
+	// 	});
 
-		// Change it back to a pointer when it leaves.
-		this.map.on('mouseleave', 'stations', () => {
-			this.map.getCanvas().style.cursor = '';
-		});
-	};
+	// 	// Change it back to a pointer when it leaves.
+	// 	this.map.on('mouseleave', 'stations', () => {
+	// 		this.map.getCanvas().style.cursor = '';
+	// 	});
+	// };
 
 	createPopupText = (stationName, data) => {
 		let stationPopupDescription = `<strong>${stationName}</strong><br />`;

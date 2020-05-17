@@ -4,10 +4,10 @@
 }
 
 .stationMarker {
-	background-color: red;
+	background: radial-gradient(circle closest-side, #990000, #99000000);
 	background-size: cover;
-	width: 2vh;
-	height: 2vh;
+	width: 10vh;
+	height: 10vh;
 	border-radius: 50%;
 	cursor: pointer;
 }
