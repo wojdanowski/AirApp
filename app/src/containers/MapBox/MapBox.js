@@ -4,9 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import classes from './MapBox.module.css';
 import './mapboxCustom.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
-// import gradientImg from '../../assets/gradient_temp.png';
 import UiContext from './../../Context/UiContext';
-// import pinImg from '../../assets/pin.png';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
