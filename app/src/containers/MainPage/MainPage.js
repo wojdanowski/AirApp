@@ -80,7 +80,7 @@ class MainPage extends Component {
 	};
 
 	getAllStations = async () => {
-		this.context.uiFunctions.toggleBackdrop();
+		this.context.uiFunctions.toggleBigLoader();
 		this.setState({
 			isAllStationsLoading: true,
 		});
@@ -91,7 +91,7 @@ class MainPage extends Component {
 				allStations: res.data.stations,
 				isAllStationsLoading: false,
 			});
-			this.context.uiFunctions.toggleBackdrop();
+			this.context.uiFunctions.toggleBigLoader();
 		} catch (error) {
 			console.log(`error in getAllStations`);
 			console.log(error);
@@ -120,7 +120,9 @@ class MainPage extends Component {
 	};
 
 	showNearestStation = async (coordinates) => {
+		this.context.uiFunctions.toggleBigLoader();
 		const fetchError = await this.getNearestStation(coordinates);
+		this.context.uiFunctions.toggleBigLoader();
 		if (!fetchError) {
 			this.context.uiFunctions.scrollToRef(this.mapBoxRef);
 			this.context.uiFunctions.openSidebar();
@@ -171,7 +173,7 @@ class MainPage extends Component {
 	render() {
 		return (
 			<Aux>
-				<Modal show={this.state.isAllStationsLoading}>
+				<Modal show={this.context.showBigLoader}>
 					<Spinner />
 				</Modal>
 				<SideBar
