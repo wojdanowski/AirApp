@@ -4,12 +4,40 @@
 }
 
 .stationMarker {
-	background: radial-gradient(circle closest-side, #990000, #99000000);
 	background-size: cover;
-	width: 10vh;
-	height: 10vh;
+	width: 12vh;
+	height: 12vh;
 	border-radius: 50%;
 	cursor: pointer;
+	opacity: 0.75;
+}
+
+.conditionVeryGood {
+	background: radial-gradient(circle closest-side, #57b108, #ffffff00);
+}
+
+.conditionGood {
+	background: radial-gradient(circle closest-side, #b0dd10, #ffffff00);
+}
+
+.conditionModerate {
+	background: radial-gradient(circle closest-side, #ffd911, #ffffff00);
+}
+
+.conditionSufficient {
+	background: radial-gradient(circle closest-side, #e58100, #ffffff00);
+}
+
+.conditionBad {
+	background: radial-gradient(circle closest-side, #e50000, #ffffff00);
+}
+
+.conditionVeryBad {
+	background: radial-gradient(circle closest-side, #990000, #ffffff00);
+}
+
+.conditionNoData {
+	background: radial-gradient(circle closest-side, #bfbfbf, #99000000);
 }
 
 .selectedLocationMarker {

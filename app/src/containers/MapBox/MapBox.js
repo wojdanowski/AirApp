@@ -95,6 +95,7 @@ class MapBox extends Component {
 					// icon: 'gradient',
 					id: station._id,
 					stationName: station.name,
+					indexes: station.mIndexes,
 				},
 				geometry: {
 					type: 'Point',
@@ -112,8 +113,13 @@ class MapBox extends Component {
 		};
 
 		stationsLayerData.data.features.forEach((feature) => {
+			const gradientClassName = this.assignGradientClass(
+				'PM10',
+				feature.properties.indexes
+			);
+
 			let el = document.createElement('div');
-			el.className = classes.stationMarker;
+			el.className = `${classes.stationMarker} ${classes[gradientClassName]}`;
 
 			new mapboxgl.Marker(el)
 				.setLngLat(feature.geometry.coordinates)
@@ -123,6 +129,7 @@ class MapBox extends Component {
 				.addTo(this.map);
 
 			el.addEventListener('click', () => {
+				console.log(feature);
 				const coordinates = feature.geometry.coordinates.slice();
 				const selectedStationId = feature.properties.id;
 				const stationName = feature.properties.stationName;
@@ -150,6 +157,44 @@ class MapBox extends Component {
 				'icon-allow-overlap': true,
 			},
 		});
+	};
+
+	assignGradientClass = (paramName, indexArray) => {
+		let paramCondition = null;
+		let gradientClassName = 'condition';
+		paramCondition = indexArray.filter((el) => el.param === paramName);
+
+		if (paramCondition.length === 0) {
+			gradientClassName += 'NoData';
+			return;
+		} else paramCondition = paramCondition[0].indexLevel.indexLevelName;
+
+		console.log(paramCondition);
+		switch (paramCondition) {
+			case 'Bardzo dobry':
+				gradientClassName += 'VeryGood';
+				break;
+			case 'Dobry':
+				gradientClassName += 'Good';
+				break;
+			case 'Umiarkowany':
+				gradientClassName += 'Moderate';
+				break;
+			case 'Dostateczny':
+				gradientClassName += 'Sufficient';
+				break;
+			case 'Zły':
+				gradientClassName += 'Bad';
+				break;
+			case 'Bardzo zły':
+				gradientClassName += 'VeryBad';
+				break;
+			default:
+				gradientClassName += 'NoData';
+		}
+
+		console.log(gradientClassName);
+		return gradientClassName;
 	};
 
 	// assignEventHandlers = () => {
