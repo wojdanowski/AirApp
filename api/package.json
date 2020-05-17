@@ -6,10 +6,11 @@
   },
   "description": "",
   "scripts": {
-    "test": "jest",
-    "webserver": "nodemon src/webserver.js",
-    "worker": "nodemon src/worker.js",
-    "start": "npm-run-all --parallel webserver worker",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
+    "pretest": "cross-env NODE_ENV=test npm run devData",
+    "dev-webserver": "nodemon src/webserver.js",
+    "dev-worker": "nodemon src/worker.js",
+    "dev-start": "npm-run-all --parallel dev-webserver dev-worker",
     "debug:server": "ndb src/webserver.js",
     "debug:worker": "ndb src/worker.js",
     "devData": "node src/devData/data/importDevData.js"
@@ -28,6 +29,7 @@
     "validator": "^13.0.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "eslint": "^7.0.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.11.0",
