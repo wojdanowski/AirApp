@@ -2,6 +2,30 @@
 	padding: 10px;
 }
 
+.InputForm {
+	display: table;
+	vertical-align: middle;
+	table-layout: fixed;
+	width: 100%;
+}
+
+.Left {
+	display: table-cell;
+	text-align: left;
+	margin: auto;
+	vertical-align: middle;
+}
+
+.Right {
+	text-align: right;
+	display: table-cell;
+	margin: auto;
+	vertical-align: middle;
+	padding: 5px;
+	width: 50px;
+	height: 50px;
+}
+
 .Segment {
 	padding: 15px 0;
 	text-align: center;
