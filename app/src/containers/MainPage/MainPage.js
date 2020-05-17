@@ -8,6 +8,8 @@ import classes from './MainPage.module.css';
 import Aux from './../../hoc/Auxiliary/Auxiliary';
 import UiContext from './../../Context/UiContext';
 import * as LINKS from './../../Utils/Links';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import Modal from './../../components/UI/Modal/Modal';
 
 class MainPage extends Component {
 	constructor(props) {
@@ -20,7 +22,7 @@ class MainPage extends Component {
 			placesSuggestions: [],
 			selectedCoordinates: [],
 			allStations: null,
-			areAllStationsLoaded: false,
+			isAllStationsLoading: true,
 			displayedStation: {
 				stationName: '',
 				coordinates: [],
@@ -78,16 +80,18 @@ class MainPage extends Component {
 	};
 
 	getAllStations = async () => {
+		this.context.uiFunctions.toggleBigLoader();
 		this.setState({
-			areAllStationsLoaded: false,
+			isAllStationsLoading: true,
 		});
 		const query = `${LINKS.AIR_API_URL}stations`;
 		try {
 			const res = (await axios(query)).data;
 			this.setState({
 				allStations: res.data.stations,
-				areAllStationsLoaded: true,
+				isAllStationsLoading: false,
 			});
+			this.context.uiFunctions.toggleBigLoader();
 		} catch (error) {
 			console.log(`error in getAllStations`);
 			console.log(error);
@@ -116,7 +120,9 @@ class MainPage extends Component {
 	};
 
 	showNearestStation = async (coordinates) => {
+		this.context.uiFunctions.toggleBigLoader();
 		const fetchError = await this.getNearestStation(coordinates);
+		this.context.uiFunctions.toggleBigLoader();
 		if (!fetchError) {
 			this.context.uiFunctions.scrollToRef(this.mapBoxRef);
 			this.context.uiFunctions.openSidebar();
@@ -164,16 +170,12 @@ class MainPage extends Component {
 		}
 	};
 
-	sleeper = (ms) => {
-		console.log(`sleep`);
-		return function (x) {
-			return new Promise((resolve) => setTimeout(() => resolve(x), ms));
-		};
-	};
-
 	render() {
 		return (
 			<Aux>
+				<Modal show={this.context.showBigLoader}>
+					<Spinner />
+				</Modal>
 				<SideBar
 					stationData={this.state.displayedStation}
 					isSensorDataLoading={this.state.isSensorDataLoading}
@@ -189,7 +191,7 @@ class MainPage extends Component {
 				<MapBoxScreen
 					stationSelectionHandler={this.manualSelectionHandler}
 					allStationsData={this.state.allStations}
-					areAllStationsLoaded={this.state.areAllStationsLoaded}
+					isAllStationsLoading={this.state.isAllStationsLoading}
 					arrowClickedHandler={() =>
 						this.context.uiFunctions.scrollToRef(this.mainScreenRef)
 					}
