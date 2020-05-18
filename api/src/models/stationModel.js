@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { locationPoint, mIndex } = require('./nestedSchemas');
 
 const stationSchema = mongoose.Schema({
   station_id: {
@@ -13,26 +14,22 @@ const stationSchema = mongoose.Schema({
       values: ['Gios'],
     },
   },
-  //TODO: duplikat z subscriptionModel
-  location: {
-    // GeoJSON
-    type: {
-      type: String,
-      default: 'Point', // FIXME: coś default nie działa w update
-      enum: ['Point'],
-      required: true,
-    },
-    coordinates: {
-      type: [Number], // lon, lat
-      required: true,
-    },
-  },
+  location: locationPoint,
   name: String,
+  stIndex: {
+    indexLevel: {
+      id: Number,
+      indexLevelName: String,
+    },
+    calcDate: Date,
+    sourceDataDate: Date,
+    indexStatus: Boolean,
+    indexParam: String,
+  },
+  mIndexes: [mIndex],
+  // sensors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'sensor' }],
 });
 
 stationSchema.index({ location: '2dsphere' });
 
-const Station = (module.exports = mongoose.model('station', stationSchema));
-module.exports.get = (callback, limit) => {
-  Station.find(callback).limit(limit);
-};
+module.exports = mongoose.model('station', stationSchema);

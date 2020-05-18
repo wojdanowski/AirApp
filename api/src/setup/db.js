@@ -1,16 +1,19 @@
+const mongoose = require('mongoose');
 const env = require('./env');
 
-const mongoose = require('mongoose');
-
 // MongoDB
+const DB = env.DB_ADDRESS.replace('<PASSWORD>', env.DB_PASSWORD);
 mongoose
-  .connect(env.DB + '/airDataDB', {
+  .connect(`${DB}/airDataDB`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false,
   })
-  .then(() => console.log('Db connected successfully'))
-  .catch((err) => console.log('Error connecting db'));
+  .then((con) => {
+    console.log(
+      `Db connected successfully. Host: ${con.connections[0].host} Name: ${con.connections[0].name}`
+    );
+  });
 
-exports = mongoose.connection;
+module.exports = mongoose.connection;

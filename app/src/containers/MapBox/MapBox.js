@@ -7,6 +7,7 @@ import Aux from '../../hoc/Auxiliary/Auxiliary';
 import UiContext from './../../Context/UiContext';
 import getClassNameFromIndexes from './../../Utils/getClassNameFromIndexes';
 
+
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
 

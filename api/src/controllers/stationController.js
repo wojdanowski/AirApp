@@ -1,57 +1,38 @@
-const Gios = require('../utils/externalApis/gios');
-const Station = require('../models/stationModel');
+const {
+  allStations,
+  distinctIndexes,
+  findNearestStation,
+} = require('../services/stationService');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
-exports.all = async (req, res) => {
-  try {
-    const stations = await Station.find();
+exports.all = catchAsync(async (req, res, next) => {
+  const stations = await allStations(req.query);
 
-    res.status(200).json({
-      status: 'success',
-      data: { stations },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: { stations },
+  });
+});
 
-exports.nearestAirIndex = async (req, res) => {
-  const lon = req.query.lon;
-  const lat = req.query.lat;
-  if (lon == null || lat == null) {
-    res.status(422).json({
-      status: 'fail',
-      message: 'Lack of required parameters (lat, lon)',
-    });
-    return;
+exports.nearestAirIndex = catchAsync(async (req, res, next) => {
+  if (req.query.lon == null || req.query.lat == null) {
+    return next(new AppError('Lack of required parameters (lat, lon)', 422));
   }
 
-  // TODO: duplikat z notifications
-  try {
-    const stationList = await Station.find({
-      location: {
-        $nearSphere: {
-          $geometry: {
-            type: 'Point',
-            coordinates: [lon, lat],
-          },
-        },
-      },
-    }).limit(1);
-    let station = stationList[0];
+  const station = await findNearestStation(req.query);
 
-    const airData = await Gios.getAirIndex(station.station_id);
+  res.status(200).json({
+    status: 'success',
+    data: { station },
+  });
+});
 
-    res.status(200).json({
-      status: 'success',
-      data: { station, airData },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+exports.indexList = catchAsync(async (req, res, next) => {
+  const indexes = await distinctIndexes();
+
+  res.status(200).json({
+    status: 'success',
+    data: { indexes },
+  });
+});

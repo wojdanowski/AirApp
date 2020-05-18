@@ -1,26 +1,23 @@
-// modules
 const env = require('./setup/env');
 const db = require('./setup/db');
+const app = require('./setup/app')
 
-const express = require('express');
-const bodyParser = require('body-parser');
-
-//app
-const app = express();
-const apiRoutes = require('./routes/api-routes');
-
-// body-parser
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// routes
-app.get('/', (req, res) => {
-  res.send('Server is up.');
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION. Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
 });
-app.use('/api', apiRoutes);
 
-// run
+// RUN
 console.log(`Environment: ${env.NODE_ENV}`);
-app.listen(env.PORT, function () {
-  console.log('Running on port ' + env.PORT);
+const server = app.listen(env.PORT, function () {
+  console.log(`Running on port ${env.PORT}`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION. Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
 });

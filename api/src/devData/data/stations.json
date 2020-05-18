@@ -1,0 +1,185 @@
+[
+  {
+    "_id": "5eb3f488bc7e8f9cc8d7bb0b",
+    "station_id": 114,
+    "location": {
+      "type": "Point",
+      "coordinates": [17.141125, 51.115933]
+    },
+    "mIndexes": [
+      {
+        "param": "NO2",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "O3",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": { "id": 1, "indexLevelName": "Dobry" }
+      }
+    ],
+    "name": "Wrocław - Bartnicza",
+    "source": "Gios",
+    "stIndex": {
+      "indexLevel": { "id": 1, "indexLevelName": "Dobry" },
+      "calcDate": "2020-05-13T15:22:11.000Z",
+      "sourceDataDate": "2020-05-13T15:22:11.000Z",
+      "indexStatus": true,
+      "indexParam": "OZON"
+    }
+  },
+  {
+    "_id": "5eb3f488bc7e8f9cc8d7bb0c",
+    "station_id": 117,
+    "location": {
+      "type": "Point",
+      "coordinates": [17.02925, 51.129378]
+    },
+    "mIndexes": [
+      {
+        "param": "SO2",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "NO2",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "CO",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "PM10",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "PM25",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "O3",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": { "id": 1, "indexLevelName": "Dobry" }
+      },
+      {
+        "param": "C6H6",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      }
+    ],
+    "name": "Wrocław - Korzeniowskiego",
+    "source": "Gios",
+    "stIndex": {
+      "indexLevel": { "id": 1, "indexLevelName": "Dobry" },
+      "calcDate": "2020-05-13T15:22:11.000Z",
+      "sourceDataDate": "2020-05-13T15:22:11.000Z",
+      "indexStatus": true,
+      "indexParam": "OZON"
+    }
+  },
+  {
+    "_id": "5eb3f488bc7e8f9cc8d7bb0e",
+    "station_id": 52,
+    "location": {
+      "type": "Point",
+      "coordinates": [16.180513, 51.204503]
+    },
+    "mIndexes": [
+      {
+        "param": "SO2",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "NO2",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "CO",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "PM10",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      },
+      {
+        "param": "O3",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": { "id": 1, "indexLevelName": "Dobry" }
+      },
+      {
+        "param": "C6H6",
+        "sourceDataDate": "2020-05-13T15:22:11.000Z",
+        "calcDate": "2020-05-13T15:22:11.000Z",
+        "indexLevel": {
+          "id": 0,
+          "indexLevelName": "Bardzo dobry"
+        }
+      }
+    ],
+    "name": "Legnica - Rzeczypospolitej",
+    "source": "Gios",
+    "stIndex": {
+      "indexLevel": { "id": 1, "indexLevelName": "Dobry" },
+      "calcDate": "2020-05-13T15:22:11.000Z",
+      "sourceDataDate": "2020-05-13T15:22:11.000Z",
+      "indexStatus": true,
+      "indexParam": "OZON"
+    }
+  }
+]

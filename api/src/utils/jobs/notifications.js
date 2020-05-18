@@ -1,28 +1,21 @@
-const Subscription = require('../../models/subscriptionModel');
-const Station = require('../../models/stationModel');
-const Gios = require('../externalApis/gios');
+const moment = require('moment-timezone');
+const schedule = require('node-schedule');
+const env = require('../../setup/env');
+const { findNearestStation } = require('../../services/stationService');
+const { getActiveForHour } = require('../../services/subscriptionService');
 const sendEmail = require('../email');
 
-const schedule = require('node-schedule');
-
 const sendNotification = async (subscription) => {
-  // get air data for nearest station
-  // TODO: duplikat z stationController
   let message = '';
-
+  // get air data for nearest station
   try {
-    const stationList = await Station.find({
-      location: {
-        $nearSphere: {
-          $geometry: subscription.location,
-        },
-      },
-    }).limit(1);
-    let station = stationList[0];
+    const station = await findNearestStation({
+      lon: subscription.location.coordinates[0],
+      lat: subscription.location.coordinates[1],
+    });
 
-    const airData = await Gios.getAirIndex(station.station_id);
-    // FIXME: jakaś normalna treść wiadomości
-    message = JSON.stringify(airData);
+    message = JSON.stringify(station);
+    // FIXME: message musi zawierać link do delete oraz link do update (generować nowy token)
   } catch (err) {
     console.log(`Error while LOOKING for air data for ${subscription.email}`);
     console.log(err);
@@ -38,28 +31,33 @@ const sendNotification = async (subscription) => {
   } catch (err) {
     console.log(`Error while SENDING air data for ${subscription.email}`);
     console.log(err);
-    return;
   }
 };
 
-const sendHourNotifications = async (hour) => {
+const sendActualNotifications = async (day, hour, minute) => {
   try {
-    const subscriptions = await Subscription.find({ hours: hour });
-    console.log(`Sending ${subscriptions.length} notifications (${hour})`);
+    const subscriptions = await getActiveForHour(day, hour, minute);
+    console.log(
+      `Sending ${subscriptions.length} notifications (Day: ${day}, Hour: ${hour}, ${minute})`
+    );
     subscriptions.map(async (subscription) => {
       await sendNotification(subscription);
     });
   } catch (err) {
     console.log(`Error while looking for hour ${hour} subscriptions`);
     console.log(err);
-    return;
   }
 };
 
-exports.start = async () => {
+exports.run = async () => {
   console.log('Notifications job started');
-  const job = schedule.scheduleJob('0 * * * *', (fireDate) => {
-    console.log(`Notifications run at ${fireDate}`);
-    sendHourNotifications(fireDate.getHours());
+  const job = schedule.scheduleJob('* * * * *', (fireDate) => {
+    const localTime = moment(fireDate).tz(env.TIMEZONE);
+    console.log(`Notifications run at ${localTime}`);
+    sendActualNotifications(
+      localTime.day(),
+      localTime.hour(),
+      localTime.minute()
+    );
   });
 };
