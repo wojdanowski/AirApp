@@ -10,6 +10,7 @@ import UiContext from './../../Context/UiContext';
 import * as LINKS from './../../Utils/Links';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Modal from './../../components/UI/Modal/Modal';
+import Arrows from './../../components/UI/Arrows/Arrows';
 
 class MainPage extends Component {
 	constructor(props) {
@@ -190,14 +191,27 @@ class MainPage extends Component {
 						placesSuggestions={this.state.placesSuggestions}
 						suggestionClickedHandler={this.showNearestStation}
 					/>
+					<Arrows
+						arrowType={'button-down'}
+						float={'bottom'}
+						clicked={() => {
+							this.context.uiFunctions.scrollToRef(
+								this.mapBoxRef
+							);
+						}}
+					/>
 				</div>
 				<MapBoxScreen
 					stationSelectionHandler={this.manualSelectionHandler}
 					allStationsData={this.state.allStations}
 					isAllStationsLoading={this.state.isAllStationsLoading}
-					arrowClickedHandler={() =>
-						this.context.uiFunctions.scrollToRef(this.mainScreenRef)
-					}
+					arrowClickedHandler={() => {
+						if (this.context.showSidebar)
+							this.context.uiFunctions.toggleSidebar();
+						this.context.uiFunctions.scrollToRef(
+							this.mainScreenRef
+						);
+					}}
 					mapRef={this.mapBoxRef}
 					isInitial={this.state.isInitial}
 					selectedCoordinates={this.state.selectedCoordinates}
