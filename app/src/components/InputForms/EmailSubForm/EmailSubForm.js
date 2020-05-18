@@ -14,7 +14,7 @@ class EmailSubForm extends Component {
 		const query = `${LINKS.AIR_API_URL}subscriptions`;
 
 		try {
-			const res = await axios({
+			await axios({
 				method: 'post',
 				url: query,
 				data: {
@@ -60,7 +60,6 @@ class EmailSubForm extends Component {
 					],
 				},
 			});
-			console.log(res);
 		} catch (error) {
 			console.log(`error in subscribeLocationHandler`);
 			console.log(error);
@@ -69,7 +68,6 @@ class EmailSubForm extends Component {
 	};
 
 	formChangedHandler = (event) => {
-		console.log(event.target.value);
 		this.setState({
 			typedEmail: event.target.value,
 		});

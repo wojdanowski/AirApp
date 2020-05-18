@@ -9,6 +9,7 @@
 	padding: 10px;
 	box-sizing: border-box;
 	box-shadow: 5px 0px 15px #babece;
+	transition: transform 0.15s ease-out;
 }
 
 .Open {

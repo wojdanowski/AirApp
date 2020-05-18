@@ -16,25 +16,3 @@
 	height: 90%;
 	width: 90%;
 }
-
-/* .GeoIcon {
-	height: 100%;
-	width: 15%;
-	position: absolute;
-	top: 0;
-	right: -15%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.GeoIcon img {
-	height: 50%;
-	display: flex;
-	align-items: center;
-	transition: 0.2s ease;
-} 
-
-.GeoIcon:hover img {
-	height: 60%;
-}  */

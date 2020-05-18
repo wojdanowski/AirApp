@@ -37,7 +37,7 @@
 }
 
 .conditionNoData {
-	background: radial-gradient(circle closest-side, #bfbfbf, #99000000);
+	background: radial-gradient(circle closest-side, #7c7c7c, #99000000);
 }
 
 .selectedLocationMarker {

@@ -139,14 +139,15 @@ class MainPage extends Component {
 		}
 	};
 
-	manualSelectionHandler = (stationId, coordinates, name) => {
+	manualSelectionHandler = (stationData) => {
 		this.context.uiFunctions.openSidebar();
-		this.readAllForStation(stationId);
+		this.readAllForStation(stationData.id);
 		this.setState({
 			displayedStation: {
 				...this.state.displayedStation,
-				coordinates: coordinates,
-				stationName: name,
+				coordinates: stationData.coordinates,
+				stationName: stationData.name,
+				measurement: stationData.indexes,
 			},
 		});
 	};
