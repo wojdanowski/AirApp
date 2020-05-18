@@ -6,13 +6,16 @@ const StationInfoCard = (props) => {
 	let value;
 	props.paramValue
 		? (value = props.paramValue.value.toFixed(2))
-		: (value = 'Brak danych');
+		: (value = '???');
 
 	return (
 		<div className={classes.Param}>
-			<div className={classes.ParamName}>{props.paramName}</div>
-			<div className={classes.ParamValue}>
-				{value} µg/m<sup>3</sup>
+			<div className={classes.BigDot}>
+				<b>{value}</b> µg/m<sup>3</sup>
+			</div>
+			<div className={classes.ParamName}>
+				<h4>{props.paramName}</h4>
+				<p>Norma: Kiedyś będzie....</p>
 			</div>
 		</div>
 	);
