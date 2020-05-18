@@ -16,7 +16,7 @@ exports.createNew = async (body) => {
   const token = newSubscription.createManageToken();
   await newSubscription.save({ validateBeforeSave: false });
 
-  const message = `Link: ${env.ACTIVATE_SUB_LINK}/${token}`;
+  const message = `Link: ${env.ACTIVATE_SUB_LINK}${token}`;
 
   try {
     await sendEmail({
