@@ -24,7 +24,6 @@ class subActivate extends Component {
 		const query = `${LINKS.AIR_API_URL}subscriptions/activate/${token}`;
 		try {
 			this.context.uiFunctions.toggleBigLoader();
-			console.log(query);
 			await axios(query);
 			this.setState({
 				activationSuccess: true,
