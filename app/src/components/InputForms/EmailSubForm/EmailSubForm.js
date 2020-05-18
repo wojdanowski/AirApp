@@ -14,7 +14,7 @@ class EmailSubForm extends Component {
 		const query = `${LINKS.AIR_API_URL}subscriptions`;
 
 		try {
-			const res = await axios({
+			await axios({
 				method: 'post',
 				url: query,
 				data: {

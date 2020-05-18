@@ -11,20 +11,25 @@ const StationInfoCards = (props) => {
 				{props.stationData.stationName}
 			</p>
 			{sensorsData.map((el, index) => {
+				if (el.values.length === 0) return null;
+
 				let availableValue;
 				el.values.some((el) => {
 					availableValue = { ...el };
 					return el.value !== null;
 				});
 
-				return (
+				const contentToRender = (
 					<StationInfoCard
 						key={el._id}
 						paramName={el.key}
 						index={index}
 						paramValue={availableValue}
+						measurement={props.stationData.measurement}
 					/>
 				);
+
+				return contentToRender;
 			})}
 		</div>
 	);

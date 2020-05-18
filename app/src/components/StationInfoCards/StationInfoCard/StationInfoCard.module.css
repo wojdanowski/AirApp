@@ -25,11 +25,40 @@
 	padding: 8px;
 	background-color: white;
 	border-radius: 50%;
-	border: 7px solid red;
 	float: left;
 	margin: 0 auto;
 	vertical-align: middle;
 	font-size: 0.9em;
+	border-width: 7px;
+	border-style: solid;
+}
+
+.conditionVeryGood {
+	border-color: #57b108;
+}
+
+.conditionGood {
+	border-color: #b0dd10;
+}
+
+.conditionModerate {
+	border-color: #ffd911;
+}
+
+.conditionSufficient {
+	border-color: #e58100;
+}
+
+.conditionBad {
+	border-color: #e50000;
+}
+
+.conditionVeryBad {
+	border-color: #990000;
+}
+
+.conditionNoData {
+	border-color: #bfbfbf;
 }
 
 .ParamName {

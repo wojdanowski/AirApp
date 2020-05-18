@@ -5,6 +5,7 @@ import classes from './MapBox.module.css';
 import './mapboxCustom.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import UiContext from './../../Context/UiContext';
+import getClassNameFromIndexes from './../../Utils/getClassNameFromIndexes';
 
 mapboxgl.accessToken =
 	'pk.eyJ1Ijoid29qZGFub3dza2kiLCJhIjoiY2s5OXN6a2Z4MDFmNjNkbzhoN3Q2YnFlMSJ9.2C8OnyKvuiEhSHSCnd5LHA';
@@ -122,7 +123,7 @@ class MapBox extends Component {
 		};
 
 		stationsLayerData.data.features.forEach((feature) => {
-			const gradientClassName = this.assignGradientClass(
+			const gradientClassName = getClassNameFromIndexes(
 				'PM10',
 				feature.properties.indexes
 			);
@@ -145,11 +146,13 @@ class MapBox extends Component {
 				this.context.uiFunctions.setSelectedStationId(
 					selectedStationId
 				);
-				this.props.stationSelectionHandler(
-					selectedStationId,
+				const stationData = {
+					id: selectedStationId,
 					coordinates,
-					stationName
-				);
+					name: stationName,
+					indexes: feature.properties.indexes,
+				};
+				this.props.stationSelectionHandler(stationData);
 			});
 		});
 
@@ -165,42 +168,6 @@ class MapBox extends Component {
 				'icon-allow-overlap': true,
 			},
 		});
-	};
-
-	assignGradientClass = (paramName, indexArray) => {
-		let paramCondition = null;
-		let gradientClassName = 'condition';
-		paramCondition = indexArray.filter((el) => el.param === paramName);
-
-		if (paramCondition.length === 0) {
-			gradientClassName += 'NoData';
-			return gradientClassName;
-		} else paramCondition = paramCondition[0].indexLevel.indexLevelName;
-
-		switch (paramCondition) {
-			case 'Bardzo dobry':
-				gradientClassName += 'VeryGood';
-				break;
-			case 'Dobry':
-				gradientClassName += 'Good';
-				break;
-			case 'Umiarkowany':
-				gradientClassName += 'Moderate';
-				break;
-			case 'Dostateczny':
-				gradientClassName += 'Sufficient';
-				break;
-			case 'Zły':
-				gradientClassName += 'Bad';
-				break;
-			case 'Bardzo zły':
-				gradientClassName += 'VeryBad';
-				break;
-			default:
-				gradientClassName += 'NoData';
-		}
-
-		return gradientClassName;
 	};
 
 	// assignEventHandlers = () => {

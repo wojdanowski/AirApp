@@ -23,7 +23,7 @@ class Layout extends Component {
 	};
 
 	setSelectedStationId = (id) => {
-		console.log(`New selected station id: ${id}`);
+		// console.log(`New selected station id: ${id}`);
 		this.setState(() => {
 			return { selectedStationId: id };
 		});
