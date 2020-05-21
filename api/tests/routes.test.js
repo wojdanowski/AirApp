@@ -2,6 +2,11 @@ const request = require('supertest');
 const db = require('../src/setup/db');
 const app = require('../src/setup/app');
 
+afterAll(async () => {
+  // Closes the Mongoose connection
+  await db.close();
+});
+
 describe('Server root endpoint', () => {
   it('Should return status OK', async () => {
     const res = await request(app).get('/');
@@ -47,7 +52,6 @@ describe('Stations endpoints', () => {
     const res = await request(app).get(
       `/api/nearestAirIndex?lat=${lat}&lon=${lon}`
     );
-    // TODO: błędny endpoint powinien od razu rzucić błędem
     expect(res.statusCode).toEqual(200);
     expect(res.body.status).toEqual('success');
     expect(res.body).toHaveProperty('data');
@@ -162,9 +166,4 @@ describe('Sensors endpoints', () => {
     expect(res.body.status).toEqual('fail');
     expect(res.body).toHaveProperty('message');
   });
-});
-
-afterAll(async () => {
-  // Closes the Mongoose connection
-  await db.close();
 });
