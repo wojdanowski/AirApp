@@ -162,7 +162,6 @@ class MainPage extends Component {
 
 		try {
 			const res = (await axios(query)).data;
-			console.log(res);
 			this.setState({
 				isSensorDataLoading: false,
 				displayedStation: {
@@ -183,20 +182,29 @@ class MainPage extends Component {
 	};
 
 	getDistanceToStation = async (userPoint, stationPoint) => {
-		this.setState({
-			distanceToSelCoord: 10,
-		});
-		// const query = `${LINKS.AIR_API_URL}`;
-		// try {
-		// 	const res = (await axios(query)).data;
-		// 	console.log(res);
-		// 	this.setState({
-		// 		distanceToSelCoord: 10,
-		// 	});
-		// } catch (error) {
-		// 	console.log(`fetch error in getDistanceToStation`);
-		// 	console.log(error);
-		// }
+		const query = `${LINKS.AIR_API_URL}distance`;
+		try {
+			const res = await axios({
+				method: 'post',
+				url: query,
+				data: {
+					pointA: {
+						lat: userPoint[1],
+						lon: userPoint[0],
+					},
+					pointB: {
+						lat: stationPoint[1],
+						lon: stationPoint[0],
+					},
+				},
+			});
+			this.setState({
+				distanceToSelCoord: res.data.data.distance,
+			});
+		} catch (error) {
+			console.log(`fetch error in getDistanceToStation`);
+			console.log(error);
+		}
 	};
 
 	render() {
