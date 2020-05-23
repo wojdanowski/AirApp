@@ -39,11 +39,22 @@ const StationInfoCards = (props) => {
 		<p className={classes.DistanceInfo}>Rekomendacje: {recommendation}</p>
 	);
 
+	let pm10Level = 'Brak danych';
+	if (props.stationData.measurement.length) {
+		const pm10Item = props.stationData.measurement.filter((el) => {
+			return el.param === 'PM10';
+		});
+		if (pm10Item.length) {
+			pm10Level = pm10Item[0].indexLevel.indexLevelName;
+		}
+	}
+
 	return (
 		<div>
 			<p className={classes.StationName}>
 				{props.stationData.stationName}
 			</p>
+			<p className={classes.QualityInfo}>Poziom PM10: {pm10Level}</p>
 			{distanceInfo}
 			{sensorsData.map((el, index) => {
 				if (el.values.length === 0) return null;
