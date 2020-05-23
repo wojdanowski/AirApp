@@ -67,8 +67,7 @@ describe('Stations endpoints', () => {
     expect(station).toHaveProperty('source');
 
     expect(station).toHaveProperty('distance');
-    expect(station.distance).toBeGreaterThan(0.7);
-    expect(station.distance).toBeLessThan(0.8);
+    expect(station.distance).toBeCloseTo(0.7678, 3);
   });
 
   it('Should return nearest station Wroclaw - Korzeniowskiego', async () => {
@@ -92,8 +91,7 @@ describe('Stations endpoints', () => {
     expect(station).toHaveProperty('source');
 
     expect(station).toHaveProperty('distance');
-    expect(station.distance).toBeGreaterThan(2.9);
-    expect(station.distance).toBeLessThan(3);
+    expect(station.distance).toBeCloseTo(2.9716, 3);
   });
 
   it('Should return nearest station Legnica - Rzeczypospolitej', async () => {
@@ -117,8 +115,7 @@ describe('Stations endpoints', () => {
     expect(station).toHaveProperty('source');
 
     expect(station).toHaveProperty('distance');
-    expect(station.distance).toBeGreaterThan(0.8);
-    expect(station.distance).toBeLessThan(0.9);
+    expect(station.distance).toBeCloseTo(0.888, 3);
   });
 
   it('Should return 422 for nearest station without lat/lon', async () => {
@@ -163,6 +160,72 @@ describe('Sensors endpoints', () => {
     const res = await request(app).get(`/api/stations/sensors/${stationId}`);
 
     expect(res.statusCode).toEqual(400);
+    expect(res.body.status).toEqual('fail');
+    expect(res.body).toHaveProperty('message');
+  });
+});
+
+describe('Distance endpoints', () => {
+  it('Should return distance 0', async () => {
+    const pointA = { lat: 17, lon: 51 };
+    const pointB = { lat: 17, lon: 51 };
+
+    const res = await request(app)
+      .post('/api/distance')
+      .send({ pointA: pointA, pointB: pointB });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.status).toEqual('success');
+    expect(res.body.data.distance).toEqual(0);
+  });
+
+  it('Should return correct distance', async () => {
+    const pointA = { lat: 53.32055555555556, lon: -1.7297222222222221 };
+    const pointB = { lat: 53.31861111111111, lon: -1.6997222222222223 };
+
+    const res = await request(app)
+      .post('/api/distance')
+      .send({ pointA: pointA, pointB: pointB });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.status).toEqual('success');
+    expect(res.body.data.distance).toBeCloseTo(2.0043, 3);
+  });
+
+  it('Should return 422 for invalid points data (string)', async () => {
+    const pointA = { lat: 'A', lon: 51 };
+    const pointB = { lat: 17, lon: 51 };
+
+    const res = await request(app)
+      .post('/api/distance')
+      .send({ pointA: pointA, pointB: pointB });
+
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.status).toEqual('fail');
+    expect(res.body).toHaveProperty('message');
+  });
+
+  it('Should return 422 for invalid points data (no point)', async () => {
+    const pointA = { lat: 17, lon: 51 };
+
+    const res = await request(app)
+      .post('/api/distance')
+      .send({ pointA: pointA });
+
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.status).toEqual('fail');
+    expect(res.body).toHaveProperty('message');
+  });
+
+  it('Should return 422 for invalid points data (empty point)', async () => {
+    const pointA = { lat: 17, lon: 51 };
+    const pointB = {};
+
+    const res = await request(app)
+      .post('/api/distance')
+      .send({ pointA: pointA, pointB: pointB });
+
+    expect(res.statusCode).toEqual(422);
     expect(res.body.status).toEqual('fail');
     expect(res.body).toHaveProperty('message');
   });
