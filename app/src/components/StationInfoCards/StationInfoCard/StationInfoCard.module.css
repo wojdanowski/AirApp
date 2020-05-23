@@ -4,7 +4,7 @@
 	table-layout: fixed;
 	width: 100%;
 	height: 2em;
-	margin: 0px 5px 5px 7px;
+	margin: 5px;
 }
 .Param h4 {
 	text-align: left;
@@ -67,14 +67,15 @@
 	color: black;
 	border-radius: 5px;
 	display: table-cell;
-	margin: auto;
+	margin: 0 5px 0 5px;
 	width: 70%;
 	vertical-align: middle;
+	float: left;
 }
 
-.ParamValue {
+/* .ParamValue {
 	display: table-cell;
 	height: 100%;
 	margin: auto;
 	vertical-align: middle;
-}
+} */
