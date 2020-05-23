@@ -22,6 +22,7 @@ class MainPage extends Component {
 			isInitial: true,
 			placesSuggestions: [],
 			selectedCoordinates: [],
+			distanceToSelCoord: null,
 			allStations: null,
 			isAllStationsLoading: true,
 			displayedStation: {
@@ -161,6 +162,7 @@ class MainPage extends Component {
 
 		try {
 			const res = (await axios(query)).data;
+			console.log(res);
 			this.setState({
 				isSensorDataLoading: false,
 				displayedStation: {
@@ -168,10 +170,33 @@ class MainPage extends Component {
 					sensorsData: res.data,
 				},
 			});
+			const userLocation = this.state.selectedCoordinates;
+			if (userLocation.length)
+				this.getDistanceToStation(
+					userLocation,
+					this.state.displayedStation.coordinates
+				);
 		} catch (error) {
 			console.log(`fetch error in readAllForStation`);
 			console.log(error);
 		}
+	};
+
+	getDistanceToStation = async (userPoint, stationPoint) => {
+		this.setState({
+			distanceToSelCoord: 10,
+		});
+		// const query = `${LINKS.AIR_API_URL}`;
+		// try {
+		// 	const res = (await axios(query)).data;
+		// 	console.log(res);
+		// 	this.setState({
+		// 		distanceToSelCoord: 10,
+		// 	});
+		// } catch (error) {
+		// 	console.log(`fetch error in getDistanceToStation`);
+		// 	console.log(error);
+		// }
 	};
 
 	render() {
@@ -183,6 +208,7 @@ class MainPage extends Component {
 				<SideBar
 					stationData={this.state.displayedStation}
 					isSensorDataLoading={this.state.isSensorDataLoading}
+					distanceToStation={this.state.distanceToSelCoord}
 				/>
 				<div className={classes.MainScreenBox} ref={this.mainScreenRef}>
 					<LocationForm
