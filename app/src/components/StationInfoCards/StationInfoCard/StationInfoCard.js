@@ -19,8 +19,12 @@ const StationInfoCard = (props) => {
 
 	return (
 		<div className={classes.Param}>
-			<div className={`${classes.BigDot} ${classes[bigDotClassName]}`}>
-				<b>{value}</b> µg/m<sup>3</sup>
+			<div className={classes.DotContainer}>
+				<div
+					className={`${classes.BigDot} ${classes[bigDotClassName]}`}
+				>
+					<b>{value}</b> µg/m<sup>3</sup>
+				</div>
 			</div>
 			<div className={classes.ParamName}>
 				<h4>{props.paramName}</h4>
