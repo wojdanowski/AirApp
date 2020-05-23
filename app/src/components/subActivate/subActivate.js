@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Aux from './../../hoc/Auxiliary/Auxiliary';
 import axios from 'axios';
 import queryString from 'query-string';
-import * as LINKS from '../../Utils/Links';
+import * as LINKS from '../../Utils/LINKS';
 import Spinner from './../UI/Spinner/Spinner';
 import Modal from './../UI/Modal/Modal';
 import UiContext from './../../Context/UiContext';

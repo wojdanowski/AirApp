@@ -7,7 +7,7 @@ import SideBar from './../../components/UI/SideBar/SideBar';
 import classes from './MainPage.module.css';
 import Aux from './../../hoc/Auxiliary/Auxiliary';
 import UiContext from './../../Context/UiContext';
-import * as LINKS from './../../Utils/Links';
+import * as LINKS from '../../Utils/LINKS';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Modal from './../../components/UI/Modal/Modal';
 import Arrows from './../../components/UI/Arrows/Arrows';

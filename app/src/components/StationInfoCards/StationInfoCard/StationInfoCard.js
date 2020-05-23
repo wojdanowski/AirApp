@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './StationInfoCard.module.css';
 import getClassNameFromIndexes from './../../../Utils/getClassNameFromIndexes';
+import { NORMS } from './../../../Utils/NORMS';
 
 const StationInfoCard = (props) => {
 	// let paramValue = <Spinner />;
@@ -15,7 +16,6 @@ const StationInfoCard = (props) => {
 		nameWithoutDot,
 		props.measurement
 	);
-	// const bigDotClassName = 'RedDot';
 
 	return (
 		<div className={classes.Param}>
@@ -28,7 +28,9 @@ const StationInfoCard = (props) => {
 			</div>
 			<div className={classes.ParamName}>
 				<h4>{props.paramName}</h4>
-				<p>Norma: Kiedyś będzie....</p>
+				<p>
+					{`Norma: ${NORMS[props.paramName]}`} µg/m<sup>3</sup>
+				</p>
 			</div>
 		</div>
 	);

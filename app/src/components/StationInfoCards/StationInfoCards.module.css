@@ -1,5 +1,10 @@
 .StationName {
 	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.QualityInfo {
+	font-size: 1.3em;
 }
 
 .DistanceInfo {

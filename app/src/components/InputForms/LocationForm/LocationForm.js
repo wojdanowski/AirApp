@@ -5,8 +5,62 @@ import GeoIcon from './../../UI/GeoIcon/GeoIcon';
 import PlaceSuggestion from './PlaceSuggestion/PlaceSuggestion';
 
 class LocationForm extends Component {
-	state = {
-		typedLocation: '',
+	constructor(props) {
+		super(props);
+		this.state = {
+			typedLocation: '',
+		};
+	}
+
+	submitFormHandler = (event) => {
+		event.preventDefault();
+		const location = this.state.typedLocation;
+		this.props.changeHandler(location);
+		this.setState({ typedLocation: '' });
+	};
+
+	changeHandler = (event) => {
+		this.props.changeHandler(event.target.value);
+		this.setState({
+			typedLocation: event.target.value,
+		});
+	};
+
+	suggestionClickAndClear = (placeCoord) => {
+		this.props.suggestionClickedHandler(placeCoord);
+		this.setState({ typedLocation: '' });
+		this.hideKeyboard();
+	};
+
+	hideKeyboard = () => {
+		//this set timeout needed for case when hideKeyborad
+		//is called inside of 'onfocus' event handler
+		setTimeout(function () {
+			//creating temp field
+			var field = document.createElement('input');
+			field.setAttribute('type', 'text');
+			//hiding temp field from peoples eyes
+			//-webkit-user-modify is nessesary for Android 4.x
+			field.setAttribute(
+				'style',
+				'position:absolute; top: 0px; opacity: 0; -webkit-user-modify: read-write-plaintext-only; left:0px;'
+			);
+			document.body.appendChild(field);
+
+			//adding onfocus event handler for out temp field
+			field.onfocus = function () {
+				//this timeout of 200ms is nessasary for Android 2.3.x
+				setTimeout(function () {
+					field.setAttribute('style', 'display:none;');
+					setTimeout(function () {
+						document.body.removeChild(field);
+						document.body.focus();
+					}, 14);
+				}, 200);
+			};
+			//focusing it
+			field.focus();
+		}, 50);
 	};
 
 	render() {
@@ -17,7 +71,10 @@ class LocationForm extends Component {
 			const suggestionContent = this.props.placesSuggestions.map(
 				(place, index) => (
 					<PlaceSuggestion
-						clicked={this.props.suggestionClickedHandler}
+						clicked={(placeCoord) =>
+							this.suggestionClickAndClear(placeCoord)
+						}
+						// clicked={this.props.suggestionClickedHandler}
 						key={index}
 						suggestionText={place.name}
 						suggestionCoordinates={place.coordinates}
@@ -45,12 +102,7 @@ class LocationForm extends Component {
 
 		return (
 			<div className={classes.InputCard}>
-				<form
-					onSubmit={(event) => {
-						event.preventDefault();
-						this.props.changeHandler(this.state.typedLocation);
-					}}
-				>
+				<form onSubmit={(event) => this.submitFormHandler(event)}>
 					<h1>
 						<strong
 							style={{
@@ -71,15 +123,10 @@ class LocationForm extends Component {
 										className={classes.InputFormField}
 										type='text'
 										placeholder='Wpisz swoją lokalizację'
-										onChange={(event) => {
-											this.props.changeHandler(
-												event.target.value
-											);
-											this.setState({
-												typedLocation:
-													event.target.value,
-											});
-										}}
+										onChange={(event) =>
+											this.changeHandler(event)
+										}
+										value={this.state.typedLocation}
 									/>
 								</div>
 								<div className={classes.fullDropDownContainer}>

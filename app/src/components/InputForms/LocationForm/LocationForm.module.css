@@ -41,6 +41,7 @@
 
 .fullDropDownContainer {
 	position: relative;
+	z-index: 9999;
 }
 .fullDropDown {
 	font-weight: bold;
