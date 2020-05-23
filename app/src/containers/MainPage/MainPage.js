@@ -22,6 +22,7 @@ class MainPage extends Component {
 			isInitial: true,
 			placesSuggestions: [],
 			selectedCoordinates: [],
+			distanceToSelCoord: null,
 			allStations: null,
 			isAllStationsLoading: true,
 			displayedStation: {
@@ -168,8 +169,40 @@ class MainPage extends Component {
 					sensorsData: res.data,
 				},
 			});
+			const userLocation = this.state.selectedCoordinates;
+			if (userLocation.length)
+				this.getDistanceToStation(
+					userLocation,
+					this.state.displayedStation.coordinates
+				);
 		} catch (error) {
 			console.log(`fetch error in readAllForStation`);
+			console.log(error);
+		}
+	};
+
+	getDistanceToStation = async (userPoint, stationPoint) => {
+		const query = `${LINKS.AIR_API_URL}distance`;
+		try {
+			const res = await axios({
+				method: 'post',
+				url: query,
+				data: {
+					pointA: {
+						lat: userPoint[1],
+						lon: userPoint[0],
+					},
+					pointB: {
+						lat: stationPoint[1],
+						lon: stationPoint[0],
+					},
+				},
+			});
+			this.setState({
+				distanceToSelCoord: res.data.data.distance,
+			});
+		} catch (error) {
+			console.log(`fetch error in getDistanceToStation`);
 			console.log(error);
 		}
 	};
@@ -183,6 +216,7 @@ class MainPage extends Component {
 				<SideBar
 					stationData={this.state.displayedStation}
 					isSensorDataLoading={this.state.isSensorDataLoading}
+					distanceToStation={this.state.distanceToSelCoord}
 				/>
 				<div className={classes.MainScreenBox} ref={this.mainScreenRef}>
 					<LocationForm

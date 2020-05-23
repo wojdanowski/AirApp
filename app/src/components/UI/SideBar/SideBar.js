@@ -20,7 +20,12 @@ const SideBar = (props) => {
 	if (props.isSensorDataLoading && uiState.selectedStationId) {
 		stationInfo = <Spinner />;
 	} else if (props.stationData.sensorsData) {
-		stationInfo = <StationInfoCards stationData={props.stationData} />;
+		stationInfo = (
+			<StationInfoCards
+				stationData={props.stationData}
+				distanceToStation={props.distanceToStation}
+			/>
+		);
 	}
 
 	let subscriptionContent = null;
