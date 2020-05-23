@@ -17,4 +17,5 @@ exports.STATIONSCHEDULE = process.env.STATIONCHEDULE || 60 * 60 * 12;
 exports.AIRDATASCHEDULE = process.env.AIRDATASCHEDULE || 60 * 30;
 exports.TIMEZONE = process.env.TIMEZONE || 'Europe/Warsaw';
 // Frontend
-exports.ACTIVATE_SUB_LINK = process.env.ACTIVATE_SUB_LINK || 'http://localhost';
+exports.ACTIVATE_SUB_LINK =
+  process.env.ACTIVATE_SUB_LINK || 'http://localhost/';

@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const htmlToText = require('html-to-text');
 const env = require('../setup/env');
 
 const sendEmail = async (options) => {
@@ -10,13 +11,16 @@ const sendEmail = async (options) => {
       pass: env.EMAIL_PASSWORD,
     },
   });
+  // FIXME: tymczasowy log
+  console.log(options.attachments);
 
   const mailOptions = {
     from: `Air App <${env.EMAIL_USERNAME}>`,
     to: options.email,
     subject: options.subject,
-    text: options.message,
-    // TODO: html
+    html: options.html,
+    text: htmlToText.fromString(options.html),
+    attachments: options.attachments,
   };
 
   await transporter.sendMail(mailOptions);
