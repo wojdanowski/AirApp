@@ -9,6 +9,25 @@ class LocationForm extends Component {
 		typedLocation: '',
 	};
 
+	submitFormHandler = (event) => {
+		event.preventDefault();
+		const location = this.state.typedLocation;
+		this.props.changeHandler(location);
+		this.setState({ typedLocation: '' });
+	};
+
+	changeHandler = (event) => {
+		this.props.changeHandler(event.target.value);
+		this.setState({
+			typedLocation: event.target.value,
+		});
+	};
+
+	suggestionClickAndClear = (placeCoord) => {
+		this.props.suggestionClickedHandler(placeCoord);
+		this.setState({ typedLocation: '' });
+	};
+
 	render() {
 		let fullDropDown = null;
 		let ReceivedSuggestions = null;
@@ -17,7 +36,10 @@ class LocationForm extends Component {
 			const suggestionContent = this.props.placesSuggestions.map(
 				(place, index) => (
 					<PlaceSuggestion
-						clicked={this.props.suggestionClickedHandler}
+						clicked={(placeCoord) =>
+							this.suggestionClickAndClear(placeCoord)
+						}
+						// clicked={this.props.suggestionClickedHandler}
 						key={index}
 						suggestionText={place.name}
 						suggestionCoordinates={place.coordinates}
@@ -45,12 +67,7 @@ class LocationForm extends Component {
 
 		return (
 			<div className={classes.InputCard}>
-				<form
-					onSubmit={(event) => {
-						event.preventDefault();
-						this.props.changeHandler(this.state.typedLocation);
-					}}
-				>
+				<form onSubmit={(event) => this.submitFormHandler(event)}>
 					<h1>
 						<strong
 							style={{
@@ -71,15 +88,10 @@ class LocationForm extends Component {
 										className={classes.InputFormField}
 										type='text'
 										placeholder='Wpisz swoją lokalizację'
-										onChange={(event) => {
-											this.props.changeHandler(
-												event.target.value
-											);
-											this.setState({
-												typedLocation:
-													event.target.value,
-											});
-										}}
+										onChange={(event) =>
+											this.changeHandler(event)
+										}
+										value={this.state.typedLocation}
 									/>
 								</div>
 								<div className={classes.fullDropDownContainer}>
