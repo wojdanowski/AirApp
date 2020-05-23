@@ -11,8 +11,6 @@ const sendEmail = async (options) => {
       pass: env.EMAIL_PASSWORD,
     },
   });
-  // FIXME: tymczasowy log
-  console.log(options.attachments);
 
   const mailOptions = {
     from: `Air App <${env.EMAIL_USERNAME}>`,
