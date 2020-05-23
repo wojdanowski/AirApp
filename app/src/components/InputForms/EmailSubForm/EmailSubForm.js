@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import * as LINKS from './../../../Utils/Links';
+import * as LINKS from '../../../Utils/LINKS';
 
 import MainButton from './../../UI/Buttons/MainButton/MainButton';
 import Aux from './../../../hoc/Auxiliary/Auxiliary';
