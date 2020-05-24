@@ -16,7 +16,6 @@ const StationInfoCard = (props) => {
 		nameWithoutDot,
 		props.measurement
 	);
-
 	return (
 		<div className={classes.Param}>
 			<div className={classes.DotContainer}>
@@ -29,7 +28,7 @@ const StationInfoCard = (props) => {
 			<div className={classes.ParamName}>
 				<h4>{props.paramName}</h4>
 				<p>
-					{`Norma: ${NORMS[props.paramName]}`} µg/m<sup>3</sup>
+					{`Norma: ${NORMS[nameWithoutDot]}`} µg/m<sup>3</sup>
 				</p>
 			</div>
 		</div>
