@@ -60,9 +60,11 @@ class EmailSubForm extends Component {
 					],
 				},
 			});
+			alert('Wiadomość została wysłana na podany email');
 		} catch (error) {
 			console.log(`error in subscribeLocationHandler`);
 			console.log(error);
+			alert('Błąd');
 			return error;
 		}
 	};
