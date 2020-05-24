@@ -1,1 +1,21 @@
+.SubTitle {
+	color: #ae1100;
+	text-transform: uppercase;
+	font-weight: normal;
+}
 
+/* .SubContainer {
+	background-color: orange;
+} */
+
+.EmailForm form {
+	width: 100%;
+	padding: 0;
+}
+.CheckBoxField {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	margin-bottom: 5px;
+	align-items: center;
+}

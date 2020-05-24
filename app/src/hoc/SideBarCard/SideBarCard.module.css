@@ -1,20 +1,14 @@
 .SideBarCard {
 	height: 100%;
-	overflow-x: hidden;
 	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 5px;
 }
 .SideBarCard h1,
 .SideBarCard h2,
 .SideBarCard h3 {
 	margin-block-start: 0.5em;
 	margin-block-end: 0.5em;
-}
-
-.SideBarCard label,
-.SideBarCard form {
-	margin: 0 0 8px 0;
-	padding: 0;
-	width: 100%;
 }
 
 .SideBarCard button,

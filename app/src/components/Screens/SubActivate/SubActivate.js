@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-import Aux from './../../hoc/Auxiliary/Auxiliary';
+import Aux from '../../../hoc/Auxiliary/Auxiliary';
 import axios from 'axios';
 import queryString from 'query-string';
-import * as LINKS from '../../Utils/LINKS';
-import Spinner from './../UI/Spinner/Spinner';
-import Modal from './../UI/Modal/Modal';
-import UiContext from './../../Context/UiContext';
+import * as LINKS from '../../../Utils/LINKS';
+import Spinner from '../../UI/Spinner/Spinner';
+import Modal from '../../UI/Modal/Modal';
+import UiContext from '../../../Context/UiContext';
 
-class subActivate extends Component {
+class SubActivate extends Component {
 	state = {
 		activationSuccess: false,
 	};
@@ -29,6 +29,7 @@ class subActivate extends Component {
 				activationSuccess: true,
 			});
 			this.context.uiFunctions.toggleBigLoader();
+			alert('Activated !!!!');
 		} catch (err) {
 			if (this.context.showBigLoader)
 				this.context.uiFunctions.toggleBigLoader();
@@ -52,4 +53,4 @@ class subActivate extends Component {
 	}
 }
 
-export default subActivate;
+export default SubActivate;
