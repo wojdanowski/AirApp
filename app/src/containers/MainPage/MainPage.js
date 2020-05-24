@@ -7,7 +7,10 @@ import SideBar from './../../components/UI/SideBar/SideBar';
 import classes from './MainPage.module.css';
 import Aux from './../../hoc/Auxiliary/Auxiliary';
 import UiContext from './../../Context/UiContext';
-import * as LINKS from './../../Utils/Links';
+import * as LINKS from '../../Utils/LINKS';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import Modal from './../../components/UI/Modal/Modal';
+import Arrows from './../../components/UI/Arrows/Arrows';
 
 class MainPage extends Component {
 	constructor(props) {
@@ -19,8 +22,9 @@ class MainPage extends Component {
 			isInitial: true,
 			placesSuggestions: [],
 			selectedCoordinates: [],
+			distanceToSelCoord: null,
 			allStations: null,
-			areAllStationsLoaded: false,
+			isAllStationsLoading: true,
 			displayedStation: {
 				stationName: '',
 				coordinates: [],
@@ -78,16 +82,18 @@ class MainPage extends Component {
 	};
 
 	getAllStations = async () => {
+		this.context.uiFunctions.toggleBigLoader();
 		this.setState({
-			areAllStationsLoaded: false,
+			isAllStationsLoading: true,
 		});
 		const query = `${LINKS.AIR_API_URL}stations`;
 		try {
 			const res = (await axios(query)).data;
 			this.setState({
 				allStations: res.data.stations,
-				areAllStationsLoaded: true,
+				isAllStationsLoading: false,
 			});
+			this.context.uiFunctions.toggleBigLoader();
 		} catch (error) {
 			console.log(`error in getAllStations`);
 			console.log(error);
@@ -116,10 +122,14 @@ class MainPage extends Component {
 	};
 
 	showNearestStation = async (coordinates) => {
+		this.context.uiFunctions.toggleBigLoader();
 		const fetchError = await this.getNearestStation(coordinates);
+		this.context.uiFunctions.toggleBigLoader();
 		if (!fetchError) {
 			this.context.uiFunctions.scrollToRef(this.mapBoxRef);
-			this.context.uiFunctions.openSidebar();
+			if (window.screen.availWidth > 600)
+				this.context.uiFunctions.openSidebar();
+
 			this.setState({
 				selectedCoordinates: [...coordinates],
 				isInitial: false,
@@ -131,14 +141,15 @@ class MainPage extends Component {
 		}
 	};
 
-	manualSelectionHandler = (stationId, coordinates, name) => {
+	manualSelectionHandler = (stationData) => {
 		this.context.uiFunctions.openSidebar();
-		this.readAllForStation(stationId);
+		this.readAllForStation(stationData.id);
 		this.setState({
 			displayedStation: {
 				...this.state.displayedStation,
-				coordinates: coordinates,
-				stationName: name,
+				coordinates: stationData.coordinates,
+				stationName: stationData.name,
+				measurement: stationData.indexes,
 			},
 		});
 	};
@@ -158,25 +169,54 @@ class MainPage extends Component {
 					sensorsData: res.data,
 				},
 			});
+			const userLocation = this.state.selectedCoordinates;
+			if (userLocation.length)
+				this.getDistanceToStation(
+					userLocation,
+					this.state.displayedStation.coordinates
+				);
 		} catch (error) {
 			console.log(`fetch error in readAllForStation`);
 			console.log(error);
 		}
 	};
 
-	sleeper = (ms) => {
-		console.log(`sleep`);
-		return function (x) {
-			return new Promise((resolve) => setTimeout(() => resolve(x), ms));
-		};
+	getDistanceToStation = async (userPoint, stationPoint) => {
+		const query = `${LINKS.AIR_API_URL}distance`;
+		try {
+			const res = await axios({
+				method: 'post',
+				url: query,
+				data: {
+					pointA: {
+						lat: userPoint[1],
+						lon: userPoint[0],
+					},
+					pointB: {
+						lat: stationPoint[1],
+						lon: stationPoint[0],
+					},
+				},
+			});
+			this.setState({
+				distanceToSelCoord: res.data.data.distance,
+			});
+		} catch (error) {
+			console.log(`fetch error in getDistanceToStation`);
+			console.log(error);
+		}
 	};
 
 	render() {
 		return (
 			<Aux>
+				<Modal show={this.context.showBigLoader}>
+					<Spinner />
+				</Modal>
 				<SideBar
 					stationData={this.state.displayedStation}
 					isSensorDataLoading={this.state.isSensorDataLoading}
+					distanceToStation={this.state.distanceToSelCoord}
 				/>
 				<div className={classes.MainScreenBox} ref={this.mainScreenRef}>
 					<LocationForm
@@ -185,14 +225,27 @@ class MainPage extends Component {
 						placesSuggestions={this.state.placesSuggestions}
 						suggestionClickedHandler={this.showNearestStation}
 					/>
+					<Arrows
+						arrowType={'button-down'}
+						float={'bottom'}
+						clicked={() => {
+							this.context.uiFunctions.scrollToRef(
+								this.mapBoxRef
+							);
+						}}
+					/>
 				</div>
 				<MapBoxScreen
 					stationSelectionHandler={this.manualSelectionHandler}
 					allStationsData={this.state.allStations}
-					areAllStationsLoaded={this.state.areAllStationsLoaded}
-					arrowClickedHandler={() =>
-						this.context.uiFunctions.scrollToRef(this.mainScreenRef)
-					}
+					isAllStationsLoading={this.state.isAllStationsLoading}
+					arrowClickedHandler={() => {
+						if (this.context.showSidebar)
+							this.context.uiFunctions.toggleSidebar();
+						this.context.uiFunctions.scrollToRef(
+							this.mainScreenRef
+						);
+					}}
 					mapRef={this.mapBoxRef}
 					isInitial={this.state.isInitial}
 					selectedCoordinates={this.state.selectedCoordinates}

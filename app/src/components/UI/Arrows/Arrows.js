@@ -16,7 +16,7 @@ import './Arrows.css';
 const Arrow = (props) => {
 	return (
 		<div className='arrowContainer' onClick={props.clicked}>
-			<div className={props.arrowType}></div>
+			<div className={`${props.arrowType} ${props.float}`}></div>
 		</div>
 	);
 };
