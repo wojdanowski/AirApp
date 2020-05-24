@@ -1,7 +1,9 @@
 const Subscription = require('../models/subscriptionModel');
 const DbQueryFeatures = require('../utils/dbQueryFeatures');
+const { findNearestWithDistance } = require('./stationService');
 const env = require('../setup/env');
 const sendEmail = require('../utils/email');
+const HTMLGenerator = require('../utils/HTMLGenerator');
 
 exports.createNew = async (body) => {
   const newSubscription = await Subscription.create({
@@ -16,15 +18,26 @@ exports.createNew = async (body) => {
   const token = newSubscription.createManageToken();
   await newSubscription.save({ validateBeforeSave: false });
 
-  const message = `Link: ${env.ACTIVATE_SUB_LINK}/${token}`;
-
+  const nearestStation = await findNearestWithDistance({
+    lon: body.lon,
+    lat: body.lat,
+  });
+  const activationLink = `${env.ACTIVATE_SUB_LINK}${token}`;
+  const params = { activationLink, location: nearestStation.name };
+  const { html, attachments } = await HTMLGenerator({
+    template: 'confirmSubscription',
+    params,
+    images: ['logo.png', 'facebook.png', 'gplus.png', 'twitter.png'],
+  });
   try {
     await sendEmail({
       email: newSubscription.email,
       subject: 'Aktywuj subskrypcję - Air App',
-      message: message,
+      html,
+      attachments,
     });
-  } catch {
+  } catch (err) {
+    console.log(err);
     await Subscription.findByIdAndDelete(newSubscription._id);
     return -1;
   }

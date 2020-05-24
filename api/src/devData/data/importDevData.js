@@ -20,7 +20,7 @@ const importData = async (jsonData, model) => {
   }
 };
 
-// DELETE ALL DATA
+// DELETE DATA
 const deleteData = async (model) => {
   try {
     await model.deleteMany();
@@ -29,15 +29,23 @@ const deleteData = async (model) => {
   }
 };
 
-if (env.NODE_ENV === 'production') {
-  console.error('You are in production environment! Script aborted...');
-  process.exit(1);
-} else {
-  fileList.forEach(async (file) => {
-    const jsonData = JSON.parse(fs.readFileSync(file[0], 'utf-8'));
-    await deleteData(file[1]);
-    await importData(jsonData, file[1]);
-  });
-  console.log('End');
-  // TODO: poczekaj na forEach i potem process.exit(0)
-}
+// IMPORT FILES
+const importFiles = async (files) => {
+  if (env.NODE_ENV === 'production') {
+    console.error('You are in production environment! Script aborted...');
+    process.exit(1);
+  } else {
+    Promise.all(
+      files.map(async (file) => {
+        const jsonData = JSON.parse(fs.readFileSync(file[0], 'utf-8'));
+        await deleteData(file[1]);
+        await importData(jsonData, file[1]);
+      })
+    ).then(() => {
+      console.log('Dev data imported');
+      db.close();
+    });
+  }
+};
+
+importFiles(fileList);

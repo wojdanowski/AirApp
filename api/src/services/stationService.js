@@ -25,6 +25,31 @@ exports.findNearestStation = async (query) => {
     query
   ).limitFields();
   const stationList = await features.query;
+
+  return stationList[0];
+};
+
+exports.findNearestWithDistance = async (query) => {
+  const multiplier = 0.001;
+
+  const stationList = await Station.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [query.lon * 1, query.lat * 1],
+        },
+        distanceField: 'distance',
+        distanceMultiplier: multiplier,
+      },
+    },
+    {
+      $project: {
+        __v: 0,
+        'location.type': 0,
+      },
+    },
+  ]);
   return stationList[0];
 };
 
