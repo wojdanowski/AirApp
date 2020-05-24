@@ -6,6 +6,7 @@ import MainButton from './../../UI/Buttons/MainButton/MainButton';
 import Aux from './../../../hoc/Auxiliary/Auxiliary';
 import classes from './EmailSubForm.module.css';
 import Checkbox from './../../UI/Checkbox/Checkbox';
+import { EMAIL_REGEX } from './../../../Utils/regexes';
 
 class EmailSubForm extends Component {
 	state = {
@@ -33,7 +34,10 @@ class EmailSubForm extends Component {
 			alert('Nie wybrano dni');
 			return;
 		}
-
+		if (!this.validateEmail(this.state.typedEmail)) {
+			alert('Podano zły adres');
+			return;
+		}
 		try {
 			await axios({
 				method: 'post',
@@ -66,6 +70,10 @@ class EmailSubForm extends Component {
 		this.setState({
 			selectedDays: newSelectedDays,
 		});
+	};
+
+	validateEmail = (email) => {
+		return EMAIL_REGEX.test(String(email).toLowerCase());
 	};
 
 	render() {
