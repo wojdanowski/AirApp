@@ -3,6 +3,7 @@ const htmlToText = require('html-to-text');
 const env = require('../setup/env');
 
 const sendEmail = async (options) => {
+  console.log(`Sending Email to ${options.email}, Topic: ${options.subject}`);
   const transporter = nodemailer.createTransport({
     host: env.EMAIL_HOST,
     port: env.EMAIL_PORT,

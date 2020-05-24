@@ -1,6 +1,9 @@
 const db = require('../src/setup/db');
 const { saveSensorData } = require('../src/services/sensorService');
-const { saveGiosStationLocation } = require('../src/services/stationService');
+const {
+  saveGiosStationLocation,
+  saveGiosStationAirIndex,
+} = require('../src/services/stationService');
 const Sensor = require('../src/models/sensorModel');
 const Station = require('../src/models/stationModel');
 
@@ -111,5 +114,67 @@ describe('Station service', () => {
     // eslint-disable-next-line eqeqeq
     const savedStation = newStations.find((station) => station._id == oldId);
     expect(savedStation.name).toEqual('Wrocław - Bartnicza edited');
+  });
+
+  it('Should update station AirIndex', async () => {
+    const _id = '5eb3f488bc7e8f9cc8d7bb0e';
+    const airIndex = {
+      id: 52,
+      stCalcDate: '2020-05-23 08:00:00',
+      stIndexLevel: {
+        id: 0,
+        indexLevelName: 'Bardzo dobry',
+      },
+      stSourceDataDate: '2020-05-23 08:00:00',
+      so2CalcDate: '2020-05-23 08:00:00',
+      so2IndexLevel: {
+        id: 0,
+        indexLevelName: 'Bardzo dobry',
+      },
+      so2SourceDataDate: '2020-05-23 08:00:00',
+      no2CalcDate: '2020-05-23 08:00:00',
+      no2IndexLevel: {
+        id: 0,
+        indexLevelName: 'Bardzo dobry',
+      },
+      no2SourceDataDate: '2020-05-23 08:00:00',
+      coCalcDate: '2020-05-23 08:00:00',
+      coIndexLevel: {
+        id: 0,
+        indexLevelName: 'Bardzo dobry',
+      },
+      coSourceDataDate: '2020-05-23 08:00:00',
+      pm10CalcDate: '2020-05-23 08:00:00',
+      pm10IndexLevel: {
+        id: 0,
+        indexLevelName: 'Bardzo dobry',
+      },
+      pm10SourceDataDate: '2020-05-23 08:00:00',
+      pm25CalcDate: '2020-05-23 08:00:00',
+      pm25IndexLevel: null,
+      pm25SourceDataDate: null,
+      o3CalcDate: '2020-05-23 08:00:00',
+      o3IndexLevel: {
+        id: 0,
+        indexLevelName: 'Bardzo dobry',
+      },
+      o3SourceDataDate: '2020-05-23 08:00:00',
+      c6h6CalcDate: '2020-05-23 08:00:00',
+      c6h6IndexLevel: {
+        id: 0,
+        indexLevelName: 'Bardzo dobry',
+      },
+      c6h6SourceDataDate: '2020-05-23 08:00:00',
+      stIndexStatus: true,
+      stIndexCrParam: 'PYL',
+    };
+
+    await saveGiosStationAirIndex(airIndex);
+    const newStation = await Station.findById(_id);
+
+    console.log(newStation);
+
+    expect(newStation.stIndex.calcDate).toEqual('2020-05-23 08:00:00');
+    expect(newStation.mIndexes.length).toEqual(7);
   });
 });
