@@ -19,3 +19,4 @@ exports.TIMEZONE = process.env.TIMEZONE || 'Europe/Warsaw';
 // Frontend
 exports.ACTIVATE_SUB_LINK =
   process.env.ACTIVATE_SUB_LINK || 'http://localhost/';
+exports.DELETE_SUB_LINK = process.env.DELETE_SUB_LINK || 'http://localhost/';
