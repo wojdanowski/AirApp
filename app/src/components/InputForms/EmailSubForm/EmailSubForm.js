@@ -4,14 +4,35 @@ import * as LINKS from '../../../Utils/LINKS';
 
 import MainButton from './../../UI/Buttons/MainButton/MainButton';
 import Aux from './../../../hoc/Auxiliary/Auxiliary';
+import classes from './EmailSubForm.module.css';
+import Checkbox from './../../UI/Checkbox/Checkbox';
 
 class EmailSubForm extends Component {
 	state = {
 		typedEmail: '',
+		selectedDays: [false, false, false, false, false, false, false],
+		subscriptionSchedule: [],
 	};
 
 	subscribeLocationHandler = async () => {
 		const query = `${LINKS.AIR_API_URL}subscriptions`;
+
+		let subscriptionSchedule = [];
+		this.state.selectedDays.forEach((day, index) => {
+			if (day) {
+				const newDay = {
+					weekDay: index,
+					hour: 8,
+					minutes: 0,
+				};
+				subscriptionSchedule.push(newDay);
+			}
+		});
+
+		if (!subscriptionSchedule.length) {
+			alert('Nie wybrano dni');
+			return;
+		}
 
 		try {
 			await axios({
@@ -21,48 +42,14 @@ class EmailSubForm extends Component {
 					email: this.state.typedEmail,
 					lat: this.props.stationCoordinates[1],
 					lon: this.props.stationCoordinates[0],
-					hours: [
-						{
-							weekDay: 0,
-							hour: 8,
-							minutes: 0,
-						},
-						{
-							weekDay: 1,
-							hour: 8,
-							minutes: 0,
-						},
-						{
-							weekDay: 2,
-							hour: 8,
-							minutes: 0,
-						},
-						{
-							weekDay: 3,
-							hour: 8,
-							minutes: 0,
-						},
-						{
-							weekDay: 4,
-							hour: 8,
-							minutes: 0,
-						},
-						{
-							weekDay: 5,
-							hour: 8,
-							minutes: 0,
-						},
-						{
-							weekDay: 6,
-							hour: 8,
-							minutes: 0,
-						},
-					],
+					hours: [...subscriptionSchedule],
 				},
 			});
+			alert('Wiadomość została wysłana na podany email');
 		} catch (error) {
 			console.log(`error in subscribeLocationHandler`);
 			console.log(error);
+			alert('Błąd');
 			return error;
 		}
 	};
@@ -73,28 +60,64 @@ class EmailSubForm extends Component {
 		});
 	};
 
+	checkboxChangeHandler = (event) => {
+		let newSelectedDays = [...this.state.selectedDays];
+		newSelectedDays[event.target.day] = event.target.value;
+		this.setState({
+			selectedDays: newSelectedDays,
+		});
+	};
+
 	render() {
+		const weekDays = [
+			'Poniedziałek',
+			'Wtorek',
+			'Środa',
+			'Czwartek',
+			'Piątek',
+			'Sobota',
+			'Niedziela',
+		];
+
 		return (
 			<Aux>
-				<h3>Get email notification</h3>
-				<label>
-					<input
-						type='email'
-						placeholder='Email Address'
-						onChange={(event) => this.formChangedHandler(event)}
-					/>
-				</label>
-				<form
-					onSubmit={(event) => {
-						event.preventDefault();
-						this.subscribeLocationHandler();
-					}}
-				>
-					<MainButton
-						label={'SUBSCRIBE'}
-						clicked={() => this.subscribeLocationHandler()}
-					/>
-				</form>
+				<h3 className={classes.SubTitle}>subskrypcja</h3>
+				<div className={classes.SubContainer}>
+					<div className={classes.CheckBoxField}>
+						{weekDays.map((el, index) => {
+							return (
+								<Checkbox
+									key={index}
+									day={index}
+									label={el}
+									onChangeHandler={this.checkboxChangeHandler}
+								/>
+							);
+						})}
+					</div>
+					<div className={classes.EmailForm}>
+						<label>
+							<input
+								type='email'
+								placeholder='Email Address'
+								onChange={(event) =>
+									this.formChangedHandler(event)
+								}
+							/>
+						</label>
+						<form
+							onSubmit={(event) => {
+								event.preventDefault();
+								this.subscribeLocationHandler();
+							}}
+						>
+							<MainButton
+								label={'wyślij'}
+								clicked={() => this.subscribeLocationHandler()}
+							/>
+						</form>
+					</div>
+				</div>
 			</Aux>
 		);
 	}

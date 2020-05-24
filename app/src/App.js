@@ -5,7 +5,7 @@ import './App.css';
 import Aux from './hoc/Auxiliary/Auxiliary';
 import Layout from './containers/Layout/Layout';
 import MainPage from './containers/MainPage/MainPage';
-import subActivate from './components/subActivate/subActivate';
+import SubActivate from './components/Screens/SubActivate/SubActivate';
 
 function App() {
 	return (
@@ -13,7 +13,7 @@ function App() {
 			<Aux>
 				<Layout>
 					<Switch>
-						<Route path='/activate' component={subActivate} />
+						<Route path='/activate' component={SubActivate} />
 						<Route path='/' component={MainPage} />
 					</Switch>
 				</Layout>
