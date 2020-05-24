@@ -78,13 +78,13 @@ class EmailSubForm extends Component {
 
 	render() {
 		const weekDays = [
+			'Niedziela',
 			'Poniedziałek',
 			'Wtorek',
 			'Środa',
 			'Czwartek',
 			'Piątek',
 			'Sobota',
-			'Niedziela',
 		];
 
 		return (
