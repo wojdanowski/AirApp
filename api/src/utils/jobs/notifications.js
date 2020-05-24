@@ -22,8 +22,10 @@ const setNotificationParams = (subscription, station) => {
   });
   if (!mainIndex) mainIndex = station.mIndexes[0];
   const token = subscription.createManageToken();
+
   params.deleteLink = `${env.DELETE_SUB_LINK}${token}`;
   params.location = station.name;
+  params.mainLvl = mainIndex.indexLevel.indexLevelName;
   params.catImgId = mainIndex.indexLevel.id;
   params.recommendation = recommendations[mainIndex.indexLevel.id];
 
