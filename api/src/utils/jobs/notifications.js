@@ -53,7 +53,7 @@ exports.run = async () => {
   console.log('Notifications job started');
   const job = schedule.scheduleJob('* * * * *', (fireDate) => {
     const localTime = moment(fireDate).tz(env.TIMEZONE);
-    console.log(`Notifications run at ${localTime}`);
+    // console.log(`Notifications run at ${localTime}`);
     sendActualNotifications(
       localTime.day(),
       localTime.hour(),

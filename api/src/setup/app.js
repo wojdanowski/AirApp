@@ -4,6 +4,7 @@ const env = require('./env');
 const stationRouter = require('../routes/stationRoutes');
 const subscriptionRouter = require('../routes/subscriptionRoutes');
 const indexRouter = require('../routes/indexRoutes');
+const distanceRouter = require('../routes/distanceRoutes');
 const AppError = require('../utils/appError');
 const globalErrorHandler = require('../controllers/errorController');
 
@@ -11,7 +12,7 @@ const globalErrorHandler = require('../controllers/errorController');
 const app = express();
 
 // MIDDLEWARE
-if (env.NODE_ENV !== 'production') {
+if (env.NODE_ENV === 'development') {
   const morgan = require('morgan');
   app.use(morgan('dev'));
 }
@@ -33,6 +34,7 @@ app.get('/', (req, res) => {
 app.use('/api/subscriptions', subscriptionRouter);
 app.use('/api/stations', stationRouter);
 app.use('/api', indexRouter);
+app.use('/api', distanceRouter);
 
 // UNHANDLED ROUTES
 app.all('*', (req, res, next) => {
