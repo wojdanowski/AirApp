@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import * as LINKS from '../../../Utils/LINKS';
 
+import * as LINKS from '../../../Utils/LINKS';
 import MainButton from './../../UI/Buttons/MainButton/MainButton';
 import Aux from './../../../hoc/Auxiliary/Auxiliary';
 import classes from './EmailSubForm.module.css';
 import Checkbox from './../../UI/Checkbox/Checkbox';
 import { EMAIL_REGEX } from './../../../Utils/regexes';
+import Dropdown from './../../UI/Dropdown/Dropdown';
 
 class EmailSubForm extends Component {
 	state = {
 		typedEmail: '',
 		selectedDays: [false, false, false, false, false, false, false],
+		selectedHour: 0,
 		subscriptionSchedule: [],
 	};
 
@@ -23,7 +25,7 @@ class EmailSubForm extends Component {
 			if (day) {
 				const newDay = {
 					weekDay: index,
-					hour: 8,
+					hour: this.state.selectedHour,
 					minutes: 0,
 				};
 				subscriptionSchedule.push(newDay);
@@ -36,6 +38,10 @@ class EmailSubForm extends Component {
 		}
 		if (!this.validateEmail(this.state.typedEmail)) {
 			alert('Podano zły adres');
+			return;
+		}
+		if (this.state.selectedHour === 0) {
+			alert('Nie wybrano godziny');
 			return;
 		}
 		try {
@@ -76,6 +82,15 @@ class EmailSubForm extends Component {
 		return EMAIL_REGEX.test(String(email).toLowerCase());
 	};
 
+	dropDownSelectHandler = (event) => {
+		const hour = parseInt(event.target.value, 10);
+		if (hour !== -1) {
+			this.setState({
+				selectedHour: hour,
+			});
+		}
+	};
+
 	render() {
 		const weekDays = [
 			'Niedziela',
@@ -102,6 +117,11 @@ class EmailSubForm extends Component {
 								/>
 							);
 						})}
+					</div>
+					<div className={classes.DropDownContainer}>
+						<Dropdown
+							onChangeHandler={this.dropDownSelectHandler}
+						/>
 					</div>
 					<div className={classes.EmailForm}>
 						<label>
