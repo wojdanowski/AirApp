@@ -106,22 +106,28 @@ class EmailSubForm extends Component {
 			<Aux>
 				<h3 className={classes.SubTitle}>subskrypcja</h3>
 				<div className={classes.SubContainer}>
-					<div className={classes.CheckBoxField}>
-						{weekDays.map((el, index) => {
-							return (
-								<Checkbox
-									key={index}
-									day={index}
-									label={el}
-									onChangeHandler={this.checkboxChangeHandler}
-								/>
-							);
-						})}
-					</div>
-					<div className={classes.DropDownContainer}>
-						<Dropdown
-							onChangeHandler={this.dropDownSelectHandler}
-						/>
+					<div className={classes.Schedule}>
+						<div className={classes.CheckboxContainer}>
+							<div className={classes.CheckBoxField}>
+								{weekDays.map((el, index) => {
+									return (
+										<Checkbox
+											key={index}
+											day={index}
+											label={el}
+											onChangeHandler={
+												this.checkboxChangeHandler
+											}
+										/>
+									);
+								})}
+							</div>
+						</div>
+						<div className={classes.DropdownContainer}>
+							<Dropdown
+								onChangeHandler={this.dropDownSelectHandler}
+							/>
+						</div>
 					</div>
 					<div className={classes.EmailForm}>
 						<label>

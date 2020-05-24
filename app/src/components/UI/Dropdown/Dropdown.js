@@ -16,7 +16,7 @@ const DropDown = (props) => {
 				className='form-control'
 				id='paymentMethod'
 			>
-				<option value={0}>Wybierz godzinę</option>
+				<option value={0}>Godzina...</option>
 
 				{options.map((el, index) => {
 					return (

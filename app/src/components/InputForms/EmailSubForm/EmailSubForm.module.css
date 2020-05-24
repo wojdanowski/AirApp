@@ -21,5 +21,17 @@
 }
 
 .DropdownContainer {
-	background: orange;
+	display: table-cell;
+	padding: 5px;
+}
+
+.Schedule {
+	display: table;
+	vertical-align: middle;
+	table-layout: fixed;
+	width: 100%;
+}
+
+.CheckboxContainer {
+	display: table-cell;
 }
