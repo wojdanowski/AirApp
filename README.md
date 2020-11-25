@@ -1,6 +1,7 @@
-# AirApp
-Air quality app made as student team project.
+## AirApp
 [Demo](https://airapp-65e79.web.app/)
+
+Air quality app made as student team project.
 
 Air quality app made as student team project. My task was to create frontend logic of the app. Air app takes air quality data from official government api and displays visualization on map.
 
